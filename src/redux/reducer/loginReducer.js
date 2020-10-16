@@ -8,14 +8,14 @@ const default_state_login = {
 const login_reducer = (state = default_state_login, action) => {
   switch (action.type) {
     case ADD_USER: {
-      console.log(action.user);
+      //console.log(action.user);
       return {
         ...state,
         user: action.user,
       };
     }
     case ADD_PSSD: {
-      console.log(action.user);
+      //console.log(action.user);
       return {
         ...state,
         password: action.password,

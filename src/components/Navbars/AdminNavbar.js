@@ -26,7 +26,7 @@ class AdminNavbar extends React.Component {
       <BrowserRouter>
         <Switch>
           <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
-          <Redirect from="/" to="/auth/login" />
+          <Redirect from="/" to="/auth" />
         </Switch>
       </BrowserRouter>,
       document.getElementById("root")
@@ -95,8 +95,8 @@ class AdminNavbar extends React.Component {
                     <span>Support</span>
                   </DropdownItem>*/}
                   <DropdownItem divider />
-                  <DropdownItem>
-                    <i className="ni ni-user-run" onClick={this.logout} />
+                  <DropdownItem onClick={this.logout}>
+                    <i className="ni ni-user-run" />
                     <span>Logout</span>
                   </DropdownItem>
                 </DropdownMenu>
