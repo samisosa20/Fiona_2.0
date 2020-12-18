@@ -32,7 +32,7 @@ class Admin extends React.Component {
     document.scrollingElement.scrollTop = 0;
     this.refs.mainContent.scrollTop = 0;
   }
-  getRoutes = routes => {
+  getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
         return (
@@ -47,7 +47,7 @@ class Admin extends React.Component {
       }
     });
   };
-  getBrandText = path => {
+  getBrandText = (path) => {
     for (let i = 0; i < routes.length; i++) {
       if (
         this.props.location.pathname.indexOf(
@@ -66,9 +66,9 @@ class Admin extends React.Component {
           {...this.props}
           routes={routes}
           logo={{
-            innerLink: "/admin/dash",
+            innerLink: "/admin/Acount",
             imgSrc: require("assets/img/brand/argon-react.png"),
-            imgAlt: "..."
+            imgAlt: "...",
           }}
         />
         <div className="main-content" ref="mainContent">
@@ -78,8 +78,9 @@ class Admin extends React.Component {
           />
           <Switch>
             {this.getRoutes(routes)}
-            <Redirect from="*" to="/admin/dash" />
+            <Redirect from="*" to="/admin/Acount" />
           </Switch>
+
           <Container fluid>
             <AdminFooter />
           </Container>

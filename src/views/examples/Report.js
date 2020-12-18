@@ -35,6 +35,8 @@ function Report() {
     TopExp: [],
     Budget: [],
     OpenClose: [],
+    ClassOpen: "",
+    ClassClose: "",
     identify: 0,
   });
   const [stateDataModal, setDataModal] = useState({
@@ -154,7 +156,7 @@ function Report() {
   useEffect(() => {
     async function getDataReport(idc, divi) {
       if (stateDate.Sdate === "") {
-        getDate();
+        getDate(0);
       }
       let Fecha_ini = document.getElementById("Sdate").value;
       let Fehca_fin = document.getElementById("Edate").value;
@@ -196,6 +198,10 @@ function Report() {
               TopExp: TopExpenses.data,
               Budget: Budget.data,
               OpenClose: OpenClose.data[0],
+              ClassOpen:
+                OpenClose.data[0].open < 0 ? "text-danger" : "text-success",
+              ClassClose:
+                OpenClose.data[0].end < 0 ? "text-danger" : "text-success",
               identify: 1,
             });
           })
@@ -276,7 +282,11 @@ function Report() {
                     >
                       Opening Balance
                     </CardTitle>
-                    <span className="h2 font-weight-bold mb-0">
+                    <span
+                      className={
+                        "h2 font-weight-bold mb-0 " + stateData.ClassOpen
+                      }
+                    >
                       {stateData.OpenClose
                         ? formatter.format(stateData.OpenClose.open)
                         : formatter.format(0)}
@@ -297,7 +307,7 @@ function Report() {
                     >
                       Income
                     </CardTitle>
-                    <span className="h2 font-weight-bold mb-0">
+                    <span className="h2 font-weight-bold mb-0 text-success">
                       {stateData.OpenClose
                         ? formatter.format(stateData.OpenClose.income)
                         : formatter.format(0)}
@@ -318,7 +328,7 @@ function Report() {
                     >
                       Expenses
                     </CardTitle>
-                    <span className="h2 font-weight-bold mb-0">
+                    <span className="h2 font-weight-bold mb-0 text-danger">
                       {stateData.OpenClose
                         ? formatter.format(stateData.OpenClose.expenses)
                         : formatter.format(0)}
@@ -339,7 +349,11 @@ function Report() {
                     >
                       Ending Balance
                     </CardTitle>
-                    <span className="h2 font-weight-bold mb-0">
+                    <span
+                      className={
+                        "h2 font-weight-bold mb-0 " + stateData.ClassClose
+                      }
+                    >
                       {stateData.OpenClose
                         ? formatter.format(stateData.OpenClose.end)
                         : formatter.format(0)}
@@ -357,15 +371,22 @@ function Report() {
                 <Row className="align-items-center">
                   <div className="col">
                     <h6 className="text-uppercase text-light ls-1 mb-1">
-                      Grafica de torta
+                      Cake chart
                     </h6>
-                    <h2 className="text-white mb-0">Ingresos</h2>
+                    <h2 className="text-white mb-0">Income</h2>
                   </div>
                 </Row>
               </CardHeader>
               <CardBody>
                 <div className="chart">
-                  <Chart_Ingresos />
+                  {stateDate.Sdate != "" ? (
+                    <Chart_Ingresos
+                      dstart={stateDate.Sdate}
+                      dend={stateDate.Fdate}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </div>
               </CardBody>
             </Card>
@@ -376,15 +397,22 @@ function Report() {
                 <Row className="align-items-center">
                   <div className="col">
                     <h6 className="text-uppercase text-light ls-1 mb-1">
-                      Grafica de torta
+                      Cake chart
                     </h6>
-                    <h2 className="text-white mb-0">Egresos</h2>
+                    <h2 className="text-white mb-0">Expenses</h2>
                   </div>
                 </Row>
               </CardHeader>
               <CardBody>
                 <div className="chart">
-                  <Chart_Egreso />
+                  {stateDate.Sdate != "" ? (
+                    <Chart_Egreso
+                      dstart={stateDate.Sdate}
+                      dend={stateDate.Fdate}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </div>
               </CardBody>
             </Card>
@@ -395,15 +423,22 @@ function Report() {
                 <Row className="align-items-center">
                   <div className="col">
                     <h6 className="text-uppercase text-light ls-1 mb-1">
-                      Grafica de torta
+                      Cake chart
                     </h6>
-                    <h2 className="text-white mb-0">Ahorros</h2>
+                    <h2 className="text-white mb-0">Savings</h2>
                   </div>
                 </Row>
               </CardHeader>
               <CardBody>
                 <div className="chart">
-                  <Chart_Ahorros />
+                  {stateDate.Sdate != "" ? (
+                    <Chart_Ahorros
+                      dstart={stateDate.Sdate}
+                      dend={stateDate.Fdate}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </div>
               </CardBody>
             </Card>

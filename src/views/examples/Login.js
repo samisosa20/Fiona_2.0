@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import API from "../../variables/API";
-import AdminLayout from "layouts/Admin.js";
-import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch, Redirect, Link } from "react-router-dom"; // para navegar entre paginas
+import { Redirect, Link } from "react-router-dom"; // para navegar entre paginas
 import store from "../../redux/store";
 import { return_user } from "../../redux/actions/Login";
 import { Provider } from "react-redux";
@@ -23,7 +21,7 @@ import {
 } from "reactstrap";
 
 function Login(props) {
-  //const [state, setState] = useState({ user: "", password: "" });
+  const [key, setKey] = useState(false);
 
   /* ...state para que no se modifique */
   const handleChange = (event) => {
@@ -64,28 +62,21 @@ function Login(props) {
           sessionStorage.setItem("Email", res.data.email);
           sessionStorage.setItem("IdUser", res.data.idUser);
           sessionStorage.setItem("Divisa", res.data.divisa);
-          ReactDOM.render(
-            <BrowserRouter>
-              <Switch>
-                <Route
-                  path="/admin"
-                  render={(props) => <AdminLayout {...props} />}
-                />
-                <Redirect from="/" to="/admin/Dash" />
-              </Switch>
-            </BrowserRouter>,
-            document.getElementById("root")
-          );
+          //window.location = "/admin/Acount";
+          setKey(true);
         }
       });
     }
   };
 
-  /*store.subscribe(() => {
-    console.log(store.getState());
-  });*/
+  const Login_success = () => {
+    if (key) {
+      return <Redirect to="/admin/Acount" />;
+    }
+  };
   return (
     <Provider store={store}>
+      {Login_success()}
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
           <CardBody className="px-lg-5 py-lg-5">

@@ -22,15 +22,7 @@ import {
 
 class AdminNavbar extends React.Component {
   logout() {
-    ReactDOM.render(
-      <BrowserRouter>
-        <Switch>
-          <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
-          <Redirect from="/" to="/auth" />
-        </Switch>
-      </BrowserRouter>,
-      document.getElementById("root")
-    );
+    window.location = "/";
   }
   render() {
     return (

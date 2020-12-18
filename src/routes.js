@@ -12,20 +12,20 @@ import Profile from "views/examples/Profile.js";
 
 var routes = [
   {
-    path: "/Dash",
-    name: "Dashboard",
-    icon: "ni ni-tv-2 text-primary",
-    component: Dash,
-    layout: "/admin",
-    sidebar: true,
-  },
-  {
     path: "/Acount",
     name: "Acount",
     icon: "ni ni-app text-blue",
     component: Account,
     layout: "/admin",
     sidebar: true,
+  },
+  {
+    path: "/dash",
+    name: "Dashboard",
+    icon: "ni ni-tv-2 text-primary",
+    component: Dash,
+    layout: "/admin",
+    sidebar: false,
   },
   {
     path: "/catego",
