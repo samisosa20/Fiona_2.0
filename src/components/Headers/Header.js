@@ -149,7 +149,7 @@ function Header() {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Income
+                          Annual Income
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0 text-success">
                           {state.ingresos}
@@ -176,7 +176,7 @@ function Header() {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Expenses
+                          Annual Expenses
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0 text-danger">
                           {state.egresos}
@@ -200,7 +200,7 @@ function Header() {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Savings
+                          Annual Savings
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
                           {state.ahorros}
@@ -224,7 +224,7 @@ function Header() {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Utility
+                          Annual Utility
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
                           {state.utilidad}

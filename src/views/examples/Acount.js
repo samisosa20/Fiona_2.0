@@ -12,10 +12,11 @@ import {
   Label,
   ModalFooter,
 } from "reactstrap";
-import { Form, Modal, option } from "react-bootstrap";
+import { Form, Modal, InputGroup } from "react-bootstrap";
 // core components
 import { Header } from "components/Headers/Header.js";
 import API from "../../variables/API";
+import axios from "axios";
 import { Link } from "react-router-dom"; // para navegar entre paginas
 
 function Account() {
@@ -24,38 +25,53 @@ function Account() {
   const [stateform, setform] = useState({
     catego: "",
     descrip: "",
-    badge: "",
+    badge: "COP",
     monto: 0,
-    save_account: 0,
+    save_account: false,
   });
   // edicion de informacion
   const [stateformEdit, setformEdit] = useState({
     edit_account: "",
     edit_descrip: "",
     edit_badge: "",
-    edit_monto: 0,
+    edit_monto: false,
     edit_save_account: 0,
     id_data: 0,
   });
   /* Declaracion de estados de los modals */
   const [showNewMod, setshowNewMod] = useState(false);
+  const [showNewModMovi, setshowNewModMovie] = useState(false);
   const [showDelMod, setshowDelMod] = useState(false);
   const [showEdiMod, setshowEdiMod] = useState(false);
   const [stateAccount, setStateAccount] = useState(false);
+  const [showNewTransMod, setshowNewTransMod] = useState(false);
+  const [stateCatego, setCatego] = useState([]);
+  const [stateAcount, setAcount] = useState([]);
+  const [stateSignal, setSignal] = useState({ Signal: "+" });
+  const [stateformtrans, setformtrans] = useState({
+    monto: 0,
+    badge: "COP",
+    account_ini: 0,
+    account_fin: 0,
+    datetime: "",
+    descrip: "",
+  });
 
   useEffect(() => {
     var idc = sessionStorage.getItem("IdUser");
     API.post("acount", {
       id: 2,
       idc: idc,
-    }).then((response) => setState(response.data));
-  }, [stateAccount]);
+    }).then((response) => {setState(response.data)});
+  }, [stateAccount, showNewModMovi, showNewTransMod]);
 
   // Funcion para cambiar de estado de los modals
   const ModNewCateSate = () => setshowNewMod(!showNewMod);
   const ModDelCateSate = () => setshowDelMod(!showDelMod);
   const ModEdiCateSate = () => setshowEdiMod(!showEdiMod);
   const ChangeStateAccount = () => setStateAccount(!stateAccount);
+  const ModNewMoviSate = () => setshowNewModMovie(!showNewModMovi);
+  const ModNewTransSate = () => setshowNewTransMod(!showNewTransMod);
 
   // Accion al abrir los modals
   const OpenModalNew = (e) => {
@@ -75,6 +91,7 @@ function Account() {
   };
   const OpenModalEdit = (e, id, catego, descrip, group, monto, include) => {
     e.preventDefault();
+    include = include === "1" ? true : false;
     setformEdit({
       edit_account: catego,
       edit_descrip: descrip,
@@ -85,6 +102,160 @@ function Account() {
     });
     ModEdiCateSate();
     //document.getElementById("edit_badge").value = group;
+  };
+  const VerifySignal = (event, idSigno) => {
+    let signo = document.getElementById(idSigno);
+
+    if (event.target.value < 0) {
+      if (idSigno !== "") {
+        setSignal({ Signal: "-" });
+        signo.className = "btn btn-outline-danger";
+      }
+      event.target.value = event.target.value * -1;
+    }
+    if (idSigno === "signo_move") {
+      setform({ ...stateform, [event.target.name]: event.target.value });
+    } else {
+      setformtrans({
+        ...stateformtrans,
+        [event.target.name]: event.target.value,
+      });
+    }
+  };
+  const ChangeSignal = (event) => {
+    setSignal({ Signal: event.target.value !== "+" ? "+" : "-" });
+    if (event.target.value !== "+") {
+      event.target.className = "btn btn-outline-success";
+    } else {
+      event.target.className = "btn btn-outline-danger";
+    }
+  };
+  const handleChangeTrans = (event) => {
+    setformtrans({
+      ...stateformtrans,
+      [event.target.name]: event.target.value,
+    });
+  };
+  const OpenModalMovi = (e) => {
+    e.preventDefault();
+    let idc = sessionStorage.getItem("IdUser");
+    axios
+      .all([
+        API.post(`acount`, {
+          id: 5,
+          idc: idc,
+        }),
+        API.post(`acount`, {
+          id: 2,
+          idc: idc,
+        }),
+      ])
+      .then(
+        axios.spread((firstResponse, secondResponse) => {
+          setCatego(firstResponse.data);
+          setAcount(secondResponse.data);
+        })
+      );
+    let now = new Date(),
+      year,
+      month,
+      date,
+      hours,
+      minutes,
+      seconds,
+      formattedDateTime;
+
+    year = now.getFullYear();
+    month =
+      now.getMonth().toString().length === 1
+        ? "0" + (now.getMonth() + 1).toString()
+        : now.getMonth() + 1;
+    date =
+      now.getDate().toString().length === 1
+        ? "0" + now.getDate().toString()
+        : now.getDate();
+    hours =
+      now.getHours().toString().length === 1
+        ? "0" + now.getHours().toString()
+        : now.getHours();
+    minutes =
+      now.getMinutes().toString().length === 1
+        ? "0" + now.getMinutes().toString()
+        : now.getMinutes();
+    seconds =
+      now.getSeconds().toString().length === 1
+        ? "0" + now.getSeconds().toString()
+        : now.getSeconds();
+
+    formattedDateTime =
+      year +
+      "-" +
+      month +
+      "-" +
+      date +
+      "T" +
+      hours +
+      ":" +
+      minutes +
+      ":" +
+      seconds;
+    setform({ ...stateform, datetime: formattedDateTime });
+    ModNewMoviSate();
+  };
+  const OpenModalTrans = (e) => {
+    e.preventDefault();
+    let idc = sessionStorage.getItem("IdUser");
+    API.post("acount", {
+      id: 2,
+      idc: idc,
+    }).then((response) => setCatego(response.data));
+    let now = new Date(),
+      year,
+      month,
+      date,
+      hours,
+      minutes,
+      seconds,
+      formattedDateTime;
+
+    year = now.getFullYear();
+    month =
+      now.getMonth().toString().length === 1
+        ? "0" + (now.getMonth() + 1).toString()
+        : now.getMonth() + 1;
+    date =
+      now.getDate().toString().length === 1
+        ? "0" + now.getDate().toString()
+        : now.getDate();
+    hours =
+      now.getHours().toString().length === 1
+        ? "0" + now.getHours().toString()
+        : now.getHours();
+    minutes =
+      now.getMinutes().toString().length === 1
+        ? "0" + now.getMinutes().toString()
+        : now.getMinutes();
+    seconds =
+      now.getSeconds().toString().length === 1
+        ? "0" + now.getSeconds().toString()
+        : now.getSeconds();
+
+    formattedDateTime =
+      year +
+      "-" +
+      month +
+      "-" +
+      date +
+      "T" +
+      hours +
+      ":" +
+      minutes +
+      ":" +
+      seconds;
+
+    //document.getElementById("datetime_movi").value = formattedDateTime;
+    setformtrans({ ...stateformtrans, datetime: formattedDateTime });
+    ModNewTransSate();
   };
   // Eliminar data
   const handleDelete = (e, id) => {
@@ -100,12 +271,22 @@ function Account() {
       ChangeStateAccount();
     });
   };
+
   /* ...state para que no se modifique */
   const handleChange = (event) => {
-    setform({ ...stateform, [event.target.name]: event.target.value });
+    console.log(event.target.name === "edit_save_account")
+    if (event.target.name === "edit_save_account"){
+      setform({ ...stateform, "save_account": event.target.checked });
+    } else {
+      setform({ ...stateform, [event.target.name]: event.target.value });
+    }
   };
   const handleChangeEdit = (event) => {
-    setformEdit({ ...stateformEdit, [event.target.name]: event.target.value });
+    if (event.target.name === "edit_save_account"){
+      setformEdit({ ...stateformEdit, "edit_include": event.target.checked });
+    } else {
+      setformEdit({ ...stateformEdit, [event.target.name]: event.target.value });
+    }
   };
 
   const handleSubmit = (event) => {
@@ -122,9 +303,105 @@ function Account() {
         monto: stateform.monto,
         save: stateform.save_account,
       }).then((response) => {
-        alert(response.data);
         ModNewCateSate();
         ChangeStateAccount();
+        let idAlert;
+        if (response.data === 200) {
+          idAlert = "alert-200";
+        } else {
+          idAlert = "alert-400";
+        }
+        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+          setTimeout(() => {
+          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          }, 2000)
+      });
+    }
+  };
+  const handleSubmitMovi = (event) => {
+    event.preventDefault();
+    if (
+      stateform.badge === "" ||
+      stateform.catego === 0 ||
+      stateform.acount === ""
+    ) {
+      alert("Fill in all the fields");
+    } else {
+      document.getElementById("btn_new_move_dash").disabled = true;
+      document.getElementById("btn_new_move_dash").innerHTML =
+        "<span className='spinner-border spinner-border-sm mr-1'" +
+        "role='status' aria-hidden='true'></span>Loading...";
+      let valor = stateform.monto;
+      if (document.getElementById("signo_move").value === "-") {
+        valor = valor * -1;
+      }
+      let idc = sessionStorage.getItem("IdUser");
+      API.post("add_data", {
+        id: 3,
+        idu: idc,
+        accoun: stateform.acount,
+        value: valor,
+        divisa: stateform.badge,
+        catego: stateform.catego,
+        descrip: stateform.descrip,
+        date: stateform.datetime,
+      }).then((response) => {
+        //alert (response.data);
+        ModNewMoviSate();
+        document.getElementById("btn_new_move_dash").innerHTML = "Add";
+        document.getElementById("btn_new_move_dash").disabled = false;
+        let idAlert;
+        if (response.data === 200) {
+          idAlert = "alert-200";
+        } else {
+          idAlert = "alert-400";
+        }
+        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+          setTimeout(() => {
+          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          }, 2000)
+      });
+    }
+  };
+  const handleSubmit_trans = (event) => {
+    event.preventDefault();
+    if (
+      stateformtrans.badge === "" ||
+      stateformtrans.account_fin === 0 ||
+      stateformtrans.account_ini === 0 ||
+      stateformtrans.monto === 0
+    ) {
+      alert("Fill in all the fields");
+    } else {
+      document.getElementById("btn_new_trans_dash").disabled = true;
+      document.getElementById("btn_new_trans_dash").innerHTML =
+        "<span className='spinner-border spinner-border-sm mr-1'" +
+        "role='status' aria-hidden='true'></span>Loading...";
+      let idc = sessionStorage.getItem("IdUser");
+      API.post("add_data", {
+        id: 4,
+        idu: idc,
+        acco_frist: stateformtrans.account_ini,
+        value: stateformtrans.monto,
+        divisa: stateformtrans.badge,
+        acco_sec: stateformtrans.account_fin,
+        descri: stateformtrans.descrip,
+        date: stateformtrans.datetime,
+      }).then((response) => {
+        //alert (response.data);
+        ModNewTransSate();
+        document.getElementById("btn_new_trans_dash").innerHTML = "Add";
+        document.getElementById("btn_new_trans_dash").disabled = false;
+        let idAlert;
+        if (response.data === 200) {
+          idAlert = "alert-200";
+        } else {
+          idAlert = "alert-400";
+        }
+        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+          setTimeout(() => {
+          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          }, 2000)
       });
     }
   };
@@ -133,10 +410,11 @@ function Account() {
     if (stateformEdit.badge === 0) {
     } else {
       let idc = sessionStorage.getItem("IdUser");
-      console.log(stateformEdit.edit_include);
-      let include = 1;
-      if (stateformEdit.edit_include == null) {
+      let include;
+      if (stateformEdit.edit_include === false) {
         include = 0;
+      } else {
+        include = 1;
       }
       API.post("edit_data", {
         id: 2,
@@ -151,6 +429,16 @@ function Account() {
         console.log(response);
         ModEdiCateSate();
         ChangeStateAccount();
+        let idAlert;
+        if (response.data === 200) {
+          idAlert = "alert-200";
+        } else {
+          idAlert = "alert-400";
+        }
+        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+          setTimeout(() => {
+          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          }, 2000)
       });
     }
   };
@@ -158,6 +446,19 @@ function Account() {
     <>
       <Header />
       <Container className="mt--7" fluid>
+      <div className="col justify-content-end row">
+          <Button className="btn-info mb-3" onClick={(e) => OpenModalMovi(e)}>
+            <i className="fas fa-plus mr-2"></i>
+            Move
+          </Button>
+          <Button
+            className="btn-success mb-3"
+            onClick={(e) => OpenModalTrans(e)}
+          >
+            <i className="fas fa-exchange-alt mr-2"></i>
+            Transfer
+          </Button>
+        </div>
         <Row>
           {state
             ? state.map((data, index) => (
@@ -180,7 +481,7 @@ function Account() {
                     <Row>
                       <div className="col">Divisas: {data.divisa}</div>
                       <div className="col">
-                        {data.cuenta_ahorro === 1 ? "Cuenta Ahorro" : ""}
+                        {data.cuenta_ahorro === "1" ? "Saving Acount" : ""}
                       </div>
                     </Row>
                   </CardHeader>
@@ -195,7 +496,7 @@ function Account() {
                         }
                       >
                         <Button
-                          className="mr-4 shadow"
+                          className="mr-4 shadow btn-circle"
                           color="success"
                           size="sm"
                         >
@@ -203,7 +504,7 @@ function Account() {
                         </Button>
                       </Link>
                       <Button
-                        className="mr-4 shadow"
+                        className="mr-4 shadow btn-circle"
                         color="info"
                         size="sm"
                         onClick={(e) =>
@@ -221,7 +522,7 @@ function Account() {
                         <i className="ni ni-settings"></i>
                       </Button>
                       <Button
-                        className="mr-4 shadow"
+                        className="mr-4 shadow btn-circle"
                         color="danger"
                         size="sm"
                         onClick={(e) =>
@@ -242,17 +543,25 @@ function Account() {
             <CardBody style={{ paddingLeft: "10px", paddingRight: "10px" }}>
               <Row>
                 <div className="col" style={{ marginTop: 20 }}>
-                  <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted">
+                  <h3 className="card-title col-md-11 col-lg-11 col-xl-11 text-muted pt-3">
                     <i className="fas fa-plus mr-2"></i>New Account
                   </h3>
                 </div>
-                <div className="col">
+                <div className="col pt-3">
                   <i className="fas fa-chevron-right float-right mt-3 ml-2 fa-2x"></i>
                 </div>
               </Row>
             </CardBody>
           </Card>
         </Row>
+        <div className="alert bg-success-lighten-20 fixed-bottom mx-auto col-3 mb-2 text-dark d-sm-none" id="alert-200" role="alert">
+          <i className="far fa-check-circle mr-5"></i>
+          Data save success!
+        </div>
+        <div className="alert bg-wrong-darken-10 fixed-bottom mx-auto col-3 mb-2 text-dark d-sm-none" id="alert-400" role="alert">
+          <i className="far fa-times-circle mr-5"></i>
+          Data doens't save!
+        </div>
         <Modal show={showNewMod} id="ModalAdd" onHide={ModNewCateSate}>
           <Modal.Header closeButton>
             <Modal.Title>Creator of category</Modal.Title>
@@ -324,6 +633,128 @@ function Account() {
               </Button>
               <Button type="submit" color="success">
                 Save Changes
+              </Button>
+            </Modal.Footer>
+          </Form>
+        </Modal>
+        <Modal show={showNewModMovi} id="ModalAdd" onHide={ModNewMoviSate}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Movement</Modal.Title>
+          </Modal.Header>
+          <Form role="form" onSubmit={handleSubmitMovi}>
+            <Modal.Body>
+              <FormGroup>
+                <Row>
+                  <div className="col-md-8">
+                    <Label>Value</Label>
+                    <InputGroup>
+                      <InputGroup.Prepend>
+                        <Button
+                          value={stateSignal.Signal}
+                          type="button"
+                          id="signo_move"
+                          className="btn btn-outline-success"
+                          onClick={ChangeSignal}
+                        >
+                          {stateSignal.Signal}
+                        </Button>
+                      </InputGroup.Prepend>
+                      <Form.Control
+                        pattern="[0-9]{0,5}"
+                        type="number"
+                        name="monto"
+                        id="monto"
+                        step={0.01}
+                        aria-describedby="SignalAppend"
+                        required
+                        onChange={(e) => VerifySignal(e, "signo_move")}
+                      ></Form.Control>
+                    </InputGroup>
+                  </div>
+                  <div className="col-md-3">
+                    <Form.Control
+                      as="select"
+                      className="mt-4"
+                      name="badge"
+                      onChange={handleChange}
+                    >
+                      <option>COP</option>
+                      <option>USD</option>
+                    </Form.Control>
+                  </div>
+                </Row>
+              </FormGroup>
+              <FormGroup>
+                <Label>Acount</Label>
+                <Form.Control as="select" name="acount" onChange={handleChange}>
+                  <option></option>
+                  {stateAcount.id !== -1000
+                    ? stateAcount.map((data, index) => {
+                        return (
+                          <option
+                            key={index}
+                            className="font-weight-bold"
+                            value={data.id}
+                          >
+                            {data.nombre}
+                          </option>
+                        );
+                      })
+                    : ""}
+                </Form.Control>
+              </FormGroup>
+              <FormGroup>
+                <Label>Category</Label>
+                <Form.Control as="select" name="catego" onChange={handleChange}>
+                  <option></option>
+                  {stateCatego.id !== -1000
+                    ? stateCatego.map((data, index) => {
+                        if (data.sub_categoria === data.categoria) {
+                          return (
+                            <option
+                              key={index}
+                              className="font-weight-bold"
+                              value={data.nro_sub_catego}
+                            >
+                              {data.sub_categoria}
+                            </option>
+                          );
+                        } else {
+                          return (
+                            <option key={index} value={data.nro_sub_catego}>
+                              &nbsp;&nbsp;&nbsp;{data.sub_categoria}
+                            </option>
+                          );
+                        }
+                      })
+                    : ""}
+                </Form.Control>
+              </FormGroup>
+              <FormGroup>
+                <Label>Description</Label>
+                <Form.Control
+                  as="textarea"
+                  name="descrip"
+                  rows="3"
+                  onChange={handleChange}
+                ></Form.Control>
+              </FormGroup>
+              <FormGroup>
+                <Label>Date</Label>
+                <Input
+                  type="datetime-local"
+                  name="datetime"
+                  defaultValue="2020-01-01T12:00:00"
+                  onChange={handleChange}
+                />
+              </FormGroup>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button color="danger" onClick={ModNewMoviSate}>
+                Close
+              </Button>
+              <Button type="submit" color="success" id="btn_new_move_dash">
+                Add
               </Button>
             </Modal.Footer>
           </Form>
@@ -429,6 +860,119 @@ function Account() {
                 Save Changes
               </Button>
             </ModalFooter>
+          </Form>
+        </Modal>
+        <Modal show={showNewTransMod} id="ModalTrans" onHide={ModNewTransSate}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Transfer</Modal.Title>
+          </Modal.Header>
+          <Form role="form" onSubmit={handleSubmit_trans}>
+            <Modal.Body>
+              <FormGroup>
+                <Row>
+                  <div className="col-md-8">
+                    <Label>Value</Label>
+                    <InputGroup>
+                      <InputGroup.Prepend>
+                        <Button
+                          value={stateSignal.Signal}
+                          type="button"
+                          className="btn btn-outline-success"
+                        >
+                          +
+                        </Button>
+                      </InputGroup.Prepend>
+                      <Form.Control
+                        pattern="[0-9]{0,5}"
+                        type="number"
+                        name="monto"
+                        id="monto"
+                        step={0.01}
+                        aria-describedby="SignalAppend"
+                        required
+                        onChange={(e) => VerifySignal(e, "")}
+                      ></Form.Control>
+                    </InputGroup>
+                  </div>
+                  <div className="col-md-3">
+                    <Form.Control
+                      as="select"
+                      className="mt-4"
+                      name="badge"
+                      onChange={handleChangeTrans}
+                    >
+                      <option>COP</option>
+                      <option>USD</option>
+                    </Form.Control>
+                  </div>
+                </Row>
+              </FormGroup>
+              <FormGroup>
+                <Label>Out Account</Label>
+                <Form.Control
+                  as="select"
+                  id="account_ini"
+                  name="account_ini"
+                  onChange={handleChangeTrans}
+                >
+                  <option></option>
+                  {stateCatego.id !== -1000
+                    ? stateCatego.map((data, index) => {
+                        return (
+                          <option key={index} value={data.id}>
+                            {data.nombre}
+                          </option>
+                        );
+                      })
+                    : ""}
+                </Form.Control>
+              </FormGroup>
+              <FormGroup>
+                <Label>In Account</Label>
+                <Form.Control
+                  as="select"
+                  name="account_fin"
+                  onChange={handleChangeTrans}
+                >
+                  <option></option>
+                  {stateCatego.id !== -1000
+                    ? stateCatego.map((data, index) => {
+                        return (
+                          <option key={index} value={data.id}>
+                            {data.nombre}
+                          </option>
+                        );
+                      })
+                    : ""}
+                </Form.Control>
+              </FormGroup>
+              <FormGroup>
+                <Label>Description</Label>
+                <Form.Control
+                  as="textarea"
+                  name="descrip"
+                  rows="3"
+                  onChange={handleChangeTrans}
+                ></Form.Control>
+              </FormGroup>
+              <FormGroup>
+                <Label>Date</Label>
+                <Form.Control
+                  type="datetime-local"
+                  defaultValue="2020-01-01T12:00:00"
+                  name="datetime"
+                  onChange={handleChangeTrans}
+                ></Form.Control>
+              </FormGroup>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button color="danger" onClick={ModNewTransSate}>
+                Close
+              </Button>
+              <Button type="submit" color="success" id="btn_new_trans_dash">
+                Add
+              </Button>
+            </Modal.Footer>
           </Form>
         </Modal>
       </Container>

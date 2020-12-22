@@ -1,0 +1,52 @@
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scroll-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE and Edge */
+.scroll-none {
+  -ms-overflow-style: none;
+}
+
+.card-scroll {
+  max-height: 300px;
+  overflow-x: hidden;
+}
+
+.height-15 {
+  height: 15px;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
+
+$success: #2dce89;
+$wrong: #fb6340;
+
+@for $i from 5 through 100 {
+  @if $i % 10 == 0 {
+    $percentage: $i*1%;
+    .bg-wrong-darken-#{$i} {
+      background-color: darken($wrong, $percentage);
+    }
+    .bg-success-lighten-#{$i} {
+      background-color: lighten($success, $percentage);
+    }
+    .bg-wrong-lighten-#{$i} {
+      background-color: lighten($wrong, $percentage);
+    }
+    .mix-black-#{$i} {
+      background-color: mix(black, $wrong, $percentage);
+    }
+    .mix-white-#{$i} {
+      background-color: mix(white, $wrong, $percentage);
+    }
+  }
+}

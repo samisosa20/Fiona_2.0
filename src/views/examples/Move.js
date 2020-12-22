@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 import API from "../../variables/API";
 import axios from "axios";
@@ -100,7 +100,7 @@ function Account() {
         .then(
           axios.spread((firstResponse, secondResponse) => {
             setState({
-              NameAcount: div[2],
+              NameAcount: div[2].replace("%20", ' '),
               Balance: firstResponse.data[0].cantidad,
               Divisa: firstResponse.data[0].divisa,
               Descripcion: firstResponse.data[0].descripcion,
@@ -377,7 +377,7 @@ function Account() {
     } else {
       document.getElementById("btn_new_move_move").disabled = true;
       document.getElementById("btn_new_move_move").innerHTML =
-        "<span class='spinner-border spinner-border-sm mr-1'" +
+        "<span className='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
       let valor = stateform.monto;
       if (document.getElementById("signo_move").value === "-") {
@@ -399,6 +399,16 @@ function Account() {
         document.getElementById("btn_new_move_move").innerHTML = "Add";
         document.getElementById("btn_new_move_move").disabled = false;
         setrefreshData(!refreshData);
+        let idAlert;
+        if (response.data === 200) {
+          idAlert = "alert-200";
+        } else {
+          idAlert = "alert-400";
+        }
+        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+          setTimeout(() => {
+          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          }, 2000)
       });
     }
   };
@@ -418,7 +428,7 @@ function Account() {
     } else {
       document.getElementById("btn_new_trans_move").disabled = true;
       document.getElementById("btn_new_trans_move").innerHTML =
-        "<span class='spinner-border spinner-border-sm mr-1'" +
+        "<span className='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
       let idc = sessionStorage.getItem("IdUser");
       API.post("add_data", {
@@ -436,6 +446,16 @@ function Account() {
         document.getElementById("btn_new_trans_move").innerHTML = "Add";
         document.getElementById("btn_new_trans_move").disabled = false;
         setrefreshData(!refreshData);
+        let idAlert;
+        if (response.data === 200) {
+          idAlert = "alert-200";
+        } else {
+          idAlert = "alert-400";
+        }
+        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+          setTimeout(() => {
+          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          }, 2000)
       });
     }
   };
@@ -446,7 +466,7 @@ function Account() {
     } else {
       document.getElementById("btn_edit_move_move").disabled = true;
       document.getElementById("btn_edit_move_move").innerHTML =
-        "<span class='spinner-border spinner-border-sm mr-1'" +
+        "<span className='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
       let valor = stateformEdit.monto;
       if (document.getElementById("signo_move_edit").value === "-") {
@@ -470,6 +490,16 @@ function Account() {
           "Save Changes";
         document.getElementById("btn_edit_move_move").disabled = false;
         setrefreshData(!refreshData);
+        let idAlert;
+        if (response.data === 200) {
+          idAlert = "alert-200";
+        } else {
+          idAlert = "alert-400";
+        }
+        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+          setTimeout(() => {
+          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          }, 2000)
       });
     }
   };
@@ -485,7 +515,7 @@ function Account() {
     } else {
       document.getElementById("btn_edit_trans_move").disabled = true;
       document.getElementById("btn_edit_trans_move").innerHTML =
-        "<span class='spinner-border spinner-border-sm mr-1'" +
+        "<span className='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
       let valor = stateformEditTrans.monto;
       let idc = sessionStorage.getItem("IdUser");
@@ -506,6 +536,16 @@ function Account() {
           "Save Changes";
         document.getElementById("btn_edit_trans_move").disabled = false;
         setrefreshData(!refreshData);
+        let idAlert;
+        if (response.data === 200) {
+          idAlert = "alert-200";
+        } else {
+          idAlert = "alert-400";
+        }
+        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+          setTimeout(() => {
+          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          }, 2000)
       });
     }
   };
@@ -513,7 +553,7 @@ function Account() {
     e.preventDefault();
     document.getElementById("btn_dele_move_move").disabled = true;
     document.getElementById("btn_dele_move_move").innerHTML =
-      "<span class='spinner-border spinner-border-sm mr-1'" +
+      "<span className='spinner-border spinner-border-sm mr-1'" +
       "role='status' aria-hidden='true'></span>Loading...";
     let idc = sessionStorage.getItem("IdUser");
     API.post("delete_data", {
@@ -528,6 +568,16 @@ function Account() {
       document.getElementById("btn_dele_move_move").innerHTML = "Delete";
       document.getElementById("btn_dele_move_move").disabled = false;
       setrefreshData(!refreshData);
+      let idAlert;
+        if (response.data === 200) {
+          idAlert = "alert-200";
+        } else {
+          idAlert = "alert-400";
+        }
+        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+          setTimeout(() => {
+          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          }, 2000)
     });
   };
   return (
@@ -542,14 +592,14 @@ function Account() {
           </div>
           <div className="col justify-content-end row">
             <Button className="btn-info mb-3" onClick={(e) => OpenModalMovi(e)}>
-              <i class="fas fa-plus mr-2"></i>
+              <i className="fas fa-plus mr-2"></i>
               Move
             </Button>
             <Button
               className="mr-3 mb-3 btn-success"
               onClick={(e) => OpenModalTrans(e)}
             >
-              <i class="fas fa-exchange-alt mr-2"></i>
+              <i className="fas fa-exchange-alt mr-2"></i>
               Transfer
             </Button>
           </div>
@@ -619,6 +669,14 @@ function Account() {
             </ListGroupItem>
           ))}
         </ListGroup>
+        <div className="alert bg-success-lighten-20 fixed-bottom mx-auto col-3 mb-2 text-dark d-sm-none" id="alert-200" role="alert">
+          <i className="far fa-check-circle mr-5"></i>
+          Data save success!
+        </div>
+        <div className="alert bg-wrong-darken-10 fixed-bottom mx-auto col-3 mb-2 text-dark d-sm-none" id="alert-400" role="alert">
+          <i className="far fa-times-circle mr-5"></i>
+          Data doens't save!
+        </div>
         <Modal show={showNewMod} id="ModalAdd" onHide={ModNewMoviSate}>
           <Modal.Header closeButton>
             <Modal.Title>Add Movement</Modal.Title>

@@ -21,7 +21,8 @@ import API from "../../variables/API";
 import axios from "axios";
 // core components
 import { Header } from "components/Headers/Header.js";
-import "assets/css/sammy-react.css";
+import { months } from "moment";
+
 
 function Report() {
   const [stateDate, setDate] = useState({
@@ -72,7 +73,6 @@ function Report() {
   };
 
   function getDate(mode = "1") {
-    if (mode !== "0") {
       let now = new Date(),
         year,
         month,
@@ -80,33 +80,39 @@ function Report() {
         date,
         formattedDateTime,
         formattedDateTimeIni;
-      if (mode === "1") {
-        year = now.getFullYear();
+      month_now =
+        now.getMonth().toString().length === 1
+          ? "0" + now.getMonth().toString()
+          : now.getMonth() + 1;
+
+      let d = new Date();
+      if (mode === "-1") {
+        d.setFullYear(now.getFullYear(), month_now - 1, 0);
+        year = d.getFullYear();
         month =
-          now.getMonth().toString().length === 1
-            ? "0" + (now.getMonth() + 1).toString()
-            : now.getMonth() + 1;
+          d.getMonth().toString().length === 1
+            ? "0" + (d.getMonth() + 1).toString()
+            : d.getMonth() + 1;
         date =
-          now.getDate().toString().length === 1
-            ? "0" + now.getDate().toString()
-            : now.getDate();
-
-        formattedDateTime = year + "-" + month + "-" + date;
+          d.getDate().toString().length === 1
+            ? "0" + d.getDate().toString()
+            : d.getDate();
+            formattedDateTime = year + "-" + month + "-" + date;
+            
         document.getElementById("Edate").value = formattedDateTime;
-
-        month =
-          now.getMonth().toString().length === 1
-            ? "0" + (now.getMonth() + 1).toString()
-            : now.getMonth() + 1;
+        month_now = month;
         date = "01";
-      } else {
-        month_now =
-          now.getMonth().toString().length === 1
-            ? "0" + now.getMonth().toString()
-            : now.getMonth();
+        formattedDateTimeIni = year + "-" + month_now + "-" + date;
+        document.getElementById("Sdate").value = formattedDateTimeIni;
 
-        let d = new Date();
-
+        setDate({
+          ...stateDate,
+          Sdate: formattedDateTimeIni,
+          Fdate: formattedDateTime,
+          hidden: true,
+        });
+      } else if (mode == "1") {
+        
         d.setFullYear(now.getFullYear(), month_now, 0);
         year = d.getFullYear();
         month =
@@ -118,35 +124,35 @@ function Report() {
             ? "0" + d.getDate().toString()
             : d.getDate();
         formattedDateTime = year + "-" + month + "-" + date;
+        
         document.getElementById("Edate").value = formattedDateTime;
-        month_now =
-          now.getMonth().toString().length === 1
-            ? "0" + (now.getMonth() - 1).toString()
-            : now.getMonth() - 1;
-        d.setFullYear(now.getFullYear(), month_now, 1);
+
+        if ( month_now === 12 ){
+          d.setFullYear(now.getFullYear(), month_now - 1, 1);
+        } else {
+          d.setFullYear(now.getFullYear(), month_now, 1);
+        }
         year = d.getFullYear();
         month =
           d.getMonth().toString().length === 1
             ? "0" + (d.getMonth() + 1).toString()
-            : d.getMonth() + 1;
+            : d.getMonth();
         date =
           d.getDate().toString().length === 1
             ? "0" + d.getDate().toString()
             : d.getDate();
+        formattedDateTimeIni = year + "-" + month_now + "-" + date;
+        document.getElementById("Sdate").value = formattedDateTimeIni;
+  
+        setDate({
+          ...stateDate,
+          Sdate: formattedDateTimeIni,
+          Fdate: formattedDateTime,
+          hidden: true,
+        });
+      } else {
+        setDate({ ...stateDate, hidden: false });
       }
-
-      formattedDateTimeIni = year + "-" + month + "-" + date;
-      document.getElementById("Sdate").value = formattedDateTimeIni;
-
-      setDate({
-        ...stateDate,
-        Sdate: formattedDateTimeIni,
-        Fdate: formattedDateTime,
-        hidden: true,
-      });
-    } else {
-      setDate({ ...stateDate, hidden: false });
-    }
   }
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -155,8 +161,8 @@ function Report() {
   });
   useEffect(() => {
     async function getDataReport(idc, divi) {
-      if (stateDate.Sdate === "") {
-        getDate(0);
+      if (stateDate.Sdate === ""){
+        getDate(1);
       }
       let Fecha_ini = document.getElementById("Sdate").value;
       let Fehca_fin = document.getElementById("Edate").value;
@@ -213,7 +219,7 @@ function Report() {
   // Funcion para cambiar de estado de los modals
   const ModShowModal = () => setShowModalMove(!ShowModalMove);
   const consultdate = () => {
-    setDate({
+    setDate({...stateDate,
       Sdate: document.getElementById("Sdate").value,
       Fdate: document.getElementById("Edate").value,
     });
