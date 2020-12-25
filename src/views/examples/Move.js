@@ -18,6 +18,7 @@ import {
 import { Form, InputGroup, Modal } from "react-bootstrap";
 // core components
 import { Header } from "components/Headers/Header.js";
+import Modaldelete from "../../components/Modals/Delete";
 
 function Account() {
   //declaracion de variables
@@ -549,37 +550,6 @@ function Account() {
       });
     }
   };
-  const handleDelete = (e, id) => {
-    e.preventDefault();
-    document.getElementById("btn_dele_move_move").disabled = true;
-    document.getElementById("btn_dele_move_move").innerHTML =
-      "<span className='spinner-border spinner-border-sm mr-1'" +
-      "role='status' aria-hidden='true'></span>Loading...";
-    let idc = sessionStorage.getItem("IdUser");
-    API.post("delete_data", {
-      id: 3,
-      idu: idc,
-      id_data: id,
-      date: stateformEdit.datetime,
-    }).then((response) => {
-      //alert (response.data);
-      ModDelCateSate();
-      stateformEdit.Modal === "move" ? ModEditSate() : ModEditTransSate();
-      document.getElementById("btn_dele_move_move").innerHTML = "Delete";
-      document.getElementById("btn_dele_move_move").disabled = false;
-      setrefreshData(!refreshData);
-      let idAlert;
-        if (response.data === 200) {
-          idAlert = "alert-200";
-        } else {
-          idAlert = "alert-400";
-        }
-        document.querySelector(`#${idAlert}`).classList.remove("d-none");
-          setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-none");
-          }, 2000)
-    });
-  };
   return (
     <>
       <Header />
@@ -1043,27 +1013,17 @@ function Account() {
             </ModalFooter>
           </Form>
         </Modal>
-        <Modal show={showDelMod} id="ModalDelete" onHide={ModDelCateSate}>
-          <Modal.Header closeButton>
-            <Modal.Title>Delete movement</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {"Are you sure delete the account this movement?"}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button color="secundary" onClick={ModDelCateSate}>
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              color="danger"
-              id="btn_dele_move_move"
-              onClick={(e) => handleDelete(e, stateformEdit.id_data)}
-            >
-              Delete
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <Modaldelete
+            action = "movement"
+            title="Delete movement"
+            message="Are you sure to delete the movement of this account?"
+            refreshData={refreshData}
+            setrefreshData={setrefreshData}
+            state={stateformEdit}
+            showDelMod={showDelMod}
+            setshowDelMod={setshowDelMod}
+            extraModal={stateformEdit.Modal === "move" ? ModEditSate : ModEditTransSate}
+          />
         <Modal
           show={showEditsTransMod}
           id="ModalEditTrans"
