@@ -9,13 +9,14 @@ import {
   Label,
   Button,
 } from "reactstrap";
-import { Form, Modal, option } from "react-bootstrap";
+import { Form, Modal} from "react-bootstrap";
 // core components
 import { Header } from "components/Headers/Header.js";
 import API from "../../variables/API";
-import { Link } from "react-router-dom"; // para navegar entre paginas
+import { Link } from "react-router-dom";
+import '../../assets/styles/components/Catego.scss';
 
-function Catego() {
+const Catego = () => {
   /* Declaracion de variables */
   const [state, setState] = useState({ jsonCatego: [], lvl: 0 });
   // envio de informacion
@@ -153,7 +154,7 @@ function Catego() {
           {state.lvl !== undefined ? (
             <Card className="shadow col-md-5 mr-2 ml-2 mb-3">
               <Link to={"/admin/catego"}>
-                <CardBody style={{ paddingLeft: "10px", paddingRight: "10px" }}>
+                <CardBody className="card-body">
                   <Row>
                     <div className="col" style={{ marginTop: 20 }}>
                       <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted">
@@ -174,7 +175,7 @@ function Catego() {
             ? state.jsonCatego.map((data, index) => (
                 <Card className="shadow col-md-5 mr-2 ml-2 mb-3" key={index}>
                   <CardBody
-                    style={{ paddingLeft: "10px", paddingRight: "10px" }}
+                    className="card-body"
                   >
                     <Row>
                       <Link
@@ -217,14 +218,14 @@ function Catego() {
             className="shadow col-md-5 mr-2 ml-2 mb-3"
             onClick={(e) => OpenModalNew(e)}
           >
-            <CardBody style={{ paddingLeft: "10px", paddingRight: "10px" }}>
+            <CardBody className="card-body">
               <Row>
-                <div className="col" style={{ marginTop: 20 }}>
+                <div className="col catego">
                   <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted">
                     <i className="fas fa-plus mr-2"></i>New Category
                   </h3>
                 </div>
-                <div className="col">
+                <div className="col arrow">
                   <i className="fas fa-chevron-right float-right mt-3 ml-2 fa-2x"></i>
                 </div>
               </Row>

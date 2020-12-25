@@ -18,6 +18,8 @@ import { Header } from "components/Headers/Header.js";
 import API from "../../variables/API";
 import axios from "axios";
 import { Link } from "react-router-dom"; // para navegar entre paginas
+import FormAccount from "components/Form/FormTransfer";
+import FormEditor from "components/Form/FormEditor";
 
 function Account() {
   const [state, setState] = useState([]);
@@ -62,7 +64,9 @@ function Account() {
     API.post("acount", {
       id: 2,
       idc: idc,
-    }).then((response) => {setState(response.data)});
+    }).then((response) => {
+      setState(response.data);
+    });
   }, [stateAccount, showNewModMovi, showNewTransMod]);
 
   // Funcion para cambiar de estado de los modals
@@ -274,18 +278,21 @@ function Account() {
 
   /* ...state para que no se modifique */
   const handleChange = (event) => {
-    console.log(event.target.name === "edit_save_account")
-    if (event.target.name === "edit_save_account"){
-      setform({ ...stateform, "save_account": event.target.checked });
+    console.log(event.target.name === "edit_save_account");
+    if (event.target.name === "edit_save_account") {
+      setform({ ...stateform, save_account: event.target.checked });
     } else {
       setform({ ...stateform, [event.target.name]: event.target.value });
     }
   };
   const handleChangeEdit = (event) => {
-    if (event.target.name === "edit_save_account"){
-      setformEdit({ ...stateformEdit, "edit_include": event.target.checked });
+    if (event.target.name === "edit_save_account") {
+      setformEdit({ ...stateformEdit, edit_include: event.target.checked });
     } else {
-      setformEdit({ ...stateformEdit, [event.target.name]: event.target.value });
+      setformEdit({
+        ...stateformEdit,
+        [event.target.name]: event.target.value,
+      });
     }
   };
 
@@ -312,9 +319,9 @@ function Account() {
           idAlert = "alert-400";
         }
         document.querySelector(`#${idAlert}`).classList.remove("d-none");
-          setTimeout(() => {
+        setTimeout(() => {
           document.querySelector(`#${idAlert}`).classList.add("d-none");
-          }, 2000)
+        }, 2000);
       });
     }
   };
@@ -357,9 +364,9 @@ function Account() {
           idAlert = "alert-400";
         }
         document.querySelector(`#${idAlert}`).classList.remove("d-none");
-          setTimeout(() => {
+        setTimeout(() => {
           document.querySelector(`#${idAlert}`).classList.add("d-none");
-          }, 2000)
+        }, 2000);
       });
     }
   };
@@ -399,9 +406,9 @@ function Account() {
           idAlert = "alert-400";
         }
         document.querySelector(`#${idAlert}`).classList.remove("d-none");
-          setTimeout(() => {
+        setTimeout(() => {
           document.querySelector(`#${idAlert}`).classList.add("d-none");
-          }, 2000)
+        }, 2000);
       });
     }
   };
@@ -436,9 +443,9 @@ function Account() {
           idAlert = "alert-400";
         }
         document.querySelector(`#${idAlert}`).classList.remove("d-none");
-          setTimeout(() => {
+        setTimeout(() => {
           document.querySelector(`#${idAlert}`).classList.add("d-none");
-          }, 2000)
+        }, 2000);
       });
     }
   };
@@ -446,7 +453,7 @@ function Account() {
     <>
       <Header />
       <Container className="mt--7" fluid>
-      <div className="col justify-content-end row">
+        <div className="col justify-content-end row">
           <Button className="btn-info mb-3" onClick={(e) => OpenModalMovi(e)}>
             <i className="fas fa-plus mr-2"></i>
             Move
@@ -554,11 +561,19 @@ function Account() {
             </CardBody>
           </Card>
         </Row>
-        <div className="alert bg-success-lighten-20 fixed-bottom mx-auto col-3 mb-2 text-dark d-none" id="alert-200" role="alert">
+        <div
+          className="alert bg-success-lighten-20 fixed-bottom mx-auto col-3 mb-2 text-dark d-none"
+          id="alert-200"
+          role="alert"
+        >
           <i className="far fa-check-circle mr-5"></i>
           Data save success!
         </div>
-        <div className="alert bg-wrong-darken-10 fixed-bottom mx-auto col-3 mb-2 text-dark d-none" id="alert-400" role="alert">
+        <div
+          className="alert bg-wrong-darken-10 fixed-bottom mx-auto col-3 mb-2 text-dark d-none"
+          id="alert-400"
+          role="alert"
+        >
           <i className="far fa-times-circle mr-5"></i>
           Data doens't save!
         </div>
@@ -787,70 +802,7 @@ function Account() {
           </Modal.Header>
           <Form role="form" onSubmit={handleSubmitEdit}>
             <Modal.Body>
-              <FormGroup>
-                <Label>Name</Label>
-                <Form.Control
-                  type="text"
-                  name="edit_catego"
-                  defaultValue={stateformEdit.edit_account}
-                  required
-                  onChange={handleChangeEdit}
-                ></Form.Control>
-              </FormGroup>
-              <FormGroup>
-                <Label>Description</Label>
-                <Form.Control
-                  as="textarea"
-                  name="edit_descrip"
-                  rows="3"
-                  defaultValue={stateformEdit.edit_descrip}
-                  onChange={handleChangeEdit}
-                ></Form.Control>
-              </FormGroup>
-              <FormGroup>
-                <Label>Badge</Label>
-                <Form.Control
-                  as="select"
-                  name="edit_badge"
-                  required
-                  onChange={handleChangeEdit}
-                  defaultValue={stateformEdit.edit_badge}
-                >
-                  <option value="0" disabled>
-                    Select one option
-                  </option>
-                  <option value="COP">COP</option>
-                  <option value="USD">USD</option>
-                  <option value="EUR">EUR</option>
-                  <option value="JPY">JPY</option>
-                  <option value="GBD">GBD</option>
-                  <option value="CAD">CAD</option>
-                  <option value="AUD">AUD</option>
-                  <option value="MXN">MXN</option>
-                  <option value="ILS">ILS</option>
-                </Form.Control>
-              </FormGroup>
-              <FormGroup>
-                <Label>Starting amount</Label>
-                <Input
-                  name="edit_monto"
-                  pattern="[0-9]{0,5}"
-                  defaultValue={stateformEdit.edit_monto}
-                  type="number"
-                  onChange={handleChangeEdit}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Form.Check
-                  type="checkbox"
-                  label="Saving account"
-                  value="1"
-                  defaultChecked={stateformEdit.edit_include}
-                  onChange={handleChangeEdit}
-                  name="edit_save_account"
-                  id="edit_save_account"
-                />
-              </FormGroup>
+              <FormEditor stateformEdit handleChangeEdit/>
             </Modal.Body>
             <ModalFooter>
               <Button color="danger" onClick={ModEdiCateSate}>
@@ -866,114 +818,14 @@ function Account() {
           <Modal.Header closeButton>
             <Modal.Title>Add Transfer</Modal.Title>
           </Modal.Header>
-          <Form role="form" onSubmit={handleSubmit_trans}>
-            <Modal.Body>
-              <FormGroup>
-                <Row>
-                  <div className="col-md-8">
-                    <Label>Value</Label>
-                    <InputGroup>
-                      <InputGroup.Prepend>
-                        <Button
-                          value={stateSignal.Signal}
-                          type="button"
-                          className="btn btn-outline-success"
-                        >
-                          +
-                        </Button>
-                      </InputGroup.Prepend>
-                      <Form.Control
-                        pattern="[0-9]{0,5}"
-                        type="number"
-                        name="monto"
-                        id="monto"
-                        step={0.01}
-                        aria-describedby="SignalAppend"
-                        required
-                        onChange={(e) => VerifySignal(e, "")}
-                      ></Form.Control>
-                    </InputGroup>
-                  </div>
-                  <div className="col-md-3">
-                    <Form.Control
-                      as="select"
-                      className="mt-4"
-                      name="badge"
-                      onChange={handleChangeTrans}
-                    >
-                      <option>COP</option>
-                      <option>USD</option>
-                    </Form.Control>
-                  </div>
-                </Row>
-              </FormGroup>
-              <FormGroup>
-                <Label>Out Account</Label>
-                <Form.Control
-                  as="select"
-                  id="account_ini"
-                  name="account_ini"
-                  onChange={handleChangeTrans}
-                >
-                  <option></option>
-                  {stateCatego.id !== -1000
-                    ? stateCatego.map((data, index) => {
-                        return (
-                          <option key={index} value={data.id}>
-                            {data.nombre}
-                          </option>
-                        );
-                      })
-                    : ""}
-                </Form.Control>
-              </FormGroup>
-              <FormGroup>
-                <Label>In Account</Label>
-                <Form.Control
-                  as="select"
-                  name="account_fin"
-                  onChange={handleChangeTrans}
-                >
-                  <option></option>
-                  {stateCatego.id !== -1000
-                    ? stateCatego.map((data, index) => {
-                        return (
-                          <option key={index} value={data.id}>
-                            {data.nombre}
-                          </option>
-                        );
-                      })
-                    : ""}
-                </Form.Control>
-              </FormGroup>
-              <FormGroup>
-                <Label>Description</Label>
-                <Form.Control
-                  as="textarea"
-                  name="descrip"
-                  rows="3"
-                  onChange={handleChangeTrans}
-                ></Form.Control>
-              </FormGroup>
-              <FormGroup>
-                <Label>Date</Label>
-                <Form.Control
-                  type="datetime-local"
-                  defaultValue="2020-01-01T12:00:00"
-                  name="datetime"
-                  onChange={handleChangeTrans}
-                ></Form.Control>
-              </FormGroup>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button color="danger" onClick={ModNewTransSate}>
-                Close
-              </Button>
-              <Button type="submit" color="success" id="btn_new_trans_dash">
-                Add
-              </Button>
-            </Modal.Footer>
-          </Form>
+          <FormAccount
+            handleSubmit_trans={handleSubmit_trans}
+            stateSignal={stateSignal}
+            VerifySignal={VerifySignal}
+            stateCatego={stateCatego}
+            handleChangeTrans={handleChangeTrans}
+            ModNewTransSate={ModNewTransSate}
+          />
         </Modal>
       </Container>
     </>
