@@ -27,7 +27,7 @@ function Login(props) {
   const handleChange = (event) => {
     //setState({ ...state, [event.target.name]: event.target.value });
 
-    store.dispatch(return_user([event.target.name], event.target.value));
+    store.dispatch(return_user(event.target.name, event.target.value));
   };
 
   const handleSubmit = (event) => {
