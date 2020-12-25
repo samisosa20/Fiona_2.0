@@ -405,9 +405,9 @@ function Account() {
         } else {
           idAlert = "alert-400";
         }
-        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+        document.querySelector(`#${idAlert}`).classList.remove("d-none");
           setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          document.querySelector(`#${idAlert}`).classList.add("d-none");
           }, 2000)
       });
     }
@@ -452,9 +452,9 @@ function Account() {
         } else {
           idAlert = "alert-400";
         }
-        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+        document.querySelector(`#${idAlert}`).classList.remove("d-none");
           setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          document.querySelector(`#${idAlert}`).classList.add("d-none");
           }, 2000)
       });
     }
@@ -496,9 +496,9 @@ function Account() {
         } else {
           idAlert = "alert-400";
         }
-        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+        document.querySelector(`#${idAlert}`).classList.remove("d-none");
           setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          document.querySelector(`#${idAlert}`).classList.add("d-none");
           }, 2000)
       });
     }
@@ -542,9 +542,9 @@ function Account() {
         } else {
           idAlert = "alert-400";
         }
-        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+        document.querySelector(`#${idAlert}`).classList.remove("d-none");
           setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          document.querySelector(`#${idAlert}`).classList.add("d-none");
           }, 2000)
       });
     }
@@ -574,9 +574,9 @@ function Account() {
         } else {
           idAlert = "alert-400";
         }
-        document.querySelector(`#${idAlert}`).classList.remove("d-sm-none");
+        document.querySelector(`#${idAlert}`).classList.remove("d-none");
           setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-sm-none");
+          document.querySelector(`#${idAlert}`).classList.add("d-none");
           }, 2000)
     });
   };
@@ -669,11 +669,11 @@ function Account() {
             </ListGroupItem>
           ))}
         </ListGroup>
-        <div className="alert bg-success-lighten-20 fixed-bottom mx-auto col-3 mb-2 text-dark d-sm-none" id="alert-200" role="alert">
+        <div className="alert bg-success-lighten-20 fixed-bottom mx-auto col-3 mb-2 text-dark d-none" id="alert-200" role="alert">
           <i className="far fa-check-circle mr-5"></i>
           Data save success!
         </div>
-        <div className="alert bg-wrong-darken-10 fixed-bottom mx-auto col-3 mb-2 text-dark d-sm-none" id="alert-400" role="alert">
+        <div className="alert bg-wrong-darken-10 fixed-bottom mx-auto col-3 mb-2 text-dark d-none" id="alert-400" role="alert">
           <i className="far fa-times-circle mr-5"></i>
           Data doens't save!
         </div>

@@ -77,7 +77,7 @@ function Budget() {
                     <Row>
                       <Link to={"/admin/ViewBudget/" + data.year}>
                         <Button
-                          className="mr-4 shadow"
+                          className="mr-4 shadow btn-circle"
                           color="success"
                           size="sm"
                         >
@@ -91,7 +91,7 @@ function Budget() {
                         }}
                       >
                         <Button
-                          className="mr-4 shadow"
+                          className="mr-4 shadow btn-circle"
                           color="danger"
                           size="sm"
                           onClick={(e) =>
