@@ -204,8 +204,8 @@ function Report() {
               TopExp: TopExpenses.data,
               Budget: Budget.data,
               OpenClose: OpenClose.data[0],
-              ClassOpen: OpenClose.data[0].open < 0 ? "text-danger" : "text-success",
-              ClassClose: OpenClose.data[0].end < 0 ? "text-danger" : "text-success",
+              ClassOpen: OpenClose.data[0] && OpenClose.data[0].open < 0 ? "text-danger" : "text-success",
+              ClassClose: OpenClose.data[0] && OpenClose.data[0].end < 0 ? "text-danger" : "text-success",
               identify: 1,
             });
           })
