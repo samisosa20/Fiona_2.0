@@ -103,7 +103,7 @@ function ViewBudget() {
         id_data: stateEdit.id_data,
         value: stateEdit.value,
       }).then((response) => {
-        //alert (response.data);
+        alert (response.data);
         ModEditSate();
         document.getElementById(
           "value_mounth_" + stateEdit.id_data
@@ -111,6 +111,16 @@ function ViewBudget() {
         document.getElementById("btn_save_budget").innerHTML = "Save Changes";
         document.getElementById("btn_save_budget").disabled = false;
         setrefreshData(!refreshData);
+        let idAlert;
+        if (response.data === 200) {
+          idAlert = "alert-200";
+        } else {
+          idAlert = "alert-400";
+        }
+        document.querySelector(`#${idAlert}`).classList.remove("d-none");
+          setTimeout(() => {
+          document.querySelector(`#${idAlert}`).classList.add("d-none");
+          }, 2000)
       });
     }
   };
@@ -259,6 +269,14 @@ function ViewBudget() {
             </Table>
           </CardBody>
         </Card>
+        <div className="alert bg-success-lighten-20 fixed-bottom mx-auto col-3 mb-2 text-dark d-none" id="alert-200" role="alert">
+          <i className="far fa-check-circle mr-5"></i>
+          Data save success!
+        </div>
+        <div className="alert bg-wrong-darken-10 fixed-bottom mx-auto col-3 mb-2 text-dark d-none" id="alert-400" role="alert">
+          <i className="far fa-times-circle mr-5"></i>
+          Data doens't save!
+        </div>
         <Modal
           show={showMounthMod}
           id="ModalMounth"
