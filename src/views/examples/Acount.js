@@ -21,6 +21,8 @@ import { Link } from "react-router-dom"; // para navegar entre paginas
 import FormAccount from "components/Form/FormTransfer";
 import FormEditor from "components/Form/FormEditor";
 
+import Modaldelete from "../../components/Modals/Delete";
+
 function Account() {
   const [state, setState] = useState([]);
   // envio de informacion
@@ -47,6 +49,7 @@ function Account() {
   const [showEdiMod, setshowEdiMod] = useState(false);
   const [stateAccount, setStateAccount] = useState(false);
   const [showNewTransMod, setshowNewTransMod] = useState(false);
+  const [refreshData, setrefreshData] = useState(false);
   const [stateCatego, setCatego] = useState([]);
   const [stateAcount, setAcount] = useState([]);
   const [stateSignal, setSignal] = useState({ Signal: "+" });
@@ -67,7 +70,7 @@ function Account() {
     }).then((response) => {
       setState(response.data);
     });
-  }, [stateAccount, showNewModMovi, showNewTransMod]);
+  }, [refreshData]);
 
   // Funcion para cambiar de estado de los modals
   const ModNewCateSate = () => setshowNewMod(!showNewMod);
@@ -261,20 +264,6 @@ function Account() {
     setformtrans({ ...stateformtrans, datetime: formattedDateTime });
     ModNewTransSate();
   };
-  // Eliminar data
-  const handleDelete = (e, id) => {
-    e.preventDefault();
-    let idc = sessionStorage.getItem("IdUser");
-    API.post("delete_data", {
-      id: 2,
-      idu: idc,
-      id_data: id,
-    }).then((response) => {
-      alert(response.data);
-      ModDelCateSate();
-      ChangeStateAccount();
-    });
-  };
 
   /* ...state para que no se modifique */
   const handleChange = (event) => {
@@ -301,6 +290,7 @@ function Account() {
     if (stateform.badge === 0) {
     } else {
       let idc = sessionStorage.getItem("IdUser");
+      let save_account = stateform.save_account ? 1 : 0;
       API.post("add_data", {
         id: 2,
         idu: idc,
@@ -308,10 +298,12 @@ function Account() {
         descrip: stateform.descrip,
         divisa: stateform.badge,
         monto: stateform.monto,
-        save: stateform.save_account,
+        save: save_account,
       }).then((response) => {
+        console.log(response)
         ModNewCateSate();
         ChangeStateAccount();
+        setrefreshData(!refreshData);
         let idAlert;
         if (response.data === 200) {
           idAlert = "alert-200";
@@ -325,6 +317,7 @@ function Account() {
       });
     }
   };
+
   const handleSubmitMovi = (event) => {
     event.preventDefault();
     if (
@@ -354,6 +347,7 @@ function Account() {
         date: stateform.datetime,
       }).then((response) => {
         //alert (response.data);
+        setrefreshData(!refreshData);
         ModNewMoviSate();
         document.getElementById("btn_new_move_dash").innerHTML = "Add";
         document.getElementById("btn_new_move_dash").disabled = false;
@@ -396,6 +390,7 @@ function Account() {
         date: stateformtrans.datetime,
       }).then((response) => {
         //alert (response.data);
+        setrefreshData(!refreshData);
         ModNewTransSate();
         document.getElementById("btn_new_trans_dash").innerHTML = "Add";
         document.getElementById("btn_new_trans_dash").disabled = false;
@@ -436,6 +431,7 @@ function Account() {
         console.log(response);
         ModEdiCateSate();
         ChangeStateAccount();
+        setrefreshData(!refreshData);
         let idAlert;
         if (response.data === 200) {
           idAlert = "alert-200";
@@ -774,28 +770,16 @@ function Account() {
             </Modal.Footer>
           </Form>
         </Modal>
-        <Modal show={showDelMod} id="ModalDelete" onHide={ModDelCateSate}>
-          <Modal.Header closeButton>
-            <Modal.Title>Delete category</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {"Are you sure delete the account " +
-              stateformEdit.edit_account +
-              "?"}
-          </Modal.Body>
-          <ModalFooter>
-            <Button color="secundary" onClick={ModDelCateSate}>
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              color="danger"
-              onClick={(e) => handleDelete(e, stateformEdit.id_data)}
-            >
-              Delete
-            </Button>
-          </ModalFooter>
-        </Modal>
+        <Modaldelete
+            action = "account"
+            title="Delete account"
+            message={"Are you sure delete the account " + stateformEdit.edit_account + "?"}
+            refreshData={refreshData}
+            setrefreshData={setrefreshData}
+            state={stateformEdit}
+            showDelMod={showDelMod}
+            setshowDelMod={setshowDelMod}
+          />
         <Modal show={showEdiMod} id="ModalEdit" onHide={ModEdiCateSate}>
           <Modal.Header closeButton>
             <Modal.Title>Editor of category</Modal.Title>

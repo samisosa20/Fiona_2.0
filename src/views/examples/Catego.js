@@ -16,9 +16,12 @@ import API from "../../variables/API";
 import { Link } from "react-router-dom";
 import '../../assets/styles/components/Catego.scss';
 
+import Modaldelete from "../../components/Modals/Delete";
+
 const Catego = () => {
   /* Declaracion de variables */
   const [state, setState] = useState({ jsonCatego: [], lvl: 0 });
+  const [refreshData, setrefreshData] = useState(false);
   // envio de informacion
   const [stateform, setform] = useState({
     catego: "",
@@ -57,7 +60,7 @@ const Catego = () => {
       idc: idc,
       lvl: lvl,
     }).then((response) => setState({ jsonCatego: response.data, lvl: lvl }));
-  });
+  },[refreshData]);
 
   /* ...state para que no se modifique */
   const handleChange = (event) => {
@@ -107,9 +110,20 @@ const Catego = () => {
         group: stateform.group,
         catego: stateform.include,
       }).then((response) => {
-        alert(response.data);
+        //alert(response.data);
         ModNewCateSate();
         ChangeStateCatego();
+        setrefreshData(!refreshData);
+        let idAlert;
+        if (response.data === 200) {
+          idAlert = "alert-200";
+        } else {
+          idAlert = "alert-400";
+        }
+        document.querySelector(`#${idAlert}`).classList.remove("d-none");
+        setTimeout(() => {
+        document.querySelector(`#${idAlert}`).classList.add("d-none");
+        }, 2000)
       });
     }
   };
@@ -129,22 +143,18 @@ const Catego = () => {
       }).then((response) => {
         ModEdiCateSate();
         ChangeStateCatego();
+        let idAlert;
+        if (response.data === 200) {
+          idAlert = "alert-200";
+        } else {
+          idAlert = "alert-400";
+        }
+        document.querySelector(`#${idAlert}`).classList.remove("d-none");
+        setTimeout(() => {
+        document.querySelector(`#${idAlert}`).classList.add("d-none");
+        }, 2000)
       });
     }
-  };
-  // Eliminar data
-  const handleDelete = (e, id) => {
-    e.preventDefault();
-    let idc = sessionStorage.getItem("IdUser");
-    API.post("delete_data", {
-      id: 1,
-      idu: idc,
-      id_data: id,
-    }).then((response) => {
-      alert(response.data);
-      ModDelCateSate();
-      ChangeStateCatego();
-    });
   };
   return (
     <>
@@ -233,6 +243,14 @@ const Catego = () => {
           </Card>
         </Row>
         <div>
+          <div className="alert bg-success-lighten-20 fixed-bottom mx-auto col-3 mb-2 text-dark d-none" id="alert-200" role="alert">
+            <i className="far fa-check-circle mr-5"></i>
+            Data save success!
+          </div>
+          <div className="alert bg-wrong-darken-10 fixed-bottom mx-auto col-3 mb-2 text-dark d-none" id="alert-400" role="alert">
+            <i className="far fa-times-circle mr-5"></i>
+            Data doens't save!
+          </div>
           <Modal show={showNewMod} id="ModalAdd" onHide={ModNewCateSate}>
             <Modal.Header closeButton>
               <Modal.Title>Creator of category</Modal.Title>
@@ -303,28 +321,16 @@ const Catego = () => {
               </Modal.Footer>
             </Form>
           </Modal>
-          <Modal show={showDelMod} id="ModalDelete" onHide={ModDelCateSate}>
-            <Modal.Header closeButton>
-              <Modal.Title>Delete category</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {"Are you sure delete the category " +
-                stateformEdit.edit_categor +
-                "?"}
-            </Modal.Body>
-            <Modal.Footer>
-              <Button color="secundary" onClick={ModDelCateSate}>
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                color="danger"
-                onClick={(e) => handleDelete(e, stateformEdit.id_data)}
-              >
-                Delete
-              </Button>
-            </Modal.Footer>
-          </Modal>
+          <Modaldelete
+            action = "catego"
+            title="Delete category"
+            message={"Are you sure delete the category " + stateformEdit.edit_categor + "?"}
+            refreshData={refreshData}
+            setrefreshData={setrefreshData}
+            state={stateformEdit}
+            showDelMod={showDelMod}
+            setshowDelMod={setshowDelMod}
+          />
           <Modal show={showEdiMod} id="ModalEdit" onHide={ModEdiCateSate}>
             <Modal.Header closeButton>
               <Modal.Title>Editor of category</Modal.Title>

@@ -15,6 +15,8 @@ import { Form, Modal } from "react-bootstrap";
 import { Header } from "components/Headers/Header.js";
 import API from "../../variables/API";
 
+import Modaldelete from "../../components/Modals/Delete";
+
 function ViewBudget() {
   const [state, setState] = useState([]);
   const [showDelMod, setshowDelMod] = useState(false);
@@ -131,36 +133,7 @@ function ViewBudget() {
     }
   };
 
-  const handleDelete = (e, id) => {
-    e.preventDefault();
-    document.getElementById("btn_dele_move_move").disabled = true;
-    document.getElementById("btn_dele_move_move").innerHTML =
-      "<span className='spinner-border spinner-border-sm mr-1'" +
-      "role='status' aria-hidden='true'></span>Loading...";
-    let idc = sessionStorage.getItem("IdUser");
-    API.post("delete_data", {
-      id: 5,
-      idu: idc,
-      year: year,
-      category: stateBudget.number,
-    }).then((response) => {
-      //alert (response.data);
-      ModDelCateSate();
-      document.getElementById("btn_dele_move_move").innerHTML = "Delete";
-      document.getElementById("btn_dele_move_move").disabled = false;
-      setrefreshData(!refreshData);
-      let idAlert;
-        if (response.data === 200) {
-          idAlert = "alert-200";
-        } else {
-          idAlert = "alert-400";
-        }
-        document.querySelector(`#${idAlert}`).classList.remove("d-none");
-          setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-none");
-          }, 2000)
-    });
-  }
+
 
   return (
     <>
@@ -367,27 +340,18 @@ function ViewBudget() {
             </Button>
           </ModalFooter>
         </Modal>
-        <Modal show={showDelMod} id="ModalDelete" onHide={ModDelCateSate}>
-          <Modal.Header closeButton>
-            <Modal.Title>Delete budget</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {"Are you sure to delete the entry of this budget?"}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button color="secundary" onClick={ModDelCateSate}>
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              color="danger"
-              id="btn_dele_move_move"
-              onClick={(e) => handleDelete(e, stateEdit.id_data)}
-            >
-              Delete
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <Modaldelete
+          showDelMod={showDelMod}
+          setshowDelMod={setshowDelMod}
+          ModDelCateSate={ModDelCateSate}
+          title="Delete budget"
+          message="Are you sure to delete the entry of this budget?"
+          refreshData={refreshData}
+          setrefreshData={setrefreshData}
+          state={stateBudget}
+          year={year}
+          extraModal={ModMounthSate}
+        />
         <Modal show={showEditMod} id="ModalEditBudget" onHide={ModEditSate}>
           <Modal.Header closeButton>
             <Modal.Title>Category Editor</Modal.Title>
