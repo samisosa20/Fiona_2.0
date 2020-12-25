@@ -1,17 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-// reactstrap components
-import {
-  Button,
-  Card,
-  CardBody,
-  CardTitle,
-  Container,
-  Row,
-  Col,
-} from "reactstrap";
+
 import { Modal } from "react-bootstrap";
 import API from "../../variables/API";
+import ContainerHeader from "./ContainsHeader";
 
 function Header() {
   const [state, setState] = useState({
@@ -59,7 +51,7 @@ function Header() {
                 ahorros: secondResponse.data[0].cantidad,
                 utilidad: firstResponse.data[0].utilidad,
               });
-              console.log("Value add",secondResponse.data[0].cantidad)
+              console.log("Value add", secondResponse.data[0].cantidad);
             } catch (error) {
               setState({ ingresos: 0, egresos: 0, ahorros: 0, utilidad: 0 });
             }
@@ -131,207 +123,20 @@ function Header() {
       });
     }
   };
+
   return (
-    <>
-      <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
-        <Container fluid>
-          <div className="header-body">
-            {/* Card stats */}
-            <Row>
-              <Col lg="6" xl="3">
-                <Card
-                  className="card-stats mb-4 mb-xl-0"
-                  onClick={(e) => OpenViewMovi(e, 1)}
-                >
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Annual Income
-                        </CardTitle>
-                        <span className="h2 font-weight-bold mb-0 text-success">
-                          {state.ingresos}
-                        </span>
-                      </div>
-                      {/*<Col className="col-auto">
-                        <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                          <i className="fas fa-chart-bar" />
-                        </div>
-                      </Col>*/}
-                    </Row>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col lg="6" xl="3">
-                <Card
-                  className="card-stats mb-4 mb-xl-0"
-                  onClick={(e) => OpenViewMovi(e, 2)}
-                >
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Annual Expenses
-                        </CardTitle>
-                        <span className="h2 font-weight-bold mb-0 text-danger">
-                          {state.egresos}
-                        </span>
-                      </div>
-                      {/*<Col className="col-auto">
-                        <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
-                          <i className="fas fa-chart-pie" />
-                        </div>
-                      </Col>*/}
-                    </Row>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col lg="6" xl="3">
-                <Card className="card-stats mb-4 mb-xl-0">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Annual Savings
-                        </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">
-                          {state.ahorros}
-                        </span>
-                      </div>
-                      {/*<Col className="col-auto">
-                        <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                          <i className="fas fa-users" />
-                        </div>
-                    </Col>*/}
-                    </Row>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col lg="6" xl="3">
-                <Card className="card-stats mb-4 mb-xl-0">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Annual Utility
-                        </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">
-                          {state.utilidad}
-                        </span>
-                      </div>
-                      {/*<Col className="col-auto">
-                        <div className="icon icon-shape bg-info text-white rounded-circle shadow">
-                          <i className="fas fa-percent" />
-                        </div>
-                    </Col>*/}
-                    </Row>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-          </div>
-          <Modal show={ModViewMovi} id="ModalMovi" onHide={ModViewMoviState}>
-            <Modal.Header closeButton>
-              <Modal.Title>Activity By Account</Modal.Title>
-            </Modal.Header>
-            <Modal.Body style={{ maxHeight: "500px", overflow: "auto" }}>
-              {stateViewMovi.data
-                ? stateViewMovi.title === 1
-                  ? stateViewMovi.data.map((data, index) => (
-                      <Card
-                        key={index}
-                        onClick={
-                          stateViewMovi.lvl === 0
-                            ? (e) => OpenViewMovilvl(e, 1, data.nombre)
-                            : stateViewMovi.lvl === 1
-                            ? (e) =>
-                                OpenViewMovilvlMonth(
-                                  e,
-                                  1,
-                                  data.nombre,
-                                  data.mes
-                                )
-                            : ""
-                        }
-                      >
-                        <h4 className="card-title col-md-12 text-muted mt-2">
-                          {stateViewMovi.lvl === 0
-                            ? data.nombre
-                            : stateViewMovi.lvl === 1
-                            ? data.mes + " - " + data.nombre
-                            : data.categoria}
-                        </h4>
-                        <h6 className="card-title ml-3 row col-md-12 text-muted font-weight-bold">
-                          <p className="text-success">
-                            {stateViewMovi.lvl === 0
-                              ? formatter.format(data.ingreso)
-                              : formatter.format(data.cantidad)}
-                          </p>
-                        </h6>
-                      </Card>
-                    ))
-                  : stateViewMovi.data.map((data, index) => (
-                      <Card
-                        key={index}
-                        onClick={
-                          stateViewMovi.lvl === 0
-                            ? (e) => OpenViewMovilvl(e, 2, data.nombre)
-                            : stateViewMovi.lvl === 1
-                            ? (e) =>
-                                OpenViewMovilvlMonth(
-                                  e,
-                                  2,
-                                  data.nombre,
-                                  data.mes
-                                )
-                            : ""
-                        }
-                      >
-                        <h4 className="card-title col-md-12 text-muted mt-2">
-                          {stateViewMovi.lvl === 0
-                            ? data.nombre
-                            : stateViewMovi.lvl === 1
-                            ? data.mes + " - " + data.nombre
-                            : data.categoria}
-                        </h4>
-                        <h6 className="card-title ml-3 row col-md-12 text-muted font-weight-bold">
-                          <p className="text-danger">
-                            {stateViewMovi.lvl === 0
-                              ? formatter.format(data.egreso)
-                              : formatter.format(data.cantidad)}
-                          </p>
-                        </h6>
-                      </Card>
-                    ))
-                : "Out of moves"}
-            </Modal.Body>
-            <Modal.Footer>
-              {stateViewMovi.lvl === 0 ? (
-                <Button color="danger" onClick={ModViewMoviState}>
-                  Close
-                </Button>
-              ) : (
-                <Button color="primary" onClick={(e) => BackViewMovi(e)}>
-                  Back
-                </Button>
-              )}
-            </Modal.Footer>
-          </Modal>
-        </Container>
-      </div>
-    </>
+    <ContainerHeader
+      OpenViewMovi={OpenViewMovi}
+      state={state}
+      Modal={Modal}
+      ModViewMovi={ModViewMovi}
+      ModViewMoviState={ModViewMoviState}
+      stateViewMovi={stateViewMovi}
+      OpenViewMovilvl={OpenViewMovilvl}
+      OpenViewMovilvlMonth={OpenViewMovilvlMonth}
+      formatter={formatter}
+      BackViewMovi={BackViewMovi}
+    />
   );
 }
 

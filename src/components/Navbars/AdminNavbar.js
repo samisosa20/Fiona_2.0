@@ -1,7 +1,5 @@
 import React from "react";
-import AuthLayout from "layouts/Auth.js";
-import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch, Redirect, Link } from "react-router-dom"; // para navegar entre paginas
+import { Link } from "react-router-dom"; // para navegar entre paginas
 // reactstrap components
 import {
   DropdownMenu,
