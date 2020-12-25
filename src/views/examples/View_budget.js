@@ -10,14 +10,15 @@ import {
   CardTitle,
   FormGroup,
 } from "reactstrap";
-import { Form, Modal, option } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 // core components
 import { Header } from "components/Headers/Header.js";
 import API from "../../variables/API";
 
 function ViewBudget() {
   const [state, setState] = useState([]);
-  const [stateBudget, setstateBudget] = useState({ name: "", data: [] });
+  const [showDelMod, setshowDelMod] = useState(false);
+  const [stateBudget, setstateBudget] = useState({ number: 0, name: "", data: [] });
   const [stateEdit, setstateEdit] = useState({
     pass: 0,
     mounth: "",
@@ -46,6 +47,7 @@ function ViewBudget() {
   // Funcion para cambiar de estado de los modals
   const ModMounthSate = () => setshowMounthMod(!showMounthMod);
   const ModEditSate = () => setEditMod(!showEditMod);
+  const ModDelCateSate = () => setshowDelMod(!showDelMod);
 
   useEffect(() => {
     var idc = sessionStorage.getItem("IdUser");
@@ -69,7 +71,7 @@ function ViewBudget() {
       cate: number_cate,
       year: year,
     }).then((response) =>
-      setstateBudget({ name: name_catego, data: response.data })
+      setstateBudget({ number: number_cate, name: name_catego, data: response.data })
     );
     ModMounthSate();
   };
@@ -85,10 +87,14 @@ function ViewBudget() {
       setstateEdit({ pass: 1, mounth: mes, value: value, id_data: id });
     }
   };
+  const OpenModalDelete = (e) => {
+    e.preventDefault();
+    ModDelCateSate();
+  };
 
   const handleSubmitEdit = (event) => {
     event.preventDefault();
-    if (stateEdit.value <= 0 || stateEdit.value === "") {
+    if (stateEdit.value < 0 || stateEdit.value === "") {
       alert("Value has to positive");
     } else {
       document.getElementById("btn_save_budget").disabled = true;
@@ -103,7 +109,7 @@ function ViewBudget() {
         id_data: stateEdit.id_data,
         value: stateEdit.value,
       }).then((response) => {
-        alert (response.data);
+        //alert (response.data);
         ModEditSate();
         document.getElementById(
           "value_mounth_" + stateEdit.id_data
@@ -125,6 +131,37 @@ function ViewBudget() {
     }
   };
 
+  const handleDelete = (e, id) => {
+    e.preventDefault();
+    document.getElementById("btn_dele_move_move").disabled = true;
+    document.getElementById("btn_dele_move_move").innerHTML =
+      "<span className='spinner-border spinner-border-sm mr-1'" +
+      "role='status' aria-hidden='true'></span>Loading...";
+    let idc = sessionStorage.getItem("IdUser");
+    API.post("delete_data", {
+      id: 5,
+      idu: idc,
+      year: year,
+      category: stateBudget.number,
+    }).then((response) => {
+      //alert (response.data);
+      ModDelCateSate();
+      document.getElementById("btn_dele_move_move").innerHTML = "Delete";
+      document.getElementById("btn_dele_move_move").disabled = false;
+      setrefreshData(!refreshData);
+      let idAlert;
+        if (response.data === 200) {
+          idAlert = "alert-200";
+        } else {
+          idAlert = "alert-400";
+        }
+        document.querySelector(`#${idAlert}`).classList.remove("d-none");
+          setTimeout(() => {
+          document.querySelector(`#${idAlert}`).classList.add("d-none");
+          }, 2000)
+    });
+  }
+
   return (
     <>
       <Header />
@@ -141,7 +178,7 @@ function ViewBudget() {
               <tbody>
                 {state
                   ? state.map((data, index) => {
-                      if (data.categoria != aux_catego && aux_catego != "") {
+                      if (data.categoria !== aux_catego && aux_catego !== "") {
                         if (data.grupo === "6") {
                           utilidad =
                             parseFloat(utilidad) + parseFloat(data.cantidad);
@@ -157,7 +194,7 @@ function ViewBudget() {
                           parseFloat(acumulado) + parseFloat(data.cantidad);
                         if (data.sub_categoria === null) {
                           return [
-                            <tr className="table-dark text-dark">
+                            <tr className="table-dark text-dark" key={index}>
                               <td className="font-weight-bold">
                                 {aux_cat_print}
                               </td>
@@ -172,6 +209,7 @@ function ViewBudget() {
                                   year
                                 )
                               }
+                              key={index * 100}
                             >
                               <td>{data.categoria}</td>
                               <td>{formatter.format(data.cantidad)}</td>
@@ -179,7 +217,7 @@ function ViewBudget() {
                           ];
                         } else {
                           return [
-                            <tr className="table-dark text-dark">
+                            <tr className="table-dark text-dark" key={index}>
                               <td className="font-weight-bold">
                                 {aux_cat_print}
                               </td>
@@ -194,6 +232,7 @@ function ViewBudget() {
                                   year
                                 )
                               }
+                              key={index * 100}
                             >
                               <td>{data.sub_categoria}</td>
                               <td>{formatter.format(data.cantidad)}</td>
@@ -222,6 +261,7 @@ function ViewBudget() {
                                   year
                                 )
                               }
+                              key={index}
                             >
                               <td>{data.categoria}</td>
                               <td>{formatter.format(data.cantidad)}</td>
@@ -232,7 +272,7 @@ function ViewBudget() {
                           acumulado =
                             parseFloat(acumulado) + parseFloat(data.cantidad);
                           return (
-                            <tr
+                            <tr key={index}
                               onClick={(e) =>
                                 OpenModalListMounth(
                                   e,
@@ -287,6 +327,7 @@ function ViewBudget() {
             <Modal.Title>Budget {stateBudget.name}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            <div style={{overflowY: 'scroll', maxHeight: '25rem'}}>
             {stateBudget.data
               ? stateBudget.data.map((data, index) => (
                   <Card
@@ -311,12 +352,41 @@ function ViewBudget() {
                   </Card>
                 ))
               : ""}
+              </div>
           </Modal.Body>
           <ModalFooter>
             <Button color="secundary" onClick={ModMounthSate}>
               Close
             </Button>
+            <Button color="danger" onClick={(e) =>
+                  OpenModalDelete(
+                    e
+                  )
+                }>
+              Delete
+            </Button>
           </ModalFooter>
+        </Modal>
+        <Modal show={showDelMod} id="ModalDelete" onHide={ModDelCateSate}>
+          <Modal.Header closeButton>
+            <Modal.Title>Delete budget</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {"Are you sure to delete the entry of this budget?"}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button color="secundary" onClick={ModDelCateSate}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              color="danger"
+              id="btn_dele_move_move"
+              onClick={(e) => handleDelete(e, stateEdit.id_data)}
+            >
+              Delete
+            </Button>
+          </Modal.Footer>
         </Modal>
         <Modal show={showEditMod} id="ModalEditBudget" onHide={ModEditSate}>
           <Modal.Header closeButton>

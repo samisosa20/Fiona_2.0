@@ -1048,7 +1048,7 @@ function Account() {
             <Modal.Title>Delete movement</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {"Are you sure delete the account this movement?"}
+            {"Are you sure to delete the movement of this account?"}
           </Modal.Body>
           <Modal.Footer>
             <Button color="secundary" onClick={ModDelCateSate}>
