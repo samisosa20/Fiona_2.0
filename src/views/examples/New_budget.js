@@ -66,18 +66,18 @@ function ViewBudget() {
     e.preventDefault();
     let catego = document.getElementById("catego");
     let mode = document.getElementById("mode");
-    if (catego.value != 0 && mode.value != 0) {
+    if (catego.value !== 0 && mode.value !== 0) {
       catego.className = "mt-4 form-control is-valid";
       mode.className = "mt-4 form-control is-valid";
       setStateForm({ ...stateForm, mounth: 1 });
       ModStep2();
     } else {
-      if (catego.value != 0) {
+      if (catego.value !== 0) {
         catego.className = "mt-4 form-control is-valid";
       } else {
         catego.className = "mt-4 form-control is-invalid";
       }
-      if (mode.value != 0) {
+      if (mode.value !== 0) {
         mode.className = "mt-4 form-control is-valid";
       } else {
         mode.className = "mt-4 form-control is-invalid";
@@ -89,7 +89,7 @@ function ViewBudget() {
     e.preventDefault();
     let year = document.getElementById("year");
     let badge = document.getElementById("badge");
-    if (year.value != 0 && badge.value != 0) {
+    if (year.value !== 0 && badge.value !== 0) {
       year.className = "mt-4 form-control is-valid";
       badge.className = "mt-4 form-control is-valid";
       API.post("acount", {
@@ -98,12 +98,12 @@ function ViewBudget() {
       }).then((response) => setCatego(response.data));
       ModStep1();
     } else {
-      if (year.value != 0) {
+      if (year.value !== 0) {
         year.className = "mt-4 form-control is-valid";
       } else {
         year.className = "mt-4 form-control is-invalid";
       }
-      if (badge.value != 0) {
+      if (badge.value !== 0) {
         badge.className = "mt-4 form-control is-valid";
       } else {
         badge.className = "mt-4 form-control is-invalid";
@@ -334,7 +334,7 @@ function ViewBudget() {
                   required
                 ></Form.Control>
               </FormGroup>
-              {stateForm.action == 2 && stateForm.mounth === 1 ? (
+              {stateForm.action === 2 && stateForm.mounth === 1 ? (
                 <FormGroup>
                   <Form.Check
                     type="checkbox"
@@ -354,7 +354,7 @@ function ViewBudget() {
                 Prev
               </Button>
               <Button color="primary" id="btn_save_budget" type="submit">
-                {stateForm.action == 2 || stateForm.replica == 1
+                {stateForm.action === 2 || stateForm.replica === 1
                   ? "Next"
                   : "Finish"}
               </Button>
