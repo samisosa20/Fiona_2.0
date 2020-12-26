@@ -752,7 +752,7 @@ function Account() {
           </Modal.Header>
           <Form role="form" onSubmit={handleSubmitEdit}>
             <Modal.Body>
-              <FormEditor stateformEdit handleChangeEdit/>
+              <FormEditor stateformEdit={stateformEdit} handleChangeEdit={handleChangeEdit}/>
             </Modal.Body>
             <ModalFooter>
               <Button color="danger" onClick={ModEdiCateSate}>
