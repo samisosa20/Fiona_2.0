@@ -25,13 +25,12 @@
         "url": "https://github.com/creativetimofficial/argon-dashboard-react/issues"
     },
     "scripts": {
-        "predeploy": "npm run build",
         "dev": "react-scripts start",
         "start": "serve -s build",
         "build": "react-scripts build",
-        "test": "react-scripts test --env = jsdom",
-        "eject" :" react-scripts eject ",
-        "heroku-postbuild":" npm run build ",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject",
+        "heroku-postbuild": "npm run build",
         "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
         "compile-sass": "node-sass src/assets/scss/argon-dashboard-react.scss src/assets/css/argon-dashboard-react.css",
         "minify-sass": "node-sass src/assets/scss/argon-dashboard-react.scss src/assets/css/argon-dashboard-react.min.css --output-style compressed",
@@ -76,6 +75,7 @@
         "reactstrap": "8.4.1",
         "redux": "^4.0.5",
         "redux-form": "^8.3.6",
+        "serve": "^11.3.2",
         "yup": "^0.29.1"
     },
     "devDependencies": {
