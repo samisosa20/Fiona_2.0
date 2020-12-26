@@ -1,28 +1,21 @@
 import React, { useState, useEffect } from "react";
 // reactstrap components
 import {
-  Card,
-  CardBody,
-  CardHeader,
   Button,
   Container,
-  Row,
-  Input,
-  FormGroup,
-  Label,
-  ModalFooter,
 } from "reactstrap";
-import { Form, Modal, InputGroup } from "react-bootstrap";
+
 // core components
 import { Header } from "components/Headers/Header.js";
 import API from "../../variables/API";
 import axios from "axios";
-import { Link } from "react-router-dom"; // para navegar entre paginas
-import FormAccount from "components/Form/FormTransfer";
-import FormEditor from "components/Form/FormEditor";
+import ModalEditAcount from "components/Modals/EditorAcount";
 
 import Modaldelete from "../../components/Modals/Delete";
-import Alert from "../../components/Alert";
+import ModalAcountAdd from "../../components/Modals/AddAcount";
+import AcountAdd from "components/Acount/NewAcounts";
+import ModalAddMovement from "components/Modals/AddMovement";
+import ModalTranfer from "components/Modals/Transfer";
 
 function Account() {
   const [state, setState] = useState([]);
@@ -53,7 +46,7 @@ function Account() {
   const [refreshData, setrefreshData] = useState(false);
   const [stateCatego, setCatego] = useState([]);
   const [stateAcount, setAcount] = useState([]);
-  const [stateAlert, setSateAlert] = useState({visible: false, code: 200})
+  const [stateAlert, setSateAlert] = useState({ visible: false, code: 200 });
   const [stateSignal, setSignal] = useState({ Signal: "+" });
   const [stateformtrans, setformtrans] = useState({
     monto: 0,
@@ -302,13 +295,13 @@ function Account() {
         monto: stateform.monto,
         save: save_account,
       }).then((response) => {
-        console.log(response)
+        console.log(response);
         ModNewCateSate();
         ChangeStateAccount();
         setrefreshData(!refreshData);
-        setSateAlert({visible: true, code: response.data})
+        setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
-          setSateAlert({visible: false, code: 0})
+          setSateAlert({ visible: false, code: 0 });
         }, 2000);
       });
     }
@@ -347,9 +340,9 @@ function Account() {
         ModNewMoviSate();
         document.getElementById("btn_new_move_dash").innerHTML = "Add";
         document.getElementById("btn_new_move_dash").disabled = false;
-        setSateAlert({visible: true, code: response.data})
+        setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
-          setSateAlert({visible: false, code: 0})
+          setSateAlert({ visible: false, code: 0 });
         }, 2000);
       });
     }
@@ -384,9 +377,9 @@ function Account() {
         ModNewTransSate();
         document.getElementById("btn_new_trans_dash").innerHTML = "Add";
         document.getElementById("btn_new_trans_dash").disabled = false;
-        setSateAlert({visible: true, code: response.data})
+        setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
-          setSateAlert({visible: false, code: 0})
+          setSateAlert({ visible: false, code: 0 });
         }, 2000);
       });
     }
@@ -416,9 +409,9 @@ function Account() {
         ModEdiCateSate();
         ChangeStateAccount();
         setrefreshData(!refreshData);
-        setSateAlert({visible: true, code: response.data})
+        setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
-          setSateAlert({visible: false, code: 0})
+          setSateAlert({ visible: false, code: 0 });
         }, 2000);
       });
     }
@@ -440,343 +433,60 @@ function Account() {
             Transfer
           </Button>
         </div>
-        <Row>
-          {state
-            ? state.map((data, index) => (
-                <Card className="shadow col-md-5 mr-2 ml-2 mb-3" key={index}>
-                  <CardHeader className="border-0">
-                    <Row>
-                      <div className="col">
-                        <h3 className="mb-0">{data.nombre}</h3>
-                      </div>
-                      {data.cantidad_int < 0 ? (
-                        <div className="col justify-content-end text-danger">
-                          $ {data.cantidad}
-                        </div>
-                      ) : (
-                        <div className="col justify-content-end text-success">
-                          $ {data.cantidad}
-                        </div>
-                      )}
-                    </Row>
-                    <Row>
-                      <div className="col">Divisas: {data.divisa}</div>
-                      <div className="col">
-                        {data.cuenta_ahorro === "1" ? "Saving Acount" : ""}
-                      </div>
-                    </Row>
-                  </CardHeader>
-                  <CardBody className="mt--4">
-                    <Row>
-                      <Link
-                        to={
-                          "/admin/move?acount=" +
-                          data.id +
-                          "&naco=" +
-                          data.nombre
-                        }
-                      >
-                        <Button
-                          className="mr-4 shadow btn-circle"
-                          color="success"
-                          size="sm"
-                        >
-                          <i className="ni ni-curved-next"></i>
-                        </Button>
-                      </Link>
-                      <Button
-                        className="mr-4 shadow btn-circle"
-                        color="info"
-                        size="sm"
-                        onClick={(e) =>
-                          OpenModalEdit(
-                            e,
-                            data.id,
-                            data.nombre,
-                            data.descripcion,
-                            data.divisa,
-                            data.monto_inicial,
-                            data.cuenta_ahorro
-                          )
-                        }
-                      >
-                        <i className="ni ni-settings"></i>
-                      </Button>
-                      <Button
-                        className="mr-4 shadow btn-circle"
-                        color="danger"
-                        size="sm"
-                        onClick={(e) =>
-                          OpenModalDelete(e, data.id, data.nombre)
-                        }
-                      >
-                        <i className="far fa-trash-alt"></i>
-                      </Button>
-                    </Row>
-                  </CardBody>
-                </Card>
-              ))
-            : ""}
-          <Card
-            className="shadow col-md-5 mr-2 ml-2 mb-3"
-            onClick={(e) => OpenModalNew(e)}
-          >
-            <CardBody style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-              <Row>
-                <div className="col" style={{ marginTop: 20 }}>
-                  <h3 className="card-title col-md-11 col-lg-11 col-xl-11 text-muted pt-3">
-                    <i className="fas fa-plus mr-2"></i>New Account
-                  </h3>
-                </div>
-                <div className="col pt-3">
-                  <i className="fas fa-chevron-right float-right mt-3 ml-2 fa-2x"></i>
-                </div>
-              </Row>
-            </CardBody>
-          </Card>
-        </Row>
-        <Alert
-        visible={stateAlert.visible}
-        code={stateAlert.code}/>
-        <Modal show={showNewMod} id="ModalAdd" onHide={ModNewCateSate}>
-          <Modal.Header closeButton>
-            <Modal.Title>Creator of category</Modal.Title>
-          </Modal.Header>
-          <Form role="form" onSubmit={handleSubmit}>
-            <Modal.Body>
-              <FormGroup>
-                <Label>Name</Label>
-                <Form.Control
-                  type="text"
-                  name="catego"
-                  required
-                  onChange={handleChange}
-                ></Form.Control>
-              </FormGroup>
-              <FormGroup>
-                <Label>Description</Label>
-                <Form.Control
-                  as="textarea"
-                  name="descrip"
-                  rows="3"
-                  onChange={handleChange}
-                ></Form.Control>
-              </FormGroup>
-              <FormGroup>
-                <Label>Badge</Label>
-                <Form.Control
-                  as="select"
-                  name="badge"
-                  required
-                  onChange={handleChange}
-                >
-                  <option value="0" disabled>
-                    Select one option
-                  </option>
-                  <option value="COP">COP</option>
-                  <option value="USD">USD</option>
-                  <option value="EUR">EUR</option>
-                  <option value="JPY">JPY</option>
-                  <option value="GBD">GBD</option>
-                  <option value="CAD">CAD</option>
-                  <option value="AUD">AUD</option>
-                  <option value="MXN">MXN</option>
-                  <option value="ILS">ILS</option>
-                </Form.Control>
-              </FormGroup>
-              <FormGroup>
-                <Label>Starting amount</Label>
-                <Input
-                  name="monto"
-                  pattern="[0-9]{0,5}"
-                  type="number"
-                  onChange={handleChange}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Form.Check
-                  type="checkbox"
-                  label="Saving account"
-                  value="1"
-                  onChange={handleChange}
-                  name="save_account"
-                />
-              </FormGroup>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button color="danger" onClick={ModNewCateSate}>
-                Close
-              </Button>
-              <Button type="submit" color="success">
-                Save Changes
-              </Button>
-            </Modal.Footer>
-          </Form>
-        </Modal>
-        <Modal show={showNewModMovi} id="ModalAdd" onHide={ModNewMoviSate}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add Movement</Modal.Title>
-          </Modal.Header>
-          <Form role="form" onSubmit={handleSubmitMovi}>
-            <Modal.Body>
-              <FormGroup>
-                <Row>
-                  <div className="col-md-8">
-                    <Label>Value</Label>
-                    <InputGroup>
-                      <InputGroup.Prepend>
-                        <Button
-                          value={stateSignal.Signal}
-                          type="button"
-                          id="signo_move"
-                          className="btn btn-outline-success"
-                          onClick={ChangeSignal}
-                        >
-                          {stateSignal.Signal}
-                        </Button>
-                      </InputGroup.Prepend>
-                      <Form.Control
-                        pattern="[0-9]{0,5}"
-                        type="number"
-                        name="monto"
-                        id="monto"
-                        step={0.01}
-                        aria-describedby="SignalAppend"
-                        required
-                        onChange={(e) => VerifySignal(e, "signo_move")}
-                      ></Form.Control>
-                    </InputGroup>
-                  </div>
-                  <div className="col-md-3">
-                    <Form.Control
-                      as="select"
-                      className="mt-4"
-                      name="badge"
-                      onChange={handleChange}
-                    >
-                      <option>COP</option>
-                      <option>USD</option>
-                    </Form.Control>
-                  </div>
-                </Row>
-              </FormGroup>
-              <FormGroup>
-                <Label>Acount</Label>
-                <Form.Control as="select" name="acount" onChange={handleChange}>
-                  <option></option>
-                  {stateAcount.id !== -1000
-                    ? stateAcount.map((data, index) => {
-                        return (
-                          <option
-                            key={index}
-                            className="font-weight-bold"
-                            value={data.id}
-                          >
-                            {data.nombre}
-                          </option>
-                        );
-                      })
-                    : ""}
-                </Form.Control>
-              </FormGroup>
-              <FormGroup>
-                <Label>Category</Label>
-                <Form.Control as="select" name="catego" onChange={handleChange}>
-                  <option></option>
-                  {stateCatego.id !== -1000
-                    ? stateCatego.map((data, index) => {
-                        if (data.sub_categoria === data.categoria) {
-                          return (
-                            <option
-                              key={index}
-                              className="font-weight-bold"
-                              value={data.nro_sub_catego}
-                            >
-                              {data.sub_categoria}
-                            </option>
-                          );
-                        } else {
-                          return (
-                            <option key={index} value={data.nro_sub_catego}>
-                              &nbsp;&nbsp;&nbsp;{data.sub_categoria}
-                            </option>
-                          );
-                        }
-                      })
-                    : ""}
-                </Form.Control>
-              </FormGroup>
-              <FormGroup>
-                <Label>Description</Label>
-                <Form.Control
-                  as="textarea"
-                  name="descrip"
-                  rows="3"
-                  onChange={handleChange}
-                ></Form.Control>
-              </FormGroup>
-              <FormGroup>
-                <Label>Date</Label>
-                <Input
-                  type="datetime-local"
-                  name="datetime"
-                  defaultValue="2020-01-01T12:00:00"
-                  onChange={handleChange}
-                />
-              </FormGroup>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button color="danger" onClick={ModNewMoviSate}>
-                Close
-              </Button>
-              <Button type="submit" color="success" id="btn_new_move_dash">
-                Add
-              </Button>
-            </Modal.Footer>
-          </Form>
-        </Modal>
+        <AcountAdd
+          state={state}
+          OpenModalNew={OpenModalNew}
+          OpenModalEdit={OpenModalEdit}
+          OpenModalDelete={OpenModalDelete}
+        />
+        <ModalAcountAdd
+          showNewMod={showNewMod}
+          ModNewCateSate={ModNewCateSate}
+          handleSubmit={handleSubmit}
+          handleChange={handleChange}
+        />
+        <ModalAddMovement
+          stateSignal={stateSignal}
+          ChangeSignal={ChangeSignal}
+          VerifySignal={VerifySignal}
+          handleChange={handleChange}
+          stateAcount={stateAcount}
+          stateCatego={stateCatego}
+          showNewModMovi={showNewModMovi}
+          handleSubmitMovi={handleSubmit}
+          ModNewMoviSate={ModNewMoviSate}
+        />
         <Modaldelete
-            action = "account"
-            title="Delete account"
-            message={"Are you sure delete the account " + stateformEdit.edit_account + "?"}
-            refreshData={refreshData}
-            setrefreshData={setrefreshData}
-            state={stateformEdit}
-            showDelMod={showDelMod}
-            setshowDelMod={setshowDelMod}
-            setSateAlert={setSateAlert}
-          />
-        <Modal show={showEdiMod} id="ModalEdit" onHide={ModEdiCateSate}>
-          <Modal.Header closeButton>
-            <Modal.Title>Editor of category</Modal.Title>
-          </Modal.Header>
-          <Form role="form" onSubmit={handleSubmitEdit}>
-            <Modal.Body>
-              <FormEditor stateformEdit={stateformEdit} handleChangeEdit={handleChangeEdit}/>
-            </Modal.Body>
-            <ModalFooter>
-              <Button color="danger" onClick={ModEdiCateSate}>
-                Close
-              </Button>
-              <Button type="submit" color="success">
-                Save Changes
-              </Button>
-            </ModalFooter>
-          </Form>
-        </Modal>
-        <Modal show={showNewTransMod} id="ModalTrans" onHide={ModNewTransSate}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add Transfer</Modal.Title>
-          </Modal.Header>
-          <FormAccount
-            handleSubmit_trans={handleSubmit_trans}
-            stateSignal={stateSignal}
-            VerifySignal={VerifySignal}
-            stateCatego={stateCatego}
-            handleChangeTrans={handleChangeTrans}
-            ModNewTransSate={ModNewTransSate}
-          />
-        </Modal>
+          action="account"
+          title="Delete account"
+          message={
+            "Are you sure delete the account " +
+            stateformEdit.edit_account +
+            "?"
+          }
+          refreshData={refreshData}
+          setrefreshData={setrefreshData}
+          state={stateformEdit}
+          showDelMod={showDelMod}
+          setshowDelMod={setshowDelMod}
+          setSateAlert={setSateAlert}
+        />
+        <ModalEditAcount
+          showEdiMod={showEdiMod}
+          ModEdiCateSate={ModEdiCateSate}
+          handleSubmitEdit={handleSubmitEdit}
+          stateformEdit={stateformEdit}
+          handleChangeEdit={handleChangeEdit}
+        />
+        <ModalTranfer
+          showNewTransMod={showNewTransMod}
+          handleSubmit_trans={handleSubmit_trans}
+          stateSignal={stateSignal}
+          VerifySignal={VerifySignal}
+          stateCatego={stateCatego}
+          handleChangeTrans={handleChangeTrans}
+          ModNewTransSate={ModNewTransSate}
+        />
       </Container>
     </>
   );
