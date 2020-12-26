@@ -135,7 +135,7 @@ const Catego = () => {
         <Row>
           {state.lvl !== undefined ? (
             <Card className="shadow col-md-5 mr-2 ml-2 mb-3">
-              <Link to={"/admin/catego"}>
+              <Link to={"/admin/catego"} onClick={() => setrefreshData(!refreshData)}>
                 <CardBody className="card-body">
                   <Row>
                     <div className="col" style={{ marginTop: 20 }}>
@@ -164,6 +164,7 @@ const Catego = () => {
                         to={"/admin/catego#" + data.id}
                         className="col"
                         style={{ marginTop: 20 }}
+                        onClick={() => setrefreshData(!refreshData)}
                       >
                         <h3 className="card-title col-md-9 col-lg-9 col-xl-9">
                           {data.categoria}
@@ -208,7 +209,7 @@ const Catego = () => {
                   </h3>
                 </div>
                 <div className="col">
-                  <i className="fas fa-chevron-right float-right mt-3 ml-2 fa-2x"></i>
+                  <i className="fas fa-chevron-right float-right mt-3 mt-xl-0 ml-2 fa-2x"></i>
                 </div>
               </Row>
             </CardBody>
