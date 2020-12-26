@@ -105,9 +105,9 @@ function Account() {
           axios.spread((firstResponse, secondResponse) => {
             setState({
               NameAcount: div[2].replace("%20", ' '),
-              Balance: firstResponse.data[0].cantidad,
-              Divisa: firstResponse.data[0].divisa,
-              Descripcion: firstResponse.data[0].descripcion,
+              Balance: firstResponse.data[0] ? firstResponse.data[0].cantidad : 0.00,
+              Divisa: firstResponse.data[0] ? firstResponse.data[0].divisa : "COP",
+              Descripcion: firstResponse.data[0] ? firstResponse.data[0].descripcion : "",
               json_movi: secondResponse.data,
             });
           })
@@ -537,7 +537,7 @@ function Account() {
         {/* Table */}
         <Row className="mb-2">
           <div className="col">
-            <h3 className="mb-0 text-white">{state.NameAcount}:</h3>
+            <h3 className="mb-0 text-white text-uppercase">{state.NameAcount}:</h3>
           </div>
           <div className="col justify-content-end row">
             <Button className="btn-info mb-3" onClick={(e) => OpenModalMovi(e)}>
@@ -557,21 +557,24 @@ function Account() {
           <CardHeader className="border-0">
             <Row>
               <div className="col">
-                <h3 className="mb-0">{"Description: " + state.Descripcion}</h3>
+                <h3 className="mb-0 text-bold">Description: 
+                <span className="font-weight-normal ml-1">{state.Descripcion}</span>
+                </h3>
               </div>
               <div className="col justify-content-end">
                 <h3 className="mb-0">
-                  {"Balance: " + state.Balance + " " + state.Divisa}
+                  Balance: 
+                <span className="font-weight-normal ml-1">{state.Balance + " " + state.Divisa}</span>
                 </h3>
               </div>
             </Row>
           </CardHeader>
         </Card>
         <ListGroup
-          className="shadow col-md-12 mb-3"
+          className="shadow col-md-12 mb-3 p-0"
           style={{ maxHeight: "500px", overflow: "auto" }}
         >
-          {state.json_movi.map((data, index) => (
+          {state.json_movi ? state.json_movi.map((data, index) => (
             <ListGroupItem
               key={index}
               onClick={
@@ -616,7 +619,13 @@ function Account() {
               </Row>
               <div className="col">Date: {data.fecha}</div>
             </ListGroupItem>
-          ))}
+          )): <ListGroupItem>
+          <Row>
+            <div className="col">
+              <h3 className="mb-0 text-center">Without Movement</h3>
+            </div>
+          </Row>
+        </ListGroupItem>}
         </ListGroup>
         <Alert
           visible={stateAlert.visible}

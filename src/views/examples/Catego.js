@@ -18,6 +18,7 @@ import '../../assets/styles/components/Catego.scss';
 
 import Modaldelete from "../../components/Modals/Delete";
 import Alert from "../../components/Alert";
+import Modaledit from "../../components/Modals/Edit";
 
 
 const Catego = () => {
@@ -38,7 +39,7 @@ const Catego = () => {
     edit_group: 0,
     edit_include: 0,
     id_data: 0,
-  });
+});
 
   /* Declaracion de estados de los modals */
   const [showNewMod, setshowNewMod] = useState(false);
@@ -73,6 +74,7 @@ const Catego = () => {
   const handleChangeEdit = (event) => {
     setformEdit({ ...stateformEdit, [event.target.name]: event.target.value });
   };
+
 
   // Accion al abrir los modals
   const OpenModalNew = (e) => {
@@ -125,29 +127,7 @@ const Catego = () => {
       });
     }
   };
-  const handleSubmitEdit = (event) => {
-    event.preventDefault();
-    if (stateformEdit.edit_group === 0) {
-    } else {
-      let idc = sessionStorage.getItem("IdUser");
-      API.post("edit_data", {
-        id: 1,
-        idu: idc,
-        id_data: stateformEdit.id_data,
-        name: stateformEdit.edit_categor,
-        descrip: stateformEdit.edit_descrip,
-        group: stateformEdit.edit_group,
-        sub_group: stateformEdit.edit_include,
-      }).then((response) => {
-        ModEdiCateSate();
-        ChangeStateCatego();
-        setSateAlert({visible: true, code: response.data})
-        setTimeout(() => {
-          setSateAlert({visible: false, code: 0})
-        }, 2000);
-      });
-    }
-  };
+
   return (
     <>
       <Header />
@@ -155,7 +135,7 @@ const Catego = () => {
         <Row>
           {state.lvl !== undefined ? (
             <Card className="shadow col-md-5 mr-2 ml-2 mb-3">
-              <Link to={"/admin/catego"}>
+              <Link to={"/admin/catego"} onClick={() => setrefreshData(!refreshData)}>
                 <CardBody className="card-body">
                   <Row>
                     <div className="col" style={{ marginTop: 20 }}>
@@ -175,7 +155,7 @@ const Catego = () => {
           )}
           {state.jsonCatego.id !== -1000
             ? state.jsonCatego.map((data, index) => (
-                <Card className="shadow col-md-5 mr-2 ml-2 mb-3" key={index}>
+                <Card className="shadow col-md-5 mr-2 ml-2 mb-3 arrow c-categorie" key={index}>
                   <CardBody
                     className="card-body"
                   >
@@ -184,6 +164,7 @@ const Catego = () => {
                         to={"/admin/catego#" + data.id}
                         className="col"
                         style={{ marginTop: 20 }}
+                        onClick={() => setrefreshData(!refreshData)}
                       >
                         <h3 className="card-title col-md-9 col-lg-9 col-xl-9">
                           {data.categoria}
@@ -192,13 +173,13 @@ const Catego = () => {
                       <div className="col">
                         <i className="fas fa-chevron-right float-right mt-3 ml-2 fa-2x"></i>
                         <i
-                          className="fas fa-trash-alt float-right mt-4 text-danger"
+                          className="fas fa-trash-alt float-right mt-4 text-danger arrow"
                           onClick={(e) =>
                             OpenModalDelete(e, data.id, data.categoria)
                           }
                         ></i>
                         <i
-                          className="far fa-edit float-right mr-1 mt-4 text-primary"
+                          className="far fa-edit float-right mr-1 mt-4 text-primary arrow"
                           onClick={(e) =>
                             OpenModalEdit(
                               e,
@@ -217,18 +198,18 @@ const Catego = () => {
               ))
             : ""}
           <Card
-            className="shadow col-md-5 mr-2 ml-2 mb-3"
+            className="shadow col-md-5 mr-2 ml-2 mb-3 arrow"
             onClick={(e) => OpenModalNew(e)}
           >
             <CardBody className="card-body">
               <Row>
-                <div className="col catego">
+                <div className="col">
                   <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted">
                     <i className="fas fa-plus mr-2"></i>New Category
                   </h3>
                 </div>
-                <div className="col arrow">
-                  <i className="fas fa-chevron-right float-right mt-3 ml-2 fa-2x"></i>
+                <div className="col">
+                  <i className="fas fa-chevron-right float-right mt-3 mt-xl-0 ml-2 fa-2x"></i>
                 </div>
               </Row>
             </CardBody>
@@ -319,79 +300,18 @@ const Catego = () => {
             setshowDelMod={setshowDelMod}
             setSateAlert={setSateAlert}
           />
-          <Modal show={showEdiMod} id="ModalEdit" onHide={ModEdiCateSate}>
-            <Modal.Header closeButton>
-              <Modal.Title>Editor of category</Modal.Title>
-            </Modal.Header>
-            <Form role="form" onSubmit={handleSubmitEdit}>
-              <Modal.Body>
-                <FormGroup>
-                  <Label>Name</Label>
-                  <Form.Control
-                    type="text"
-                    name="edit_categor"
-                    defaultValue={stateformEdit.edit_categor}
-                    required
-                    onChange={handleChangeEdit}
-                  ></Form.Control>
-                </FormGroup>
-                <FormGroup>
-                  <Label>Description</Label>
-                  <Form.Control
-                    as="textarea"
-                    name="edit_descrip"
-                    defaultValue={stateformEdit.edit_descrip}
-                    rows="3"
-                    onChange={handleChangeEdit}
-                  ></Form.Control>
-                </FormGroup>
-                <FormGroup>
-                  <Label>Group</Label>
-                  <Form.Control
-                    as="select"
-                    name="edit_group"
-                    defaultValue={stateformEdit.edit_group}
-                    required
-                    onChange={handleChangeEdit}
-                  >
-                    <option value="0" disabled>
-                      Select one option
-                    </option>
-                    <option value="1">Fixed costs</option>
-                    <option value="2">Personal expenses</option>
-                    <option value="3">Savings</option>
-                    <option value="4">Income</option>
-                  </Form.Control>
-                </FormGroup>
-                <FormGroup>
-                  <Label>Include inside other category</Label>
-                  <Form.Control
-                    as="select"
-                    name="edit_include"
-                    onChange={handleChangeEdit}
-                    defaultValue={stateformEdit.edit_include}
-                  >
-                    <option></option>
-                    {state.jsonCatego.id !== -1000
-                      ? state.jsonCatego.map((data, index) => (
-                          <option key={index} value={data.id}>
-                            {data.categoria}
-                          </option>
-                        ))
-                      : ""}
-                  </Form.Control>
-                </FormGroup>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button color="danger" onClick={ModEdiCateSate}>
-                  Close
-                </Button>
-                <Button type="submit" color="success">
-                  Save Changes
-                </Button>
-              </Modal.Footer>
-            </Form>
-          </Modal>
+          <Modaledit
+            title="Edit category"
+            refreshData={refreshData}
+            setrefreshData={setrefreshData}
+            stateformEdit={stateformEdit}
+            setformEdit={setformEdit}
+            showEdiMod={showEdiMod}
+            setshowEdiMod={setshowEdiMod}
+            setSateAlert={setSateAlert}
+            handle={handleChangeEdit}
+            listCategorie={state}
+          />
         </div>
       </Container>
     </>
