@@ -22,6 +22,7 @@ import FormAccount from "components/Form/FormTransfer";
 import FormEditor from "components/Form/FormEditor";
 
 import Modaldelete from "../../components/Modals/Delete";
+import Alert from "../../components/Alert";
 
 function Account() {
   const [state, setState] = useState([]);
@@ -52,6 +53,7 @@ function Account() {
   const [refreshData, setrefreshData] = useState(false);
   const [stateCatego, setCatego] = useState([]);
   const [stateAcount, setAcount] = useState([]);
+  const [stateAlert, setSateAlert] = useState({visible: false, code: 200})
   const [stateSignal, setSignal] = useState({ Signal: "+" });
   const [stateformtrans, setformtrans] = useState({
     monto: 0,
@@ -304,15 +306,9 @@ function Account() {
         ModNewCateSate();
         ChangeStateAccount();
         setrefreshData(!refreshData);
-        let idAlert;
-        if (response.data === 200) {
-          idAlert = "alert-200";
-        } else {
-          idAlert = "alert-400";
-        }
-        document.querySelector(`#${idAlert}`).classList.remove("d-none");
+        setSateAlert({visible: true, code: response.data})
         setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-none");
+          setSateAlert({visible: false, code: 0})
         }, 2000);
       });
     }
@@ -351,15 +347,9 @@ function Account() {
         ModNewMoviSate();
         document.getElementById("btn_new_move_dash").innerHTML = "Add";
         document.getElementById("btn_new_move_dash").disabled = false;
-        let idAlert;
-        if (response.data === 200) {
-          idAlert = "alert-200";
-        } else {
-          idAlert = "alert-400";
-        }
-        document.querySelector(`#${idAlert}`).classList.remove("d-none");
+        setSateAlert({visible: true, code: response.data})
         setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-none");
+          setSateAlert({visible: false, code: 0})
         }, 2000);
       });
     }
@@ -394,15 +384,9 @@ function Account() {
         ModNewTransSate();
         document.getElementById("btn_new_trans_dash").innerHTML = "Add";
         document.getElementById("btn_new_trans_dash").disabled = false;
-        let idAlert;
-        if (response.data === 200) {
-          idAlert = "alert-200";
-        } else {
-          idAlert = "alert-400";
-        }
-        document.querySelector(`#${idAlert}`).classList.remove("d-none");
+        setSateAlert({visible: true, code: response.data})
         setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-none");
+          setSateAlert({visible: false, code: 0})
         }, 2000);
       });
     }
@@ -432,15 +416,9 @@ function Account() {
         ModEdiCateSate();
         ChangeStateAccount();
         setrefreshData(!refreshData);
-        let idAlert;
-        if (response.data === 200) {
-          idAlert = "alert-200";
-        } else {
-          idAlert = "alert-400";
-        }
-        document.querySelector(`#${idAlert}`).classList.remove("d-none");
+        setSateAlert({visible: true, code: response.data})
         setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-none");
+          setSateAlert({visible: false, code: 0})
         }, 2000);
       });
     }
@@ -557,22 +535,9 @@ function Account() {
             </CardBody>
           </Card>
         </Row>
-        <div
-          className="alert bg-success-lighten-20 fixed-bottom mx-auto col-3 mb-2 text-dark d-none"
-          id="alert-200"
-          role="alert"
-        >
-          <i className="far fa-check-circle mr-5"></i>
-          Data save success!
-        </div>
-        <div
-          className="alert bg-wrong-darken-10 fixed-bottom mx-auto col-3 mb-2 text-dark d-none"
-          id="alert-400"
-          role="alert"
-        >
-          <i className="far fa-times-circle mr-5"></i>
-          Data doens't save!
-        </div>
+        <Alert
+        visible={stateAlert.visible}
+        code={stateAlert.code}/>
         <Modal show={showNewMod} id="ModalAdd" onHide={ModNewCateSate}>
           <Modal.Header closeButton>
             <Modal.Title>Creator of category</Modal.Title>
@@ -779,6 +744,7 @@ function Account() {
             state={stateformEdit}
             showDelMod={showDelMod}
             setshowDelMod={setshowDelMod}
+            setSateAlert={setSateAlert}
           />
         <Modal show={showEdiMod} id="ModalEdit" onHide={ModEdiCateSate}>
           <Modal.Header closeButton>

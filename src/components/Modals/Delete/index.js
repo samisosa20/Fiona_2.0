@@ -6,7 +6,7 @@ import API from "../../../variables/API";
 
 
 const Modaldelete = (props) => {
-  const {action, showDelMod, setshowDelMod, title, message, refreshData, setrefreshData, state, year, extraModal} = props;
+  const {action, showDelMod, setshowDelMod, title, message, refreshData, setrefreshData, state, year, extraModal, setSateAlert} = props;
   const ModDelCateSate = () => setshowDelMod(!showDelMod);
   
   const handleDelete = (e, action, refreshData, setrefreshData, state, year) => {
@@ -49,16 +49,10 @@ const Modaldelete = (props) => {
         document.getElementById("btn_dele_move_move").innerHTML = "Delete";
         document.getElementById("btn_dele_move_move").disabled = false;
         setrefreshData(!refreshData);
-        let idAlert;
-        if (response.data === 200) {
-          idAlert = "alert-200";
-        } else {
-          idAlert = "alert-400";
-        }
-        document.querySelector(`#${idAlert}`).classList.remove("d-none");
+        setSateAlert({visible: true, code: response.data})
         setTimeout(() => {
-        document.querySelector(`#${idAlert}`).classList.add("d-none");
-        }, 2000)
+          setSateAlert({visible: false, code: 0})
+        }, 2000);
       });
   }
 

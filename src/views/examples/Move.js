@@ -18,6 +18,7 @@ import {
 import { Form, InputGroup, Modal } from "react-bootstrap";
 // core components
 import { Header } from "components/Headers/Header.js";
+import Alert from "../../components/Alert";
 import Modaldelete from "../../components/Modals/Delete";
 
 function Account() {
@@ -66,6 +67,8 @@ function Account() {
   });
   const [stateCatego, setCatego] = useState([]);
   const [refreshData, setrefreshData] = useState(false);
+  const [stateAlert, setSateAlert] = useState({visible: false, code: 200})
+
   /* Declaracion de estados de los modals */
   const [showNewMod, setshowNewMod] = useState(false);
   const [showNewTransMod, setshowNewTransMod] = useState(false);
@@ -400,16 +403,10 @@ function Account() {
         document.getElementById("btn_new_move_move").innerHTML = "Add";
         document.getElementById("btn_new_move_move").disabled = false;
         setrefreshData(!refreshData);
-        let idAlert;
-        if (response.data === 200) {
-          idAlert = "alert-200";
-        } else {
-          idAlert = "alert-400";
-        }
-        document.querySelector(`#${idAlert}`).classList.remove("d-none");
-          setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-none");
-          }, 2000)
+        setSateAlert({visible: true, code: response.data})
+        setTimeout(() => {
+          setSateAlert({visible: false, code: 0})
+        }, 2000);
       });
     }
   };
@@ -447,16 +444,10 @@ function Account() {
         document.getElementById("btn_new_trans_move").innerHTML = "Add";
         document.getElementById("btn_new_trans_move").disabled = false;
         setrefreshData(!refreshData);
-        let idAlert;
-        if (response.data === 200) {
-          idAlert = "alert-200";
-        } else {
-          idAlert = "alert-400";
-        }
-        document.querySelector(`#${idAlert}`).classList.remove("d-none");
-          setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-none");
-          }, 2000)
+        setSateAlert({visible: true, code: response.data})
+        setTimeout(() => {
+          setSateAlert({visible: false, code: 0})
+        }, 2000);
       });
     }
   };
@@ -491,16 +482,10 @@ function Account() {
           "Save Changes";
         document.getElementById("btn_edit_move_move").disabled = false;
         setrefreshData(!refreshData);
-        let idAlert;
-        if (response.data === 200) {
-          idAlert = "alert-200";
-        } else {
-          idAlert = "alert-400";
-        }
-        document.querySelector(`#${idAlert}`).classList.remove("d-none");
-          setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-none");
-          }, 2000)
+        setSateAlert({visible: true, code: response.data})
+        setTimeout(() => {
+          setSateAlert({visible: false, code: 0})
+        }, 2000);
       });
     }
   };
@@ -537,16 +522,10 @@ function Account() {
           "Save Changes";
         document.getElementById("btn_edit_trans_move").disabled = false;
         setrefreshData(!refreshData);
-        let idAlert;
-        if (response.data === 200) {
-          idAlert = "alert-200";
-        } else {
-          idAlert = "alert-400";
-        }
-        document.querySelector(`#${idAlert}`).classList.remove("d-none");
-          setTimeout(() => {
-          document.querySelector(`#${idAlert}`).classList.add("d-none");
-          }, 2000)
+        setSateAlert({visible: true, code: response.data})
+        setTimeout(() => {
+          setSateAlert({visible: false, code: 0})
+        }, 2000);
       });
     }
   };
@@ -639,14 +618,9 @@ function Account() {
             </ListGroupItem>
           ))}
         </ListGroup>
-        <div className="alert bg-success-lighten-20 fixed-bottom mx-auto col-3 mb-2 text-dark d-none" id="alert-200" role="alert">
-          <i className="far fa-check-circle mr-5"></i>
-          Data save success!
-        </div>
-        <div className="alert bg-wrong-darken-10 fixed-bottom mx-auto col-3 mb-2 text-dark d-none" id="alert-400" role="alert">
-          <i className="far fa-times-circle mr-5"></i>
-          Data doens't save!
-        </div>
+        <Alert
+          visible={stateAlert.visible}
+          code={stateAlert.code}/>
         <Modal show={showNewMod} id="ModalAdd" onHide={ModNewMoviSate}>
           <Modal.Header closeButton>
             <Modal.Title>Add Movement</Modal.Title>
@@ -1023,6 +997,7 @@ function Account() {
             showDelMod={showDelMod}
             setshowDelMod={setshowDelMod}
             extraModal={stateformEdit.Modal === "move" ? ModEditSate : ModEditTransSate}
+            setSateAlert={setSateAlert}
           />
         <Modal
           show={showEditsTransMod}
