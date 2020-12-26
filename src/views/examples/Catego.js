@@ -17,6 +17,8 @@ import { Link } from "react-router-dom";
 import '../../assets/styles/components/Catego.scss';
 
 import Modaldelete from "../../components/Modals/Delete";
+import Alert from "../../components/Alert";
+
 
 const Catego = () => {
   /* Declaracion de variables */
@@ -43,6 +45,8 @@ const Catego = () => {
   const [showDelMod, setshowDelMod] = useState(false);
   const [showEdiMod, setshowEdiMod] = useState(false);
   const [stateCatego, setStateCatego] = useState(false);
+  const [stateAlert, setSateAlert] = useState({visible: false, code: 200})
+
 
   // Funcion para cambiar de estado de los modals
   const ModNewCateSate = () => setshowNewMod(!showNewMod);
@@ -114,16 +118,10 @@ const Catego = () => {
         ModNewCateSate();
         ChangeStateCatego();
         setrefreshData(!refreshData);
-        let idAlert;
-        if (response.data === 200) {
-          idAlert = "alert-200";
-        } else {
-          idAlert = "alert-400";
-        }
-        document.querySelector(`#${idAlert}`).classList.remove("d-none");
+        setSateAlert({visible: true, code: response.data})
         setTimeout(() => {
-        document.querySelector(`#${idAlert}`).classList.add("d-none");
-        }, 2000)
+          setSateAlert({visible: false, code: 0})
+        }, 2000);
       });
     }
   };
@@ -143,16 +141,10 @@ const Catego = () => {
       }).then((response) => {
         ModEdiCateSate();
         ChangeStateCatego();
-        let idAlert;
-        if (response.data === 200) {
-          idAlert = "alert-200";
-        } else {
-          idAlert = "alert-400";
-        }
-        document.querySelector(`#${idAlert}`).classList.remove("d-none");
+        setSateAlert({visible: true, code: response.data})
         setTimeout(() => {
-        document.querySelector(`#${idAlert}`).classList.add("d-none");
-        }, 2000)
+          setSateAlert({visible: false, code: 0})
+        }, 2000);
       });
     }
   };
@@ -243,14 +235,9 @@ const Catego = () => {
           </Card>
         </Row>
         <div>
-          <div className="alert bg-success-lighten-20 fixed-bottom mx-auto col-3 mb-2 text-dark d-none" id="alert-200" role="alert">
-            <i className="far fa-check-circle mr-5"></i>
-            Data save success!
-          </div>
-          <div className="alert bg-wrong-darken-10 fixed-bottom mx-auto col-3 mb-2 text-dark d-none" id="alert-400" role="alert">
-            <i className="far fa-times-circle mr-5"></i>
-            Data doens't save!
-          </div>
+          <Alert
+          visible={stateAlert.visible}
+          code={stateAlert.code}/>
           <Modal show={showNewMod} id="ModalAdd" onHide={ModNewCateSate}>
             <Modal.Header closeButton>
               <Modal.Title>Creator of category</Modal.Title>
@@ -330,6 +317,7 @@ const Catego = () => {
             state={stateformEdit}
             showDelMod={showDelMod}
             setshowDelMod={setshowDelMod}
+            setSateAlert={setSateAlert}
           />
           <Modal show={showEdiMod} id="ModalEdit" onHide={ModEdiCateSate}>
             <Modal.Header closeButton>
