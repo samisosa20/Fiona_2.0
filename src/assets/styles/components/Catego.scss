@@ -7,6 +7,26 @@
     margin-top: 10px;
 }
 
-.arrow, .catego {
+.arrow {
     cursor: pointer;
 }
+.c-categorie:hover {
+    transform: translateY(-5px) scale(1.005) translateZ(0);
+    box-shadow: 0 0 11px rgba(33,33,33,.2) !important;
+}
+.card-title:hover {
+    color: #000000;
+}
+
+.fa-edit:hover {
+    color: blue !important;
+}
+
+.fa-trash-alt {
+    color: #f15c7a !important;
+}
+
+.fa-trash-alt:hover {
+    color: #f5365c  !important;
+}
+
