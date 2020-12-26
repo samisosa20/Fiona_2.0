@@ -19,7 +19,7 @@ const FormEditor = (props) => {
         <Label>Name</Label>
         <Form.Control
           type="text"
-          name="edit_catego"
+          name="edit_account"
           defaultValue={stateformEdit.edit_account}
           required
           onChange={handleChangeEdit}
