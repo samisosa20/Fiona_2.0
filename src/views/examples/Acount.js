@@ -453,7 +453,7 @@ function Account() {
           stateAcount={stateAcount}
           stateCatego={stateCatego}
           showNewModMovi={showNewModMovi}
-          handleSubmitMovi={handleSubmit}
+          handleSubmitMovi={handleSubmitMovi}
           ModNewMoviSate={ModNewMoviSate}
         />
         <Modaldelete

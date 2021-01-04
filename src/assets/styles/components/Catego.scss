@@ -30,3 +30,9 @@
     color: #f5365c  !important;
 }
 
+.white {
+    color: white !important;
+    &:hover {
+        color: white !important;
+    }
+}

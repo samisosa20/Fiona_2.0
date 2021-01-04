@@ -72,7 +72,7 @@ const AcountAdd = (props) => {
                       size="sm"
                       onClick={(e) => OpenModalDelete(e, data.id, data.nombre)}
                     >
-                      <i className="far fa-trash-alt"></i>
+                      <i className="far fa-trash-alt white"></i>
                     </Button>
                   </Row>
                 </CardBody>
