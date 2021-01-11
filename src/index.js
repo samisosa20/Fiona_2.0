@@ -1,23 +1,6 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom"; // para navegar entre paginas
+import { BrowserRouter, Route, Switch, Redirect, useParams } from "react-router-dom"; // para navegar entre paginas
 
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -27,12 +10,25 @@ import "./index.css"
 
 import AdminLayout from "layouts/Admin.js";
 import AuthLayout from "layouts/Auth.js";
+import ValidShareAccount from "views/examples/ValidShare.js";
+import Account from "views/examples/Acount";
+
+
+function ValidPath() {
+  // We can call useParams() here to get the params,
+  // or in any child element as well!
+  let { idUser, account, owner } = useParams()
+  return <ValidShareAccount idUSer={idUser} owner={owner} idAccount={account} />
+}
 
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
       <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
       <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
+      <Route path="/valid/:idUser/:account/:owner" exact>
+        <ValidPath/>
+      </Route>
       <Redirect from="/" exact to="/auth" />
     </Switch>
   </BrowserRouter>,
