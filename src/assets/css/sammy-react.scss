@@ -29,6 +29,8 @@
 
 $success: #2dce89;
 $wrong: #fb6340;
+$warn: #ffd600;
+
 
 @for $i from 5 through 100 {
   @if $i % 10 == 0 {
@@ -41,6 +43,9 @@ $wrong: #fb6340;
     }
     .bg-wrong-lighten-#{$i} {
       background-color: lighten($wrong, $percentage);
+    }
+    .bg-warn-lighten-#{$i} {
+      background-color: lighten($warn, $percentage);
     }
     .mix-black-#{$i} {
       background-color: mix(black, $wrong, $percentage);

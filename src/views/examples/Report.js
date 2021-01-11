@@ -82,7 +82,7 @@ function Report() {
         formattedDateTimeIni;
       month_now =
         now.getMonth().toString().length === 1
-          ? "0" + now.getMonth().toString()
+          ? "0" + (now.getMonth() + 1)
           : now.getMonth() + 1;
 
       let d = new Date();
@@ -98,7 +98,6 @@ function Report() {
             ? "0" + d.getDate().toString()
             : d.getDate();
             formattedDateTime = year + "-" + month + "-" + date;
-            
         document.getElementById("Edate").value = formattedDateTime;
         month_now = month;
         date = "01";
@@ -112,38 +111,26 @@ function Report() {
           hidden: true,
         });
       } else if (mode == "1") {
-        
         d.setFullYear(now.getFullYear(), month_now, 0);
         year = d.getFullYear();
         month =
-          d.getMonth().toString().length === 1
-            ? "0" + (d.getMonth() + 1).toString()
-            : d.getMonth() + 1;
+        d.getMonth().toString().length === 1
+        ? "0" + (d.getMonth()).toString()
+        : d.getMonth();
         date =
-          d.getDate().toString().length === 1
-            ? "0" + d.getDate().toString()
-            : d.getDate();
-        formattedDateTime = year + "-" + month + "-" + date;
-        
+        d.getDate().toString().length === 1
+        ? "0" + d.getDate().toString()
+        : d.getDate();
+        formattedDateTime = year + "-" + month_now + "-" + date;
         document.getElementById("Edate").value = formattedDateTime;
 
         if ( month_now === 12 ){
           d.setFullYear(now.getFullYear(), month_now - 1, 1);
-        } else {
-          d.setFullYear(now.getFullYear(), month_now, 1);
         }
-        year = d.getFullYear();
-        month =
-          d.getMonth().toString().length === 1
-            ? "0" + (d.getMonth() + 1).toString()
-            : d.getMonth();
-        date =
-          d.getDate().toString().length === 1
-            ? "0" + d.getDate().toString()
-            : d.getDate();
-        formattedDateTimeIni = year + "-" + month_now + "-" + date;
+
+        formattedDateTimeIni = year + "-" + month_now + "-01";
         document.getElementById("Sdate").value = formattedDateTimeIni;
-  
+
         setDate({
           ...stateDate,
           Sdate: formattedDateTimeIni,

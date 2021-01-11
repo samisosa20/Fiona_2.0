@@ -9,13 +9,15 @@ import {
 import { Header } from "components/Headers/Header.js";
 import API from "../../variables/API";
 import axios from "axios";
-import ModalEditAcount from "components/Modals/EditorAcount";
 
+import Alert from "../../components/Alert";
+import ModalEditAcount from "components/Modals/EditorAcount";
 import Modaldelete from "../../components/Modals/Delete";
 import ModalAcountAdd from "../../components/Modals/AddAcount";
 import AcountAdd from "components/Acount/NewAcounts";
 import ModalAddMovement from "components/Modals/AddMovement";
 import ModalTranfer from "components/Modals/Transfer";
+import ModalshareAccount from "components/Modals/Share";
 
 function Account() {
   const [state, setState] = useState([]);
@@ -40,6 +42,7 @@ function Account() {
   const [showNewMod, setshowNewMod] = useState(false);
   const [showNewModMovi, setshowNewModMovie] = useState(false);
   const [showDelMod, setshowDelMod] = useState(false);
+  const [showShareMod, setshowShareMod] = useState(false);
   const [showEdiMod, setshowEdiMod] = useState(false);
   const [stateAccount, setStateAccount] = useState(false);
   const [showNewTransMod, setshowNewTransMod] = useState(false);
@@ -70,6 +73,7 @@ function Account() {
   // Funcion para cambiar de estado de los modals
   const ModNewCateSate = () => setshowNewMod(!showNewMod);
   const ModDelCateSate = () => setshowDelMod(!showDelMod);
+  const ModShareAccount = () => setshowShareMod(!showShareMod);
   const ModEdiCateSate = () => setshowEdiMod(!showEdiMod);
   const ChangeStateAccount = () => setStateAccount(!stateAccount);
   const ModNewMoviSate = () => setshowNewModMovie(!showNewModMovi);
@@ -80,16 +84,27 @@ function Account() {
     e.preventDefault();
     ModNewCateSate();
   };
-  const OpenModalDelete = (e, id, catego) => {
+  const OpenModalDelete = (e, id, account) => {
     e.preventDefault();
     setformEdit({
-      edit_account: catego,
+      edit_account: account,
       edit_descrip: stateformEdit.descrip,
       edit_badge: stateformEdit.group,
       edit_include: stateformEdit.include,
       id_data: id,
     });
     ModDelCateSate();
+  };
+  const OpenModalShare = (e, id, account) => {
+    e.preventDefault();
+    setformEdit({
+      edit_account: account,
+      edit_descrip: stateformEdit.descrip,
+      edit_badge: stateformEdit.group,
+      edit_include: stateformEdit.include,
+      id_data: id,
+    });
+    ModShareAccount();
   };
   const OpenModalEdit = (e, id, catego, descrip, group, monto, include) => {
     e.preventDefault();
@@ -438,6 +453,7 @@ function Account() {
           OpenModalNew={OpenModalNew}
           OpenModalEdit={OpenModalEdit}
           OpenModalDelete={OpenModalDelete}
+          OpenModalShare={OpenModalShare}
         />
         <ModalAcountAdd
           showNewMod={showNewMod}
@@ -471,6 +487,20 @@ function Account() {
           setshowDelMod={setshowDelMod}
           setSateAlert={setSateAlert}
         />
+        <ModalshareAccount
+          title="Share account"
+          message={
+            "Are you sure share the account " +
+            stateformEdit.edit_account +
+            "?"
+          }
+          refreshData={refreshData}
+          setrefreshData={setrefreshData}
+          state={stateformEdit}
+          showShareMod={showShareMod}
+          setshowShareMod={setshowShareMod}
+          setSateAlert={setSateAlert}
+        />
         <ModalEditAcount
           showEdiMod={showEdiMod}
           ModEdiCateSate={ModEdiCateSate}
@@ -487,6 +517,9 @@ function Account() {
           handleChangeTrans={handleChangeTrans}
           ModNewTransSate={ModNewTransSate}
         />
+        <Alert
+          visible={stateAlert.visible}
+          code={stateAlert.code}/>
       </Container>
     </>
   );

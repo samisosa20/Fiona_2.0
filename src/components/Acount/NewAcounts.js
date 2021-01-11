@@ -4,7 +4,8 @@ import { Card, CardBody, CardHeader, Button, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 
 const AcountAdd = (props) => {
-  const { state, OpenModalNew, OpenModalEdit, OpenModalDelete } = props;
+  const { state, OpenModalNew, OpenModalEdit, OpenModalDelete, OpenModalShare } = props;
+  const idc = sessionStorage.getItem("IdUser");
   return (
     <>
       <Row>
@@ -29,26 +30,27 @@ const AcountAdd = (props) => {
                   <Row>
                     <div className="col">Divisas: {data.divisa}</div>
                     <div className="col">
-                      {data.cuenta_ahorro === "1" ? "Saving Acount" : ""}
+                      {data.cuenta_ahorro === "1" ? "Saving Acount" : data.propietario && (<div className="text-danger">Shared Account</div>)}
                     </div>
                   </Row>
+                  
                 </CardHeader>
                 <CardBody className="mt--4">
-                  <Row>
+                  <Row className="col">
                     <Link
                       to={
                         "/admin/move?acount=" + data.id + "&naco=" + data.nombre
                       }
                     >
-                      <Button
+                     <Button
                         className="mr-4 shadow btn-circle"
                         color="success"
                         size="sm"
                       >
-                        <i className="ni ni-curved-next"></i>
+                        <i className="fas fa-sign-in-alt"></i>
                       </Button>
                     </Link>
-                    <Button
+                    {data.propietario === idc || data.propietario === null ? <Button
                       className="mr-4 shadow btn-circle"
                       color="info"
                       size="sm"
@@ -64,8 +66,9 @@ const AcountAdd = (props) => {
                         )
                       }
                     >
-                      <i className="ni ni-settings"></i>
-                    </Button>
+                      <i className="fas fa-pencil-alt"></i>
+                    </Button> : ''}
+                    {data.propietario === idc || data.propietario === null ? 
                     <Button
                       className="mr-4 shadow btn-circle"
                       color="danger"
@@ -74,6 +77,17 @@ const AcountAdd = (props) => {
                     >
                       <i className="far fa-trash-alt white"></i>
                     </Button>
+                    : ''}
+                    {data.propietario === idc || data.propietario === null ? 
+                    <Button
+                      className="mr-4 shadow btn-circle"
+                      color="warning"
+                      size="sm"
+                      onClick={(e) => OpenModalShare(e, data.id, data.nombre)}
+                    >
+                      <i className="fas fa-share"></i>
+                    </Button>
+                    : ''}
                   </Row>
                 </CardBody>
               </Card>
