@@ -13,7 +13,7 @@ import {
   Row,
   FormGroup,
   Label,
-  ModalFooter,
+  ModalFooter
 } from "reactstrap";
 import { Form, InputGroup, Modal } from "react-bootstrap";
 // core components
@@ -28,15 +28,16 @@ function Account() {
     json_movi: [],
     Balance: 0,
     Divisa: "",
-    Descripcion: "",
+    Descripcion: ""
   });
+  const [moveJson, setMoveJson] = useState([]);
   // envio de informacion
   const [stateform, setform] = useState({
     monto: 0,
     badge: "COP",
     catego: 0,
     descrip: "",
-    datetime: "",
+    datetime: ""
   });
   const [stateformtrans, setformtrans] = useState({
     monto: 0,
@@ -44,7 +45,7 @@ function Account() {
     account_ini: 0,
     account_fin: 0,
     datetime: "",
-    descrip: "",
+    descrip: ""
   });
   const [stateformEdit, setformEdit] = useState({
     id_data: 0,
@@ -54,7 +55,7 @@ function Account() {
     descrip: "",
     datetime: "",
     Signal: "+",
-    Modal: "",
+    Modal: ""
   });
   const [stateformEditTrans, setformEditTrans] = useState({
     id_data: 0,
@@ -63,11 +64,11 @@ function Account() {
     account_ini: 0,
     account_fin: 0,
     datetime: "",
-    descrip: "",
+    descrip: ""
   });
   const [stateCatego, setCatego] = useState([]);
   const [refreshData, setrefreshData] = useState(false);
-  const [stateAlert, setSateAlert] = useState({visible: false, code: 200})
+  const [stateAlert, setSateAlert] = useState({ visible: false, code: 200 });
 
   /* Declaracion de estados de los modals */
   const [showNewMod, setshowNewMod] = useState(false);
@@ -93,23 +94,30 @@ function Account() {
           API.post(`acount`, {
             id: 3,
             idc: idc,
-            idacount: acount,
+            idacount: acount
           }),
           API.post(`acount`, {
             id: 1,
             idc: idc,
-            acount: acount,
-          }),
+            acount: acount
+          })
         ])
         .then(
           axios.spread((firstResponse, secondResponse) => {
             setState({
-              NameAcount: div[2].replace("%20", ' '),
-              Balance: firstResponse.data[0] ? firstResponse.data[0].cantidad : 0.00,
-              Divisa: firstResponse.data[0] ? firstResponse.data[0].divisa : "COP",
-              Descripcion: firstResponse.data[0] ? firstResponse.data[0].descripcion : "",
-              json_movi: secondResponse.data,
+              NameAcount: div[2].replace("%20", " "),
+              Balance: firstResponse.data[0]
+                ? firstResponse.data[0].cantidad
+                : 0.0,
+              Divisa: firstResponse.data[0]
+                ? firstResponse.data[0].divisa
+                : "COP",
+              Descripcion: firstResponse.data[0]
+                ? firstResponse.data[0].descripcion
+                : "",
+              json_movi: secondResponse.data
             });
+            setMoveJson(secondResponse.data);
           })
         );
     }
@@ -124,12 +132,12 @@ function Account() {
   const ModDelCateSate = () => setshowDelMod(!showDelMod);
 
   // Accion al abrir los modals
-  const OpenModalMovi = (e) => {
+  const OpenModalMovi = e => {
     e.preventDefault();
     API.post("acount", {
       id: 5,
-      idc: idc,
-    }).then((response) => setCatego(response.data));
+      idc: idc
+    }).then(response => setCatego(response.data));
     let now = new Date(),
       year,
       month,
@@ -178,12 +186,12 @@ function Account() {
     setform({ ...stateform, datetime: formattedDateTime });
     ModNewMoviSate();
   };
-  const OpenModalTrans = (e) => {
+  const OpenModalTrans = e => {
     e.preventDefault();
     API.post("acount", {
       id: 2,
-      idc: idc,
-    }).then((response) => setCatego(response.data));
+      idc: idc
+    }).then(response => setCatego(response.data));
     let now = new Date(),
       year,
       month,
@@ -244,8 +252,8 @@ function Account() {
     e.preventDefault();
     API.post("acount", {
       id: 5,
-      idc: idc,
-    }).then((response) => setCatego(response.data));
+      idc: idc
+    }).then(response => setCatego(response.data));
 
     let div = fecha.split(" ");
     let fecha2 = div[0] + "T" + div[1];
@@ -261,7 +269,7 @@ function Account() {
       catego: catego,
       descrip: descripcion,
       datetime: fecha2,
-      Signal: signo,
+      Signal: signo
     });
     setSignal({ Signal: signo });
     ModEditSate();
@@ -278,8 +286,8 @@ function Account() {
     e.preventDefault();
     API.post("acount", {
       id: 2,
-      idc: idc,
-    }).then((response) => setCatego(response.data));
+      idc: idc
+    }).then(response => setCatego(response.data));
 
     let div = fecha.split(" ");
     let fecha2 = div[0] + "T" + div[1];
@@ -299,7 +307,7 @@ function Account() {
       account_ini: account_ini,
       account_fin: account_fin,
       datetime: fecha2,
-      descrip: descripcion,
+      descrip: descripcion
     });
     setSignal({ Signal: signo });
     ModEditTransSate();
@@ -314,27 +322,27 @@ function Account() {
       descrip: stateformEdit.descrip,
       datetime: date,
       Signal: stateformEdit.Signal,
-      Modal: modal,
+      Modal: modal
     });
     ModDelCateSate();
   };
   /* ...state para que no se modifique */
-  const handleChange = (event) => {
+  const handleChange = event => {
     setform({ ...stateform, [event.target.name]: event.target.value });
   };
-  const handleChangeTrans = (event) => {
+  const handleChangeTrans = event => {
     setformtrans({
       ...stateformtrans,
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.value
     });
   };
-  const handleChangeEdit = (event) => {
+  const handleChangeEdit = event => {
     setformEdit({ ...stateformEdit, [event.target.name]: event.target.value });
   };
-  const handleChangeEditTrans = (event) => {
+  const handleChangeEditTrans = event => {
     setformEditTrans({
       ...stateformEditTrans,
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.value
     });
   };
   const VerifySignal = (event, idSigno) => {
@@ -352,21 +360,21 @@ function Account() {
     } else if (idSigno === "signo_move_edit") {
       setformEdit({
         ...stateformEdit,
-        [event.target.name]: event.target.value,
+        [event.target.name]: event.target.value
       });
     } else if (idSigno === "signo_trans_edit") {
       setformEditTrans({
         ...stateformEditTrans,
-        [event.target.name]: event.target.value,
+        [event.target.name]: event.target.value
       });
     } else {
       setformtrans({
         ...stateformtrans,
-        [event.target.name]: event.target.value,
+        [event.target.name]: event.target.value
       });
     }
   };
-  const ChangeSignal = (event) => {
+  const ChangeSignal = event => {
     setSignal({ Signal: event.target.value !== "+" ? "+" : "-" });
     if (event.target.value !== "+") {
       event.target.className = "btn btn-outline-success";
@@ -374,7 +382,7 @@ function Account() {
       event.target.className = "btn btn-outline-danger";
     }
   };
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     event.preventDefault();
     if (stateform.badge === "" || stateform.catego === 0) {
       alert("Fill in all the fields");
@@ -396,21 +404,21 @@ function Account() {
         divisa: stateform.badge,
         catego: stateform.catego,
         descrip: stateform.descrip,
-        date: stateform.datetime,
-      }).then((response) => {
+        date: stateform.datetime
+      }).then(response => {
         //alert (response.data);
         ModNewMoviSate();
         document.getElementById("btn_new_move_move").innerHTML = "Add";
         document.getElementById("btn_new_move_move").disabled = false;
         setrefreshData(!refreshData);
-        setSateAlert({visible: true, code: response.data})
+        setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
-          setSateAlert({visible: false, code: 0})
+          setSateAlert({ visible: false, code: 0 });
         }, 2000);
       });
     }
   };
-  const handleSubmit_trans = (event) => {
+  const handleSubmit_trans = event => {
     event.preventDefault();
     let account_ini = stateformtrans.account_ini;
     if (account_ini === 0) {
@@ -437,21 +445,21 @@ function Account() {
         divisa: stateformtrans.badge,
         acco_sec: stateformtrans.account_fin,
         descri: stateformtrans.descrip,
-        date: stateformtrans.datetime,
-      }).then((response) => {
+        date: stateformtrans.datetime
+      }).then(response => {
         //alert (response.data);
         ModNewTransSate();
         document.getElementById("btn_new_trans_move").innerHTML = "Add";
         document.getElementById("btn_new_trans_move").disabled = false;
         setrefreshData(!refreshData);
-        setSateAlert({visible: true, code: response.data})
+        setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
-          setSateAlert({visible: false, code: 0})
+          setSateAlert({ visible: false, code: 0 });
         }, 2000);
       });
     }
   };
-  const handleSubmitEdit = (event) => {
+  const handleSubmitEdit = event => {
     event.preventDefault();
     if (stateformEdit.badge === "" || stateformEdit.catego === 0) {
       alert("Fill in all the fields");
@@ -474,22 +482,22 @@ function Account() {
         descrip: stateformEdit.descrip,
         date: stateformEdit.datetime,
         catego: stateformEdit.catego,
-        account: acount,
-      }).then((response) => {
+        account: acount
+      }).then(response => {
         //alert (response.data);
         ModEditSate();
         document.getElementById("btn_edit_move_move").innerHTML =
           "Save Changes";
         document.getElementById("btn_edit_move_move").disabled = false;
         setrefreshData(!refreshData);
-        setSateAlert({visible: true, code: response.data})
+        setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
-          setSateAlert({visible: false, code: 0})
+          setSateAlert({ visible: false, code: 0 });
         }, 2000);
       });
     }
   };
-  const handleSubmitEditTrans = (event) => {
+  const handleSubmitEditTrans = event => {
     event.preventDefault();
     if (
       stateformEditTrans.badge === "" ||
@@ -514,20 +522,38 @@ function Account() {
         descrip: stateformEditTrans.descrip,
         date: stateformEditTrans.datetime,
         account_ini: stateformEditTrans.account_ini,
-        account_fin: stateformEditTrans.account_fin,
-      }).then((response) => {
+        account_fin: stateformEditTrans.account_fin
+      }).then(response => {
         //alert (response.data);
         ModEditTransSate();
         document.getElementById("btn_edit_trans_move").innerHTML =
           "Save Changes";
         document.getElementById("btn_edit_trans_move").disabled = false;
         setrefreshData(!refreshData);
-        setSateAlert({visible: true, code: response.data})
+        setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
-          setSateAlert({visible: false, code: 0})
+          setSateAlert({ visible: false, code: 0 });
         }, 2000);
       });
     }
+  };
+  const searchMove = e => {
+
+    const newJson = moveJson.filter(data => {
+      if (
+        data.categoria.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
+        -1 ||
+        data.valor_int.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
+        -1 ||
+        data.descripcion.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
+        -1 ||
+        data.fecha.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
+        -1
+      ) {
+        return true;
+      }
+    });
+    setState({ ...state, json_movi: newJson });
   };
   return (
     <>
@@ -537,16 +563,18 @@ function Account() {
         {/* Table */}
         <Row className="mb-2">
           <div className="col">
-            <h3 className="mb-0 text-white text-uppercase">{state.NameAcount}:</h3>
+            <h3 className="mb-0 text-white text-uppercase">
+              {state.NameAcount}:
+            </h3>
           </div>
           <div className="col justify-content-end row">
-            <Button className="btn-info mb-3" onClick={(e) => OpenModalMovi(e)}>
+            <Button className="btn-info mb-3" onClick={e => OpenModalMovi(e)}>
               <i className="fas fa-plus mr-2"></i>
               Move
             </Button>
             <Button
               className="mr-3 mb-3 btn-success"
-              onClick={(e) => OpenModalTrans(e)}
+              onClick={e => OpenModalTrans(e)}
             >
               <i className="fas fa-exchange-alt mr-2"></i>
               Transfer
@@ -557,16 +585,29 @@ function Account() {
           <CardHeader className="border-0">
             <Row>
               <div className="col">
-                <h3 className="mb-0 text-bold">Description: 
-                <span className="font-weight-normal ml-1">{state.Descripcion}</span>
+                <h3 className="mb-0 text-bold">
+                  Description:
+                  <span className="font-weight-normal ml-1">
+                    {state.Descripcion}
+                  </span>
                 </h3>
               </div>
               <div className="col justify-content-end">
                 <h3 className="mb-0">
-                  Balance: 
-                <span className="font-weight-normal ml-1">{state.Balance + " " + state.Divisa}</span>
+                  Balance:
+                  <span className="font-weight-normal ml-1">
+                    {state.Balance + " " + state.Divisa}
+                  </span>
                 </h3>
               </div>
+              <FormGroup className="col">
+                <Form.Control
+                  type="text"
+                  name="search"
+                  placeholder="Search"
+                  onKeyUp={e => searchMove(e)}
+                ></Form.Control>
+              </FormGroup>
             </Row>
           </CardHeader>
         </Card>
@@ -574,62 +615,64 @@ function Account() {
           className="shadow col-md-12 mb-3 p-0"
           style={{ maxHeight: "500px", overflow: "auto" }}
         >
-          {state.json_movi ? state.json_movi.map((data, index) => (
-            <ListGroupItem
-              key={index}
-              onClick={
-                data.categoria !== "Transferencia"
-                  ? (e) =>
-                      OpenModalEdit(
-                        e,
-                        data.id,
-                        data.valor_int,
-                        data.divisa,
-                        data.descripcion,
-                        data.fecha,
-                        data.nro_cate
-                      )
-                  : (e) =>
-                      OpenModalEditTras(
-                        e,
-                        data.id,
-                        data.valor_int,
-                        data.divisa,
-                        data.descripcion,
-                        data.fecha,
-                        data.id_transfe
-                      )
-              }
-            >
+          {state.json_movi ? (
+            state.json_movi.map((data, index) => (
+              <ListGroupItem
+                key={index}
+                onClick={
+                  data.categoria !== "Transferencia"
+                    ? e =>
+                        OpenModalEdit(
+                          e,
+                          data.id,
+                          data.valor_int,
+                          data.divisa,
+                          data.descripcion,
+                          data.fecha,
+                          data.nro_cate
+                        )
+                    : e =>
+                        OpenModalEditTras(
+                          e,
+                          data.id,
+                          data.valor_int,
+                          data.divisa,
+                          data.descripcion,
+                          data.fecha,
+                          data.id_transfe
+                        )
+                }
+              >
+                <Row>
+                  <div className="col">
+                    <h3 className="mb-0">{data.categoria}</h3>
+                  </div>
+                  <div className="col justify-content-end">
+                    {data.valor_int < 0 ? (
+                      <h3 className="mb-0 text-danger">
+                        {"$ " + data.valor + " " + data.divisa}
+                      </h3>
+                    ) : (
+                      <h3 className="mb-0 text-success">
+                        {"$ " + data.valor + " " + data.divisa}
+                      </h3>
+                    )}
+                  </div>
+                </Row>
+                <div className="col">Date: {data.fecha}</div>
+              </ListGroupItem>
+            ))
+          ) : (
+            <ListGroupItem>
               <Row>
                 <div className="col">
-                  <h3 className="mb-0">{data.categoria}</h3>
-                </div>
-                <div className="col justify-content-end">
-                  {data.valor_int < 0 ? (
-                    <h3 className="mb-0 text-danger">
-                      {"$ " + data.valor + " " + data.divisa}
-                    </h3>
-                  ) : (
-                    <h3 className="mb-0 text-success">
-                      {"$ " + data.valor + " " + data.divisa}
-                    </h3>
-                  )}
+                  <h3 className="mb-0 text-center">Without Movement</h3>
                 </div>
               </Row>
-              <div className="col">Date: {data.fecha}</div>
             </ListGroupItem>
-          )): <ListGroupItem>
-          <Row>
-            <div className="col">
-              <h3 className="mb-0 text-center">Without Movement</h3>
-            </div>
-          </Row>
-        </ListGroupItem>}
+          )}
         </ListGroup>
-        <Alert
-          visible={stateAlert.visible}
-          code={stateAlert.code}/>
+        <Alert visible={stateAlert.visible} code={stateAlert.code} />
         <Modal show={showNewMod} id="ModalAdd" onHide={ModNewMoviSate}>
           <Modal.Header closeButton>
             <Modal.Title>Add Movement</Modal.Title>
@@ -660,7 +703,7 @@ function Account() {
                         step={0.01}
                         aria-describedby="SignalAppend"
                         required
-                        onChange={(e) => VerifySignal(e, "signo_move")}
+                        onChange={e => VerifySignal(e, "signo_move")}
                       ></Form.Control>
                     </InputGroup>
                   </div>
@@ -761,7 +804,7 @@ function Account() {
                         step={0.01}
                         aria-describedby="SignalAppend"
                         required
-                        onChange={(e) => VerifySignal(e, "")}
+                        onChange={e => VerifySignal(e, "")}
                       ></Form.Control>
                     </InputGroup>
                   </div>
@@ -895,7 +938,7 @@ function Account() {
                         aria-describedby="SignalAppend"
                         required
                         defaultValue={stateformEdit.monto}
-                        onChange={(e) => VerifySignal(e, "signo_move_edit")}
+                        onChange={e => VerifySignal(e, "signo_move_edit")}
                       ></Form.Control>
                     </InputGroup>
                   </div>
@@ -979,7 +1022,7 @@ function Account() {
             <ModalFooter>
               <Button
                 color="danger"
-                onClick={(e) =>
+                onClick={e =>
                   OpenModalDelete(
                     e,
                     stateformEdit.id_data,
@@ -997,17 +1040,19 @@ function Account() {
           </Form>
         </Modal>
         <Modaldelete
-            action = "movement"
-            title="Delete movement"
-            message="Are you sure to delete the movement of this account?"
-            refreshData={refreshData}
-            setrefreshData={setrefreshData}
-            state={stateformEdit}
-            showDelMod={showDelMod}
-            setshowDelMod={setshowDelMod}
-            extraModal={stateformEdit.Modal === "move" ? ModEditSate : ModEditTransSate}
-            setSateAlert={setSateAlert}
-          />
+          action="movement"
+          title="Delete movement"
+          message="Are you sure to delete the movement of this account?"
+          refreshData={refreshData}
+          setrefreshData={setrefreshData}
+          state={stateformEdit}
+          showDelMod={showDelMod}
+          setshowDelMod={setshowDelMod}
+          extraModal={
+            stateformEdit.Modal === "move" ? ModEditSate : ModEditTransSate
+          }
+          setSateAlert={setSateAlert}
+        />
         <Modal
           show={showEditsTransMod}
           id="ModalEditTrans"
@@ -1047,7 +1092,7 @@ function Account() {
                         aria-describedby="SignalAppend"
                         required
                         defaultValue={stateformEditTrans.monto}
-                        onChange={(e) => VerifySignal(e, "signo_trans_edit")}
+                        onChange={e => VerifySignal(e, "signo_trans_edit")}
                       ></Form.Control>
                     </InputGroup>
                   </div>
@@ -1151,7 +1196,7 @@ function Account() {
             <ModalFooter>
               <Button
                 color="danger"
-                onClick={(e) =>
+                onClick={e =>
                   OpenModalDelete(
                     e,
                     stateformEditTrans.id_data,
