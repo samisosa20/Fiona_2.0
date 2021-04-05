@@ -105,7 +105,7 @@ function Account() {
         .then(
           axios.spread((firstResponse, secondResponse) => {
             setState({
-              NameAcount: div[2].replace("%20", " "),
+              NameAcount: firstResponse.data[0].nombre,
               Balance: firstResponse.data[0]
                 ? firstResponse.data[0].cantidad
                 : 0.0,
@@ -582,9 +582,9 @@ function Account() {
           </div>
         </Row>
         <Card className="shadow col-md-12 mb-3">
-          <CardHeader className="border-0">
-            <Row>
-              <div className="col">
+          <CardHeader className="border-0 pt-3 px-2">
+            <div className="d-md-flex">
+              <div className="col p-0">
                 <h3 className="mb-0 text-bold">
                   Description:
                   <span className="font-weight-normal ml-1">
@@ -592,7 +592,7 @@ function Account() {
                   </span>
                 </h3>
               </div>
-              <div className="col justify-content-end">
+              <div className="col justify-content-end my-2 my-md-0 p-0">
                 <h3 className="mb-0">
                   Balance:
                   <span className="font-weight-normal ml-1">
@@ -600,7 +600,7 @@ function Account() {
                   </span>
                 </h3>
               </div>
-              <FormGroup className="col">
+              <FormGroup className="col p-0 m-0">
                 <Form.Control
                   type="text"
                   name="search"
@@ -608,7 +608,7 @@ function Account() {
                   onKeyUp={e => searchMove(e)}
                 ></Form.Control>
               </FormGroup>
-            </Row>
+            </div>
           </CardHeader>
         </Card>
         <ListGroup
