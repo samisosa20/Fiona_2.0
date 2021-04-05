@@ -565,7 +565,6 @@ function Account() {
           <div className="col">
             <h3 className="mb-0 text-white text-uppercase">
               {state.NameAcount}:
-              {console.log(state)}
             </h3>
           </div>
           <div className="col justify-content-end row">
