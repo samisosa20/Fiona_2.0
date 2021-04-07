@@ -28,7 +28,7 @@ const AcountAdd = (props) => {
                     )}
                   </Row>
                   <Row>
-                    <div className="col">Divisas: {data.divisa}</div>
+                    <div className="col">Badge: {data.divisa}</div>
                     <div className="col">
                       {data.cuenta_ahorro === "1" ? "Saving Acount" : data.propietario && data.propietario !== idc && (<div className="text-danger">Shared Account</div>)}
                     </div>
