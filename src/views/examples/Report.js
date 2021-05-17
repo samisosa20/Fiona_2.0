@@ -17,6 +17,7 @@ import {
   Chart_Egreso,
   Chart_Ahorros,
 } from "../../variables/charts2";
+import ExcelExport from "components/Excel"
 import API from "../../variables/API";
 import axios from "axios";
 // core components
@@ -40,6 +41,7 @@ function Report() {
     ClassClose: "",
     identify: 0,
   });
+  const [dataToExport, setDataToExport] = useState()
   const [stateDataModal, setDataModal] = useState({
     data: [],
     title: "",
@@ -183,10 +185,16 @@ function Report() {
             fecha_ini: Fecha_ini,
             fecha_fin: Fehca_fin,
           }),
+          API.post(`acount`, {
+            id: 14,
+            idc: idc,
+            sdate: Fecha_ini,
+            edate: Fehca_fin,
+          }),
         ])
         .then(
-          axios.spread((ResumAcount, TopExpenses, Budget, OpenClose) => {
-            console.log(OpenClose)
+          axios.spread((ResumAcount, TopExpenses, Budget, OpenClose, dataExport) => {
+            //console.log(dataExport.data)
             setData({
               ResumAco: ResumAcount.data,
               TopExp: TopExpenses.data,
@@ -196,6 +204,7 @@ function Report() {
               ClassClose: OpenClose.data[0] && OpenClose.data[0].end < 0 ? "text-danger" : "text-success",
               identify: 1,
             });
+            setDataToExport(dataExport.data);
           })
         );
     }
@@ -260,6 +269,7 @@ function Report() {
               <i className="fas fa-search mr-2"></i>
               Search
             </Button>
+            <ExcelExport data={dataToExport}/>
           </div>
         </Row>
         <Row className="mt-2 mb-4">

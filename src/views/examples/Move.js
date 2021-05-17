@@ -30,6 +30,7 @@ function Account() {
     Divisa: "",
     Descripcion: ""
   });
+  const [moveJson, setMoveJson] = useState([]);
   // envio de informacion
   const [stateform, setform] = useState({
     monto: 0,
@@ -119,6 +120,7 @@ function Account() {
                 : "",
               json_movi: secondResponse.data
             });
+            setMoveJson(secondResponse.data);
           })
         );
     }
@@ -569,6 +571,24 @@ function Account() {
       });
     }
   };
+  const searchMove = e => {
+
+    const newJson = moveJson.filter(data => {
+      if (
+        data.categoria.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
+        -1 ||
+        data.valor_int.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
+        -1 ||
+        data.descripcion.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
+        -1 ||
+        data.fecha.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
+        -1
+      ) {
+        return true;
+      }
+    });
+    setState({ ...state, json_movi: newJson });
+  };
   return (
     <>
       <Header />
@@ -596,9 +616,9 @@ function Account() {
           </div>
         </Row>
         <Card className="shadow col-md-12 mb-3">
-          <CardHeader className="border-0">
-            <Row>
-              <div className="col">
+          <CardHeader className="border-0 pt-3 px-2">
+            <div className="d-md-flex">
+              <div className="col p-0">
                 <h3 className="mb-0 text-bold">
                   Description:
                   <span className="font-weight-normal ml-1">
@@ -606,7 +626,7 @@ function Account() {
                   </span>
                 </h3>
               </div>
-              <div className="col justify-content-end">
+              <div className="col justify-content-end my-2 my-md-0 p-0">
                 <h3 className="mb-0">
                   Balance:
                   <span className="font-weight-normal ml-1">
@@ -614,7 +634,15 @@ function Account() {
                   </span>
                 </h3>
               </div>
-            </Row>
+              <FormGroup className="col p-0 m-0">
+                <Form.Control
+                  type="text"
+                  name="search"
+                  placeholder="Search"
+                  onKeyUp={e => searchMove(e)}
+                ></Form.Control>
+              </FormGroup>
+            </div>
           </CardHeader>
         </Card>
         <ListGroup
