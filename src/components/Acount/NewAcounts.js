@@ -3,8 +3,14 @@ import React from "react";
 import { Card, CardBody, CardHeader, Button, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 
-const AcountAdd = (props) => {
-  const { state, OpenModalNew, OpenModalEdit, OpenModalDelete, OpenModalShare } = props;
+const AcountAdd = props => {
+  const {
+    state,
+    OpenModalNew,
+    OpenModalEdit,
+    OpenModalDelete,
+    OpenModalShare
+  } = props;
   const idc = sessionStorage.getItem("IdUser");
   return (
     <>
@@ -28,66 +34,82 @@ const AcountAdd = (props) => {
                     )}
                   </Row>
                   <Row>
-                    <div className="col">Divisas: {data.divisa}</div>
+                    <div className="col">Badge: {data.divisa}</div>
                     <div className="col">
-                      {data.cuenta_ahorro === "1" ? "Saving Acount" : data.propietario && data.propietario !== idc && (<div className="text-danger">Shared Account</div>)}
+                      {data.cuenta_ahorro === "1"
+                        ? "Saving Acount"
+                        : data.propietario &&
+                          data.propietario !== idc && (
+                            <div className="text-danger">Shared Account</div>
+                          )}
                     </div>
                   </Row>
-                  
                 </CardHeader>
                 <CardBody className="mt--4">
-                  <Row className="col">
+                  <Row className="col m-0 justify-content-md-start justify-content-around">
                     <Link
                       to={
                         "/admin/move?acount=" + data.id + "&naco=" + data.nombre
                       }
                     >
-                     <Button
-                        className="mr-4 shadow btn-circle"
+                      <Button
+                        className="shadow btn-circle mr-md-2"
                         color="success"
                         size="sm"
+                        title="come in"
                       >
                         <i className="fas fa-sign-in-alt"></i>
                       </Button>
                     </Link>
-                    {data.propietario === idc || data.propietario === null ? <Button
-                      className="mr-4 shadow btn-circle"
-                      color="info"
-                      size="sm"
-                      onClick={(e) =>
-                        OpenModalEdit(
-                          e,
-                          data.id,
-                          data.nombre,
-                          data.descripcion,
-                          data.divisa,
-                          data.monto_inicial,
-                          data.cuenta_ahorro
-                        )
-                      }
-                    >
-                      <i className="fas fa-pencil-alt"></i>
-                    </Button> : ''}
-                    {data.propietario === idc || data.propietario === null ? 
-                    <Button
-                      className="mr-4 shadow btn-circle"
-                      color="danger"
-                      size="sm"
-                      onClick={(e) => OpenModalDelete(e, data.id, data.nombre)}
-                    >
-                      <i className="far fa-trash-alt white"></i>
-                    </Button>
-                    : ''}
-                    {data.propietario === idc || data.propietario === null ? 
-                    <Button
-                      className="mr-4 shadow btn-circle"
-                      color="warning"
-                      size="sm"
-                      onClick={(e) => OpenModalShare(e, data.id, data.nombre)}
-                    >
-                      <i className="fas fa-share"></i>
-                    </Button>
-                    : ''}
+                    {data.propietario === idc || data.propietario === null ? (
+                      <Button
+                        className="shadow btn-circle"
+                        color="info"
+                        size="sm"
+                        title="edit"
+                        onClick={e =>
+                          OpenModalEdit(
+                            e,
+                            data.id,
+                            data.nombre,
+                            data.descripcion,
+                            data.divisa,
+                            data.monto_inicial,
+                            data.cuenta_ahorro
+                          )
+                        }
+                      >
+                        <i className="fas fa-pencil-alt"></i>
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                    {data.propietario === idc || data.propietario === null ? (
+                      <Button
+                        className="shadow btn-circle"
+                        color="danger"
+                        size="sm"
+                        title="Delete"
+                        onClick={e => OpenModalDelete(e, data.id, data.nombre)}
+                      >
+                        <i className="far fa-trash-alt white"></i>
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                    {data.propietario === idc || data.propietario === null ? (
+                      <Button
+                        className="shadow btn-circle"
+                        color="warning"
+                        size="sm"
+                        title="Share"
+                        onClick={e => OpenModalShare(e, data.id, data.nombre)}
+                      >
+                        <i className="fas fa-share"></i>
+                      </Button>
+                    ) : (
+                      ""
+                    )}
                   </Row>
                 </CardBody>
               </Card>
@@ -95,7 +117,7 @@ const AcountAdd = (props) => {
           : ""}
         <Card
           className="shadow col-md-5 mr-2 ml-2 mb-3"
-          onClick={(e) => OpenModalNew(e)}
+          onClick={e => OpenModalNew(e)}
         >
           <CardBody style={{ paddingLeft: "10px", paddingRight: "10px" }}>
             <Row>

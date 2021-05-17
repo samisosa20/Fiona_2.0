@@ -71,7 +71,7 @@ function Login(props) {
 
   const Login_success = () => {
     if (key) {
-      return <Redirect to="/admin/Acount" />;
+      return <Redirect to="/admin/Account" />;
     }
   };
   return (

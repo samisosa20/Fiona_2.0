@@ -13,8 +13,8 @@ import Profile from "views/examples/Profile.js";
 
 var routes = [
   {
-    path: "/Acount",
-    name: "Acount",
+    path: "/Account",
+    name: "Account",
     icon: "ni ni-app text-blue",
     component: Account,
     layout: "/admin",

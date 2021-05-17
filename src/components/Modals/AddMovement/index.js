@@ -13,6 +13,7 @@ const ModalAddMovement = (props) => {
         handleChange,
         stateAcount,
         stateCatego,
+        stateEvent,
         showNewModMovi,
         handleSubmitMovi,
         ModNewMoviSate
@@ -31,6 +32,7 @@ const ModalAddMovement = (props) => {
             handleChange={handleChange}
             stateAcount={stateAcount}
             stateCatego={stateCatego}
+            stateEvent={stateEvent}
           />
         </Modal.Body>
         <Modal.Footer>

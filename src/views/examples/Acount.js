@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 // reactstrap components
-import {
-  Button,
-  Container,
-} from "reactstrap";
+import { Button, Container } from "reactstrap";
 
 // core components
 import { Header } from "components/Headers/Header.js";
@@ -27,7 +24,7 @@ function Account() {
     descrip: "",
     badge: "COP",
     monto: 0,
-    save_account: false,
+    save_account: false
   });
   // edicion de informacion
   const [stateformEdit, setformEdit] = useState({
@@ -36,7 +33,7 @@ function Account() {
     edit_badge: "",
     edit_monto: false,
     edit_save_account: 0,
-    id_data: 0,
+    id_data: 0
   });
   /* Declaracion de estados de los modals */
   const [showNewMod, setshowNewMod] = useState(false);
@@ -49,6 +46,7 @@ function Account() {
   const [refreshData, setrefreshData] = useState(false);
   const [stateCatego, setCatego] = useState([]);
   const [stateAcount, setAcount] = useState([]);
+  const [stateEvent, setEvent] = useState([]);
   const [stateAlert, setSateAlert] = useState({ visible: false, code: 200 });
   const [stateSignal, setSignal] = useState({ Signal: "+" });
   const [stateformtrans, setformtrans] = useState({
@@ -57,15 +55,15 @@ function Account() {
     account_ini: 0,
     account_fin: 0,
     datetime: "",
-    descrip: "",
+    descrip: ""
   });
 
   useEffect(() => {
     var idc = sessionStorage.getItem("IdUser");
     API.post("acount", {
       id: 2,
-      idc: idc,
-    }).then((response) => {
+      idc: idc
+    }).then(response => {
       setState(response.data);
     });
   }, [refreshData]);
@@ -80,7 +78,7 @@ function Account() {
   const ModNewTransSate = () => setshowNewTransMod(!showNewTransMod);
 
   // Accion al abrir los modals
-  const OpenModalNew = (e) => {
+  const OpenModalNew = e => {
     e.preventDefault();
     ModNewCateSate();
   };
@@ -91,7 +89,7 @@ function Account() {
       edit_descrip: stateformEdit.descrip,
       edit_badge: stateformEdit.group,
       edit_include: stateformEdit.include,
-      id_data: id,
+      id_data: id
     });
     ModDelCateSate();
   };
@@ -102,7 +100,7 @@ function Account() {
       edit_descrip: stateformEdit.descrip,
       edit_badge: stateformEdit.group,
       edit_include: stateformEdit.include,
-      id_data: id,
+      id_data: id
     });
     ModShareAccount();
   };
@@ -115,7 +113,7 @@ function Account() {
       edit_badge: group,
       edit_include: include,
       edit_monto: monto,
-      id_data: id,
+      id_data: id
     });
     ModEdiCateSate();
     //document.getElementById("edit_badge").value = group;
@@ -135,11 +133,11 @@ function Account() {
     } else {
       setformtrans({
         ...stateformtrans,
-        [event.target.name]: event.target.value,
+        [event.target.name]: event.target.value
       });
     }
   };
-  const ChangeSignal = (event) => {
+  const ChangeSignal = event => {
     setSignal({ Signal: event.target.value !== "+" ? "+" : "-" });
     if (event.target.value !== "+") {
       event.target.className = "btn btn-outline-success";
@@ -147,30 +145,35 @@ function Account() {
       event.target.className = "btn btn-outline-danger";
     }
   };
-  const handleChangeTrans = (event) => {
+  const handleChangeTrans = event => {
     setformtrans({
       ...stateformtrans,
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.value
     });
   };
-  const OpenModalMovi = (e) => {
+  const OpenModalMovi = e => {
     e.preventDefault();
     let idc = sessionStorage.getItem("IdUser");
     axios
       .all([
         API.post(`acount`, {
           id: 5,
-          idc: idc,
+          idc: idc
         }),
         API.post(`acount`, {
           id: 2,
-          idc: idc,
+          idc: idc
         }),
+        API.post(`acount`, {
+          id: 12,
+          idc: idc
+        })
       ])
       .then(
-        axios.spread((firstResponse, secondResponse) => {
+        axios.spread((firstResponse, secondResponse, thirdResponse) => {
           setCatego(firstResponse.data);
           setAcount(secondResponse.data);
+          setEvent(thirdResponse.data);
         })
       );
     let now = new Date(),
@@ -219,13 +222,13 @@ function Account() {
     setform({ ...stateform, datetime: formattedDateTime });
     ModNewMoviSate();
   };
-  const OpenModalTrans = (e) => {
+  const OpenModalTrans = e => {
     e.preventDefault();
     let idc = sessionStorage.getItem("IdUser");
     API.post("acount", {
       id: 2,
-      idc: idc,
-    }).then((response) => setCatego(response.data));
+      idc: idc
+    }).then(response => setCatego(response.data));
     let now = new Date(),
       year,
       month,
@@ -276,26 +279,26 @@ function Account() {
   };
 
   /* ...state para que no se modifique */
-  const handleChange = (event) => {
-    console.log(event.target.name === "edit_save_account");
+  const handleChange = event => {
+    //console.log(event.target.name === "edit_save_account");
     if (event.target.name === "edit_save_account") {
       setform({ ...stateform, save_account: event.target.checked });
     } else {
       setform({ ...stateform, [event.target.name]: event.target.value });
     }
   };
-  const handleChangeEdit = (event) => {
+  const handleChangeEdit = event => {
     if (event.target.name === "edit_save_account") {
       setformEdit({ ...stateformEdit, edit_include: event.target.checked });
     } else {
       setformEdit({
         ...stateformEdit,
-        [event.target.name]: event.target.value,
+        [event.target.name]: event.target.value
       });
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     event.preventDefault();
     if (stateform.badge === 0) {
     } else {
@@ -308,8 +311,8 @@ function Account() {
         descrip: stateform.descrip,
         divisa: stateform.badge,
         monto: stateform.monto,
-        save: save_account,
-      }).then((response) => {
+        save: save_account
+      }).then(response => {
         console.log(response);
         ModNewCateSate();
         ChangeStateAccount();
@@ -322,7 +325,7 @@ function Account() {
     }
   };
 
-  const handleSubmitMovi = (event) => {
+  const handleSubmitMovi = event => {
     event.preventDefault();
     if (
       stateform.badge === "" ||
@@ -349,7 +352,8 @@ function Account() {
         catego: stateform.catego,
         descrip: stateform.descrip,
         date: stateform.datetime,
-      }).then((response) => {
+        event: stateform.event ? stateform.event : ''
+      }).then(response => {
         //alert (response.data);
         setrefreshData(!refreshData);
         ModNewMoviSate();
@@ -362,7 +366,7 @@ function Account() {
       });
     }
   };
-  const handleSubmit_trans = (event) => {
+  const handleSubmit_trans = event => {
     event.preventDefault();
     if (
       stateformtrans.badge === "" ||
@@ -385,8 +389,8 @@ function Account() {
         divisa: stateformtrans.badge,
         acco_sec: stateformtrans.account_fin,
         descri: stateformtrans.descrip,
-        date: stateformtrans.datetime,
-      }).then((response) => {
+        date: stateformtrans.datetime
+      }).then(response => {
         //alert (response.data);
         setrefreshData(!refreshData);
         ModNewTransSate();
@@ -399,7 +403,7 @@ function Account() {
       });
     }
   };
-  const handleSubmitEdit = (event) => {
+  const handleSubmitEdit = event => {
     event.preventDefault();
     if (stateformEdit.badge === 0) {
     } else {
@@ -418,8 +422,8 @@ function Account() {
         descrip: stateformEdit.edit_descrip,
         divisa: stateformEdit.edit_badge,
         monto_ini: stateformEdit.edit_monto,
-        save_account: include,
-      }).then((response) => {
+        save_account: include
+      }).then(response => {
         console.log(response);
         ModEdiCateSate();
         ChangeStateAccount();
@@ -436,14 +440,11 @@ function Account() {
       <Header />
       <Container className="mt--7" fluid>
         <div className="col justify-content-end row">
-          <Button className="btn-info mb-3" onClick={(e) => OpenModalMovi(e)}>
+          <Button className="btn-info mb-3" onClick={e => OpenModalMovi(e)}>
             <i className="fas fa-plus mr-2"></i>
             Move
           </Button>
-          <Button
-            className="btn-success mb-3"
-            onClick={(e) => OpenModalTrans(e)}
-          >
+          <Button className="btn-success mb-3" onClick={e => OpenModalTrans(e)}>
             <i className="fas fa-exchange-alt mr-2"></i>
             Transfer
           </Button>
@@ -468,6 +469,7 @@ function Account() {
           handleChange={handleChange}
           stateAcount={stateAcount}
           stateCatego={stateCatego}
+          stateEvent={stateEvent}
           showNewModMovi={showNewModMovi}
           handleSubmitMovi={handleSubmitMovi}
           ModNewMoviSate={ModNewMoviSate}
@@ -490,9 +492,7 @@ function Account() {
         <ModalshareAccount
           title="Share account"
           message={
-            "Are you sure share the account " +
-            stateformEdit.edit_account +
-            "?"
+            "Are you sure share the account " + stateformEdit.edit_account + "?"
           }
           refreshData={refreshData}
           setrefreshData={setrefreshData}
@@ -517,9 +517,7 @@ function Account() {
           handleChangeTrans={handleChangeTrans}
           ModNewTransSate={ModNewTransSate}
         />
-        <Alert
-          visible={stateAlert.visible}
-          code={stateAlert.code}/>
+        <Alert visible={stateAlert.visible} code={stateAlert.code} />
       </Container>
     </>
   );
