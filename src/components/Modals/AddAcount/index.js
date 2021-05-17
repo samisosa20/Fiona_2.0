@@ -9,7 +9,7 @@ const ModalAcountAdd = (props) => {
   return (
     <Modal show={showNewMod} id="ModalAdd" onHide={ModNewCateSate}>
       <Modal.Header closeButton>
-        <Modal.Title>Creator of category</Modal.Title>
+        <Modal.Title>Creator of account</Modal.Title>
       </Modal.Header>
       <Form role="form" onSubmit={handleSubmit}>
         <Modal.Body>

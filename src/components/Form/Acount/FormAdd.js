@@ -1,18 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Button, Row, Input, FormGroup, Label } from "reactstrap";
 import { Form, InputGroup } from "react-bootstrap";
 
-const FormAdd = (props) => {
+const FormAdd = props => {
   const {
     stateSignal,
     ChangeSignal,
     VerifySignal,
     handleChange,
     stateAcount,
-    stateCatego
+    stateCatego,
+    stateEvent
   } = props;
 
+  const [showOption, setShowOption] = useState(false);
+  const showAdvanceOption = () => {
+    setShowOption(!showOption);
+  };
   return (
     <>
       <FormGroup>
@@ -39,7 +44,7 @@ const FormAdd = (props) => {
                 step={0.01}
                 aria-describedby="SignalAppend"
                 required
-                onChange={(e) => VerifySignal(e, "signo_move")}
+                onChange={e => VerifySignal(e, "signo_move")}
               ></Form.Control>
             </InputGroup>
           </div>
@@ -60,7 +65,7 @@ const FormAdd = (props) => {
         <Label>Acount</Label>
         <Form.Control as="select" name="acount" onChange={handleChange}>
           <option></option>
-          {stateAcount.id !== -1000
+          {stateAcount.id !== -1000 && stateAcount.length > 0
             ? stateAcount.map((data, index) => {
                 return (
                   <option
@@ -120,6 +125,33 @@ const FormAdd = (props) => {
           onChange={handleChange}
         />
       </FormGroup>
+      <p className="text-sm text-info" onClick={() => showAdvanceOption()}>
+        Advanced Options
+        <i
+          className={`fas ${
+            showOption ? "fa-chevron-up" : "fa-chevron-down"
+          } ml-2`}
+        ></i>
+      </p>
+      {showOption && (
+        <FormGroup>
+          <Label>Event</Label>
+          <Form.Control as="select" name="event" onChange={handleChange}>
+            <option></option>
+            {stateEvent.length > 0
+              ? stateEvent.map((data, index) => {
+                  if (data.activo === "1") {
+                    return (
+                      <option key={index} value={data.id}>
+                        {data.nombre}
+                      </option>
+                    );
+                  }
+                })
+              : ""}
+          </Form.Control>
+        </FormGroup>
+      )}
     </>
   );
 };

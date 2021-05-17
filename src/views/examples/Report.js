@@ -194,7 +194,7 @@ function Report() {
         ])
         .then(
           axios.spread((ResumAcount, TopExpenses, Budget, OpenClose, dataExport) => {
-            console.log(dataExport.data)
+            //console.log(dataExport.data)
             setData({
               ResumAco: ResumAcount.data,
               TopExp: TopExpenses.data,

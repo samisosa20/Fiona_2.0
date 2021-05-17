@@ -3,6 +3,7 @@ import Budget from "views/examples/Budget.js";
 import ViewBudget from "views/examples/View_budget";
 import NewBudget from "views/examples/New_budget";
 import Catego from "views/examples/Catego.js";
+import Event from "views/examples/Event.js";
 import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Report from "views/examples/Report.js";
@@ -12,8 +13,8 @@ import Profile from "views/examples/Profile.js";
 
 var routes = [
   {
-    path: "/Acount",
-    name: "Acount",
+    path: "/Account",
+    name: "Account",
     icon: "ni ni-app text-blue",
     component: Account,
     layout: "/admin",
@@ -64,6 +65,14 @@ var routes = [
     name: "Report",
     icon: "ni ni-align-left-2 text-red",
     component: Report,
+    layout: "/admin",
+    sidebar: true,
+  },
+  {
+    path: "/event",
+    name: "Events",
+    icon: "ni ni-time-alarm text-green",
+    component: Event,
     layout: "/admin",
     sidebar: true,
   },

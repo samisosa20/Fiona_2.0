@@ -52,6 +52,7 @@ function Account() {
     monto: 0,
     badge: "",
     catego: 0,
+    event: "",
     descrip: "",
     datetime: "",
     Signal: "+",
@@ -67,8 +68,10 @@ function Account() {
     descrip: ""
   });
   const [stateCatego, setCatego] = useState([]);
+  const [stateEvent, setEvent] = useState([]);
   const [refreshData, setrefreshData] = useState(false);
   const [stateAlert, setSateAlert] = useState({ visible: false, code: 200 });
+  const [showOption, setShowOption] = useState(false);
 
   /* Declaracion de estados de los modals */
   const [showNewMod, setshowNewMod] = useState(false);
@@ -105,7 +108,7 @@ function Account() {
         .then(
           axios.spread((firstResponse, secondResponse) => {
             setState({
-              NameAcount: firstResponse.data[0].nombre,
+              NameAcount: div[2].replace("%20", " "),
               Balance: firstResponse.data[0]
                 ? firstResponse.data[0].cantidad
                 : 0.0,
@@ -130,14 +133,28 @@ function Account() {
   const ModEditSate = () => setshowEditMod(!showEditsMod);
   const ModEditTransSate = () => setshowEditTransMod(!showEditsTransMod);
   const ModDelCateSate = () => setshowDelMod(!showDelMod);
+  const showAdvanceOption = () => setShowOption(!showOption);
 
   // Accion al abrir los modals
   const OpenModalMovi = e => {
     e.preventDefault();
-    API.post("acount", {
-      id: 5,
-      idc: idc
-    }).then(response => setCatego(response.data));
+    axios
+      .all([
+        API.post("acount", {
+          id: 5,
+          idc: idc
+        }),
+        API.post(`acount`, {
+          id: 12,
+          idc: idc
+        })
+      ])
+      .then(
+        axios.spread((firstResponse, secondResponse) => {
+          setCatego(firstResponse.data);
+          setEvent(secondResponse.data);
+        })
+      );
     let now = new Date(),
       year,
       month,
@@ -247,14 +264,27 @@ function Account() {
     divisa,
     descripcion,
     fecha,
-    catego
+    catego,
+    event
   ) => {
     e.preventDefault();
-    API.post("acount", {
-      id: 5,
-      idc: idc
-    }).then(response => setCatego(response.data));
-
+    axios
+      .all([
+        API.post("acount", {
+          id: 5,
+          idc: idc
+        }),
+        API.post(`acount`, {
+          id: 12,
+          idc: idc
+        })
+      ])
+      .then(
+        axios.spread((firstResponse, secondResponse) => {
+          setCatego(firstResponse.data);
+          setEvent(secondResponse.data);
+        })
+      );
     let div = fecha.split(" ");
     let fecha2 = div[0] + "T" + div[1];
     let signo = "+";
@@ -262,11 +292,13 @@ function Account() {
       valor_int = valor_int * -1;
       signo = "-";
     }
+    //console.log(event);
     setformEdit({
       id_data: id,
       monto: valor_int,
       badge: divisa,
       catego: catego,
+      event: event,
       descrip: descripcion,
       datetime: fecha2,
       Signal: signo
@@ -404,7 +436,8 @@ function Account() {
         divisa: stateform.badge,
         catego: stateform.catego,
         descrip: stateform.descrip,
-        date: stateform.datetime
+        date: stateform.datetime,
+        event: stateform.event ? stateform.event : ""
       }).then(response => {
         //alert (response.data);
         ModNewMoviSate();
@@ -482,7 +515,8 @@ function Account() {
         descrip: stateformEdit.descrip,
         date: stateformEdit.datetime,
         catego: stateformEdit.catego,
-        account: acount
+        account: acount,
+        event: stateformEdit.event ? stateformEdit.event : ""
       }).then(response => {
         //alert (response.data);
         ModEditSate();
@@ -629,7 +663,8 @@ function Account() {
                           data.divisa,
                           data.descripcion,
                           data.fecha,
-                          data.nro_cate
+                          data.nro_cate,
+                          data.evento
                         )
                     : e =>
                         OpenModalEditTras(
@@ -765,6 +800,40 @@ function Account() {
                   onChange={handleChange}
                 ></Form.Control>
               </FormGroup>
+              <p
+                className="text-sm text-info"
+                onClick={() => showAdvanceOption()}
+              >
+                Advanced Options
+                <i
+                  className={`fas ${
+                    showOption ? "fa-chevron-up" : "fa-chevron-down"
+                  } ml-2`}
+                ></i>
+              </p>
+              {showOption && (
+                <FormGroup>
+                  <Label>Event</Label>
+                  <Form.Control
+                    as="select"
+                    name="event"
+                    onChange={handleChange}
+                  >
+                    <option></option>
+                    {stateEvent.length > 0
+                      ? stateEvent.map((data, index) => {
+                          if (data.activo === "1") {
+                            return (
+                              <option key={index} value={data.id}>
+                                {data.nombre}
+                              </option>
+                            );
+                          }
+                        })
+                      : ""}
+                  </Form.Control>
+                </FormGroup>
+              )}
             </Modal.Body>
             <Modal.Footer>
               <Button color="danger" onClick={ModNewMoviSate}>
@@ -961,6 +1030,7 @@ function Account() {
                   as="select"
                   name="catego"
                   onChange={handleChangeEdit}
+                  value={stateformEdit.catego}
                 >
                   <option></option>
                   {stateCatego.id !== -1000
@@ -970,11 +1040,6 @@ function Account() {
                             <option
                               key={index}
                               className="font-weight-bold"
-                              selected={
-                                data.nro_sub_catego === stateformEdit.catego
-                                  ? true
-                                  : false
-                              }
                               value={data.nro_sub_catego}
                             >
                               {data.sub_categoria}
@@ -982,15 +1047,7 @@ function Account() {
                           );
                         } else {
                           return (
-                            <option
-                              key={index}
-                              selected={
-                                data.nro_sub_catego === stateformEdit.catego
-                                  ? true
-                                  : false
-                              }
-                              value={data.nro_sub_catego}
-                            >
+                            <option key={index} value={data.nro_sub_catego}>
                               &nbsp;&nbsp;&nbsp;{data.sub_categoria}
                             </option>
                           );
@@ -1018,6 +1075,41 @@ function Account() {
                   onChange={handleChangeEdit}
                 ></Form.Control>
               </FormGroup>
+              <p
+                className="text-sm text-info"
+                onClick={() => showAdvanceOption()}
+              >
+                Advanced Options
+                <i
+                  className={`fas ${
+                    showOption ? "fa-chevron-up" : "fa-chevron-down"
+                  } ml-2`}
+                ></i>
+              </p>
+              {showOption && (
+                <FormGroup>
+                  <Label>Event</Label>
+                  <Form.Control
+                    as="select"
+                    name="event"
+                    onChange={handleChangeEdit}
+                    value={stateformEdit.event ? stateformEdit.event : ''}
+                  >
+                    <option></option>
+                    {stateEvent.length > 0
+                      ? stateEvent.map((data, index) => {
+                          if (data.activo === "1") {
+                            return (
+                              <option key={index} value={data.id}>
+                                {data.nombre}
+                              </option>
+                            );
+                          }
+                        })
+                      : ""}
+                  </Form.Control>
+                </FormGroup>
+              )}
             </Modal.Body>
             <ModalFooter>
               <Button
