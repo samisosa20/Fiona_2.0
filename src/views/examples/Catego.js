@@ -60,6 +60,7 @@ const Catego = () => {
     let div = url.split("#");
     let lvl = div[1];
     let idc = sessionStorage.getItem("IdUser");
+    setform({...stateform, include: lvl ? lvl : 0})
     API.post("acount", {
       id: 4,
       idc: idc,
