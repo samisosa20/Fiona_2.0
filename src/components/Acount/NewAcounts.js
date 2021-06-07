@@ -14,13 +14,13 @@ const AcountAdd = props => {
   const idc = sessionStorage.getItem("IdUser");
   return (
     <>
-      <Row>
+      <Row className="col-12 justify-content-between">
         {state
           ? state.map((data, index) => (
-              <Card className="shadow col-md-5 mr-2 ml-2 mb-3" key={index}>
+              <Card className="shadow col-md-6 mb-3" key={index}>
                 <CardHeader className="border-0">
                   <Row>
-                    <div className="col">
+                    <div className="col p-0">
                       <h3 className="mb-0">{data.nombre}</h3>
                     </div>
                     {data.cantidad_int < 0 ? (
@@ -34,8 +34,8 @@ const AcountAdd = props => {
                     )}
                   </Row>
                   <Row>
-                    <div className="col">Badge: {data.divisa}</div>
-                    <div className="col">
+                    <div className="col p-0">Badge: {data.divisa}</div>
+                    <div className="col p-0">
                       {data.cuenta_ahorro === "1"
                         ? "Saving Acount"
                         : data.propietario &&
@@ -46,7 +46,7 @@ const AcountAdd = props => {
                   </Row>
                 </CardHeader>
                 <CardBody className="mt--4">
-                  <Row className="col m-0 justify-content-md-start justify-content-around">
+                  <Row className="col m-0 justify-content-md-start justify-content-around p-0">
                     <Link
                       to={
                         "/admin/move?acount=" + data.id + "&naco=" + data.nombre
@@ -116,17 +116,17 @@ const AcountAdd = props => {
             ))
           : ""}
         <Card
-          className="shadow col-md-5 mr-2 ml-2 mb-3"
+          className="shadow col-md-6 mb-3"
           onClick={e => OpenModalNew(e)}
         >
           <CardBody style={{ paddingLeft: "10px", paddingRight: "10px" }}>
             <Row>
-              <div className="col" style={{ marginTop: 20 }}>
+              <div className="col-10">
                 <h3 className="card-title col-md-11 col-lg-11 col-xl-11 text-muted pt-3">
                   <i className="fas fa-plus mr-2"></i>New Account
                 </h3>
               </div>
-              <div className="col pt-3">
+              <div className="col-2">
                 <i className="fas fa-chevron-right float-right mt-3 ml-2 fa-2x"></i>
               </div>
             </Row>

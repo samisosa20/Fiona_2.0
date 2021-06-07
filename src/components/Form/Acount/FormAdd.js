@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button, Row, Input, FormGroup, Label } from "reactstrap";
 import { Form, InputGroup } from "react-bootstrap";
 
-const FormAdd = props => {
+const FormAdd = (props) => {
   const {
     stateSignal,
     ChangeSignal,
@@ -11,13 +11,42 @@ const FormAdd = props => {
     handleChange,
     stateAcount,
     stateCatego,
-    stateEvent
+    stateEvent,
   } = props;
 
   const [showOption, setShowOption] = useState(false);
   const showAdvanceOption = () => {
     setShowOption(!showOption);
   };
+  const getDateTime = () => {
+    const now = new Date();
+    let year, month, date, hours, minutes, seconds;
+
+    year = now.getFullYear();
+    month =
+      now.getMonth().toString().length === 1
+        ? "0" + (now.getMonth() + 1).toString()
+        : now.getMonth() + 1;
+    date =
+      now.getDate().toString().length === 1
+        ? "0" + now.getDate().toString()
+        : now.getDate();
+    hours =
+      now.getHours().toString().length === 1
+        ? "0" + now.getHours().toString()
+        : now.getHours();
+    minutes =
+      now.getMinutes().toString().length === 1
+        ? "0" + now.getMinutes().toString()
+        : now.getMinutes();
+    seconds =
+      now.getSeconds().toString().length === 1
+        ? "0" + now.getSeconds().toString()
+        : now.getSeconds();
+
+    return `${year}-${month}-${date}T${hours}:${minutes}:${seconds}`;
+  };
+
   return (
     <>
       <FormGroup>
@@ -44,7 +73,7 @@ const FormAdd = props => {
                 step={0.01}
                 aria-describedby="SignalAppend"
                 required
-                onChange={e => VerifySignal(e, "signo_move")}
+                onChange={(e) => VerifySignal(e, "signo_move")}
               ></Form.Control>
             </InputGroup>
           </div>
@@ -121,7 +150,7 @@ const FormAdd = props => {
         <Input
           type="datetime-local"
           name="datetime"
-          defaultValue="2020-01-01T12:00:00"
+          defaultValue={getDateTime()}
           onChange={handleChange}
         />
       </FormGroup>

@@ -795,7 +795,7 @@ function Account() {
                 <Label>Date</Label>
                 <Form.Control
                   type="datetime-local"
-                  defaultValue="2020-01-01T12:00:00"
+                  defaultValue={stateform.datetime}
                   name="datetime"
                   onChange={handleChange}
                 ></Form.Control>
@@ -955,8 +955,8 @@ function Account() {
                 <Label>Date</Label>
                 <Form.Control
                   type="datetime-local"
-                  defaultValue="2020-01-01T12:00:00"
                   name="datetime"
+                  defaultValue={stateformtrans.datetime}
                   onChange={handleChangeTrans}
                 ></Form.Control>
               </FormGroup>
