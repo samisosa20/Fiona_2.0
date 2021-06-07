@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // reactstrap components
 import { Button, Row, FormGroup, Label } from "reactstrap";
@@ -14,7 +14,9 @@ const FormAccount = (props) => {
     handleChangeTrans,
     ModNewTransSate,
   } = props;
-  const getDateTime = () => {
+  const [dateTime, setDateTime] = useState("");
+
+  useEffect(() => {
     const now = new Date();
     let year, month, date, hours, minutes, seconds;
 
@@ -40,8 +42,8 @@ const FormAccount = (props) => {
         ? "0" + now.getSeconds().toString()
         : now.getSeconds();
 
-    return `${year}-${month}-${date}T${hours}:${minutes}:${seconds}`;
-  };
+    setDateTime(`${year}-${month}-${date}T${hours}:${minutes}:${seconds}`);
+  }, []);
   return (
     <Form role="form" onSubmit={handleSubmit_trans}>
       <Modal.Body>
@@ -136,7 +138,7 @@ const FormAccount = (props) => {
           <Label>Date</Label>
           <Form.Control
             type="datetime-local"
-            defaultValue={getDateTime()}
+            defaultValue={dateTime}
             name="datetime"
             onChange={handleChangeTrans}
           ></Form.Control>
