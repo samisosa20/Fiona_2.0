@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 // reactstrap components
 import {
   Col,
@@ -20,9 +21,9 @@ import {
 import ExcelExport from "components/Excel"
 import API from "../../variables/API";
 import axios from "axios";
+
 // core components
 import { Header } from "components/Headers/Header.js";
-import { months } from "moment";
 
 
 function Report() {
@@ -112,7 +113,7 @@ function Report() {
           Fdate: formattedDateTime,
           hidden: true,
         });
-      } else if (mode == "1") {
+      } else if (mode === "1") {
         d.setFullYear(now.getFullYear(), month_now, 0);
         year = d.getFullYear();
         month =
@@ -381,7 +382,7 @@ function Report() {
               </CardHeader>
               <CardBody>
                 <div className="chart">
-                  {stateDate.Sdate != "" ? (
+                  {stateDate.Sdate !== "" ? (
                     <Chart_Ingresos
                       dstart={stateDate.Sdate}
                       dend={stateDate.Fdate}
@@ -407,7 +408,7 @@ function Report() {
               </CardHeader>
               <CardBody>
                 <div className="chart">
-                  {stateDate.Sdate != "" ? (
+                  {stateDate.Sdate !== "" ? (
                     <Chart_Egreso
                       dstart={stateDate.Sdate}
                       dend={stateDate.Fdate}
@@ -433,7 +434,7 @@ function Report() {
               </CardHeader>
               <CardBody>
                 <div className="chart">
-                  {stateDate.Sdate != "" ? (
+                  {stateDate.Sdate !== "" ? (
                     <Chart_Ahorros
                       dstart={stateDate.Sdate}
                       dend={stateDate.Fdate}

@@ -1,5 +1,4 @@
 import React from "react";
-import {Button} from "reactstrap";
 import { Modal } from "react-bootstrap";
 
 import FormEditor from "../../Form/Categorie/Editor"

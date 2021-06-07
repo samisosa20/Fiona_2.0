@@ -55,3 +55,10 @@ $warn: #ffd600;
     }
   }
 }
+
+@media (min-width: 768px){
+  .col-md-6 {
+      flex: 0 0 49%;
+      max-width: 50%;
+  }
+}
