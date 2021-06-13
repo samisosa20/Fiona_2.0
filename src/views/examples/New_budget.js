@@ -113,7 +113,7 @@ function ViewBudget() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (
-      stateForm.value <= 0 ||
+      stateForm.value < 0 ||
       stateForm.value === "" ||
       stateForm.mode === 0
     ) {

@@ -62,19 +62,19 @@ function Budget() {
                 <Card className="shadow col-md-5 mr-2 ml-2 mb-3" key={index}>
                   <CardHeader className="border-0">
                     <Row>
-                      <div className="col-12">
+                      <div className="col-12 p-0">
                         <h3 className="mb-0">Budget - {data.year}</h3>
                       </div>
-                      <div className="col-sm-12 col-md-6 justify-content-end text-success">
+                      <div className="col-sm-12 col-md-6 justify-content-end text-success p-0">
                         Income: <br></br>$ {data.ingreso}
                       </div>
-                      <div className="col-sm-12 col-md-6 justify-content-end text-danger">
+                      <div className="col-sm-12 col-md-6 justify-content-end text-danger p-0">
                         Expenses: <br></br>$ {data.egreso}
                       </div>
                     </Row>
                   </CardHeader>
                   <CardBody className="mt--4">
-                    <Row>
+                    <Row className="col-12">
                       <Link to={"/admin/ViewBudget/" + data.year}>
                         <Button
                           className="mr-4 shadow btn-circle"
@@ -98,7 +98,7 @@ function Budget() {
                             OpenModalDelete(e, data.id, data.year)
                           }
                         >
-                          <i className="far fa-trash-alt"></i>
+                          <i className="far fa-trash-alt white"></i>
                         </Button>
                       </Link>
                     </Row>

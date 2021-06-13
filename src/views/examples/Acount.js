@@ -439,7 +439,7 @@ function Account() {
     <>
       <Header />
       <Container className="mt--7" fluid>
-        <div className="col justify-content-end row">
+        <div className="col justify-content-end row p-0 m-0">
           <Button className="btn-info mb-3" onClick={e => OpenModalMovi(e)}>
             <i className="fas fa-plus mr-2"></i>
             Move

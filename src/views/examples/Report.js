@@ -152,7 +152,7 @@ function Report() {
   useEffect(() => {
     async function getDataReport(idc, divi) {
       if (stateDate.Sdate === ""){
-        getDate(1);
+        getDate("1");
       }
       let Fecha_ini = document.getElementById("Sdate").value;
       let Fehca_fin = document.getElementById("Edate").value;
@@ -228,7 +228,7 @@ function Report() {
       <Container className="mt--7" fluid>
         <Row className="col justify-content-end mb-3">
           <div className="col-md-4">
-            <Label className="text-dark">Category</Label>
+            <Label className="text-dark">View Mode</Label>
             <Form.Control
               as="select"
               name="catego"
@@ -266,7 +266,7 @@ function Report() {
             </InputGroup>
           </div>
           <div className="mt-4">
-            <Button className="mr-3 btn-success" onClick={consultdate}>
+            <Button className="mr-3 btn-success" onClick={() => consultdate()}>
               <i className="fas fa-search mr-2"></i>
               Search
             </Button>
