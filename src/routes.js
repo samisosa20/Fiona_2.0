@@ -1,6 +1,7 @@
 import Dash from "views/Dash.js";
 import Budget from "views/examples/Budget.js";
 import ViewBudget from "views/examples/View_budget";
+import ReportBudget from "views/examples/Report_budget";
 import NewBudget from "views/examples/New_budget";
 import Catego from "views/examples/Catego.js";
 import Event from "views/examples/Event.js";
@@ -51,6 +52,14 @@ var routes = [
     component: ViewBudget,
     layout: "/admin",
     sidebar: false,
+  },
+  {
+    path: "/ReportBudget",
+    name: "Report Budget",
+    icon: "ni ni-books text-info",
+    component: ReportBudget,
+    layout: "/admin",
+    sidebar: true,
   },
   {
     path: "/NewBudget",

@@ -14,7 +14,7 @@ const AcountAdd = props => {
   const idc = sessionStorage.getItem("IdUser");
   return (
     <>
-      <Row className="col-12 justify-content-between">
+      <Row className="col-12 justify-content-between p-0 m-0">
         {state
           ? state.map((data, index) => (
               <Card className="shadow col-md-6 mb-3" key={index}>
