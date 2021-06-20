@@ -438,13 +438,18 @@ function ViewBudget() {
                         <CardBody className={`p-0 border rounded`}>
                           {stateFilter.length > 0
                             ? stateFilter.map((v, i) => (
-                                <div className={`border-bottom p-3 ${i % 2 === 0 ? 'bg-secondary' : ''}`} key={i}>
+                                <div
+                                  className={`border-bottom p-3 ${
+                                    i % 2 === 0 ? "bg-secondary" : ""
+                                  }`}
+                                  key={i}
+                                >
                                   <h4>{v.categoria}</h4>
-                                  <div className="row col-12 p-0 justify-content-between m-0">
+                                  {/* <div className="row col-12 p-0 justify-content-between m-0">
                                     <h5 className="m-0">Budget</h5>
                                     <h5 className="m-0">Real</h5>
                                     <h5 className="m-0">Variation</h5>
-                                  </div>
+                                  </div> */}
                                   <div className="row col-12 p-0 justify-content-between m-0">
                                     <p className="m-0 font-weight-normal">
                                       {formatter.format(v.budget)}
@@ -478,49 +483,53 @@ function ViewBudget() {
             ) : (
               <Card></Card>
             )}
-            {/* <Card>
-            <CardHeader className="px-3 pb-3">
-              <h3>Ingreso</h3>
-              <div className="row col-12 p-0 justify-content-between m-0">
-                <h5 className="m-0">Budget</h5>
-                <h5 className="m-0">Real</h5>
-                <h5 className="m-0">Variation</h5>
-              </div>
-              <div className="row col-12 p-0 justify-content-between m-0">
-                <p className="m-0">$200.000</p>
-                <p className="m-0">$150.000</p>
-                <p className="m-0">90.00</p>
-              </div>
-            </CardHeader>
-            <CardBody className="p-3">
-              <div className="border-bottom py-3">
-                <h4>Familiar</h4>
+            <Card
+              className="mb-2 shadow"
+            >
+              <CardHeader className="px-3 pb-3">
+                <div className="row justify-content-between m-0 p-0 col-12">
+                  <h3>{"Utility"}</h3>
+                </div>
                 <div className="row col-12 p-0 justify-content-between m-0">
                   <h5 className="m-0">Budget</h5>
                   <h5 className="m-0">Real</h5>
                   <h5 className="m-0">Variation</h5>
                 </div>
                 <div className="row col-12 p-0 justify-content-between m-0">
-                  <p>$200.000</p>
-                  <p>$150.000</p>
-                  <p>90.00</p>
+                  <p
+                    className={
+                      utilidadBudget < 0
+                        ? "text-danger m-0 font-weight-normal"
+                        : "text-success m-0 font-weight-normal"
+                    }
+                  >
+                    {formatter.format(utilidadBudget)}
+                  </p>
+                  <p
+                    className={
+                      utilidadReal < 0
+                        ? "text-danger m-0 font-weight-normal"
+                        : "text-success m-0 font-weight-normal"
+                    }
+                  >
+                    {formatter.format(utilidadReal)}
+                  </p>
+                  <p
+                    className={
+                      parseFloat(
+                        ((utilidadReal - utilidadBudget) / utilidadReal) * 100
+                      ) < 0
+                        ? "text-danger m-0 font-weight-bold"
+                        : "text-success m-0 font-weight-bold"
+                    }
+                  >
+                    {parseFloat(
+                      ((utilidadReal - utilidadBudget) / utilidadReal) * 100
+                    ).toFixed(2)}
+                  </p>
                 </div>
-              </div>
-              <div className="border-bottom py-3">
-                <h4>Salario</h4>
-                <div className="row col-12 p-0 justify-content-between m-0">
-                  <h5 className="m-0">Budget</h5>
-                  <h5 className="m-0">Real</h5>
-                  <h5 className="m-0">Variation</h5>
-                </div>
-                <div className="row col-12 p-0 justify-content-between m-0">
-                  <p>$200.000</p>
-                  <p>$150.000</p>
-                  <p>90.00</p>
-                </div>
-              </div>
-            </CardBody>
-          </Card> */}
+              </CardHeader>
+            </Card>
           </>
         )}
       </Container>
