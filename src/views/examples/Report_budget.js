@@ -7,15 +7,22 @@ import {
   Button,
   Label,
   Row,
+  CardHeader,
 } from "reactstrap";
 import { Form, InputGroup } from "react-bootstrap";
 // core components
 import { Header } from "components/Headers/Header.js";
 import API from "../../variables/API";
+import { BsChevronDown, BsChevronUp } from "react-icons/bs";
 
 function ViewBudget() {
   const [state, setState] = useState([]);
+  const [stateFilter, setStateFilter] = useState([]);
   const [stateSearch, setSearch] = useState(false);
+  const [displayDetail, setDisplayDetail] = useState({
+    key: 0,
+    chevron: false,
+  });
   const [stateDate, setDate] = useState({
     modal: 1,
     Sdate: "",
@@ -129,6 +136,17 @@ function ViewBudget() {
     setSearch(!stateSearch);
   };
 
+  const showDetail = (key) => {
+    setDisplayDetail({ key: key, chevron: !displayDetail.chevron });
+    setStateFilter(
+      state.filter(
+        (v) =>
+          v.nameSub ===
+          document.querySelector(`#card-primary-${key} h3`).textContent
+      )
+    );
+  };
+
   return (
     <>
       <Header />
@@ -179,20 +197,21 @@ function ViewBudget() {
             </Button>
           </div>
         </Row>
-        <Card>
-          <CardBody className="overflow-x-auto">
-            <Table hover>
-              <thead>
-                <tr className="text-dark">
-                  <th>Category</th>
-                  <th>Budget</th>
-                  <th>Real</th>
-                  <th>Variation</th>
-                </tr>
-              </thead>
-              <tbody>
-                {state
-                  ? state.map((data, index) => {
+        {window.innerWidth >= 768 ? (
+          <Card>
+            <CardBody className="overflow-x-auto">
+              <Table hover>
+                <thead>
+                  <tr className="text-dark">
+                    <th>Category</th>
+                    <th>Budget</th>
+                    <th>Real</th>
+                    <th>Variation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {state ? (
+                    state.map((data, index) => {
                       if (data.grupo === "4") {
                         utilidadBudget =
                           parseFloat(utilidadBudget) + parseFloat(data.budget);
@@ -293,57 +312,217 @@ function ViewBudget() {
                         );
                       }
                     })
-                : <tr></tr>}
-                <tr className="table-dark text-dark">
-                  <td className="font-weight-bold">{aux_catego}</td>
-                  <td>{formatter.format(acuBudget)}</td>
-                  <td>{formatter.format(acuReal)}</td>
-                  <td
-                    className={
-                      parseFloat(((acuReal - acuBudget) / acuReal) * 100) < 0
-                        ? "text-danger"
-                        : "text-success"
-                    }
-                  >
-                    {parseFloat(
-                      ((acuReal - acuBudget) / acuReal) * 100
-                    ).toFixed(2)}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="font-weight-bold">Utility</td>
-                  <td
-                    className={
-                      utilidadBudget < 0 ? "text-danger" : "text-success"
-                    }
-                  >
-                    {formatter.format(utilidadBudget)}
-                  </td>
-                  <td
-                    className={
-                      utilidadReal < 0 ? "text-danger" : "text-success"
-                    }
-                  >
-                    {formatter.format(utilidadReal)}
-                  </td>
-                  <td
-                    className={
-                      parseFloat(
+                  ) : (
+                    <tr></tr>
+                  )}
+                  <tr className="table-dark text-dark">
+                    <td className="font-weight-bold">{aux_catego}</td>
+                    <td>{formatter.format(acuBudget)}</td>
+                    <td>{formatter.format(acuReal)}</td>
+                    <td
+                      className={
+                        parseFloat(((acuReal - acuBudget) / acuReal) * 100) < 0
+                          ? "text-danger"
+                          : "text-success"
+                      }
+                    >
+                      {parseFloat(
+                        ((acuReal - acuBudget) / acuReal) * 100
+                      ).toFixed(2)}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="font-weight-bold">Utility</td>
+                    <td
+                      className={
+                        utilidadBudget < 0 ? "text-danger" : "text-success"
+                      }
+                    >
+                      {formatter.format(utilidadBudget)}
+                    </td>
+                    <td
+                      className={
+                        utilidadReal < 0 ? "text-danger" : "text-success"
+                      }
+                    >
+                      {formatter.format(utilidadReal)}
+                    </td>
+                    <td
+                      className={
+                        parseFloat(
+                          ((utilidadReal - utilidadBudget) / utilidadReal) * 100
+                        ) < 0
+                          ? "text-danger"
+                          : "text-success"
+                      }
+                    >
+                      {parseFloat(
                         ((utilidadReal - utilidadBudget) / utilidadReal) * 100
-                      ) < 0
-                        ? "text-danger"
-                        : "text-success"
-                    }
-                  >
-                    {parseFloat(
-                      ((utilidadReal - utilidadBudget) / utilidadReal) * 100
-                    ).toFixed(2)}
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-          </CardBody>
-        </Card>
+                      ).toFixed(2)}
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            </CardBody>
+          </Card>
+        ) : (
+          <>
+            {state ? (
+              state.map((data, index) => {
+                if (data.grupo === "4") {
+                  utilidadBudget =
+                    parseFloat(utilidadBudget) + parseFloat(data.budget);
+                  utilidadReal =
+                    parseFloat(utilidadReal) + parseFloat(data.realValue);
+                } else {
+                  utilidadBudget =
+                    parseFloat(utilidadBudget) - parseFloat(data.budget);
+                  utilidadReal =
+                    parseFloat(utilidadReal) - parseFloat(data.realValue);
+                }
+                if (data.nameSub !== aux_catego && aux_catego === "") {
+                  aux_catego = data.nameSub;
+                  acuBudget = parseFloat(acuBudget) + parseFloat(data.budget);
+                  acuReal = parseFloat(acuReal) + parseFloat(data.realValue);
+                } else if (data.nameSub !== aux_catego) {
+                  aux_cat_print = aux_catego;
+                  aux_catego = data.nameSub;
+                  acuBudget_print = acuBudget;
+                  acuReal_print = acuReal;
+                  aux_variation =
+                    ((acuReal_print - acuBudget_print) / acuReal_print) * 100;
+                  acuBudget = parseFloat(data.budget);
+                  acuReal = parseFloat(data.realValue);
+                  return (
+                    <Card
+                      id={`card-primary-${index * 100}`}
+                      key={index * 100}
+                      className="mb-2 shadow"
+                      onClick={() => showDetail(index * 100)}
+                    >
+                      <CardHeader className="px-3 pb-3">
+                        <div className="row justify-content-between m-0 p-0 col-12">
+                          <h3>{aux_cat_print}</h3>
+                          {displayDetail.key === index * 100 &&
+                          displayDetail.chevron ? (
+                            <BsChevronUp />
+                          ) : (
+                            <BsChevronDown />
+                          )}
+                        </div>
+                        <div className="row col-12 p-0 justify-content-between m-0">
+                          <h5 className="m-0">Budget</h5>
+                          <h5 className="m-0">Real</h5>
+                          <h5 className="m-0">Variation</h5>
+                        </div>
+                        <div className="row col-12 p-0 justify-content-between m-0">
+                          <p className="m-0 font-weight-normal">
+                            {formatter.format(acuBudget_print)}
+                          </p>
+                          <p className="m-0 font-weight-normal">
+                            {formatter.format(acuReal_print)}
+                          </p>
+                          <p
+                            className={
+                              parseFloat(aux_variation) < 0
+                                ? "text-danger m-0 font-weight-bold"
+                                : "text-success m-0 font-weight-bold"
+                            }
+                          >
+                            {parseFloat(aux_variation).toFixed(2)}
+                          </p>
+                        </div>
+                      </CardHeader>
+                      {displayDetail.key === index * 100 &&
+                      displayDetail.chevron ? (
+                        <CardBody className={`p-0 border rounded`}>
+                          {stateFilter.length > 0
+                            ? stateFilter.map((v, i) => (
+                                <div className={`border-bottom p-3 ${i % 2 === 0 ? 'bg-secondary' : ''}`} key={i}>
+                                  <h4>{v.categoria}</h4>
+                                  <div className="row col-12 p-0 justify-content-between m-0">
+                                    <h5 className="m-0">Budget</h5>
+                                    <h5 className="m-0">Real</h5>
+                                    <h5 className="m-0">Variation</h5>
+                                  </div>
+                                  <div className="row col-12 p-0 justify-content-between m-0">
+                                    <p className="m-0 font-weight-normal">
+                                      {formatter.format(v.budget)}
+                                    </p>
+                                    <p className="m-0 font-weight-normal">
+                                      {formatter.format(v.realValue)}
+                                    </p>
+                                    <p
+                                      className={
+                                        parseFloat(v.variation) < 0
+                                          ? "text-danger m-0 font-weight-bold"
+                                          : "text-success m-0 font-weight-bold"
+                                      }
+                                    >
+                                      {parseFloat(v.variation).toFixed(2)}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))
+                            : ""}
+                        </CardBody>
+                      ) : null}
+                    </Card>
+                  );
+                } else {
+                  aux_catego = data.nameSub;
+                  acuBudget = parseFloat(acuBudget) + parseFloat(data.budget);
+                  acuReal = parseFloat(acuReal) + parseFloat(data.realValue);
+                }
+              })
+            ) : (
+              <Card></Card>
+            )}
+            {/* <Card>
+            <CardHeader className="px-3 pb-3">
+              <h3>Ingreso</h3>
+              <div className="row col-12 p-0 justify-content-between m-0">
+                <h5 className="m-0">Budget</h5>
+                <h5 className="m-0">Real</h5>
+                <h5 className="m-0">Variation</h5>
+              </div>
+              <div className="row col-12 p-0 justify-content-between m-0">
+                <p className="m-0">$200.000</p>
+                <p className="m-0">$150.000</p>
+                <p className="m-0">90.00</p>
+              </div>
+            </CardHeader>
+            <CardBody className="p-3">
+              <div className="border-bottom py-3">
+                <h4>Familiar</h4>
+                <div className="row col-12 p-0 justify-content-between m-0">
+                  <h5 className="m-0">Budget</h5>
+                  <h5 className="m-0">Real</h5>
+                  <h5 className="m-0">Variation</h5>
+                </div>
+                <div className="row col-12 p-0 justify-content-between m-0">
+                  <p>$200.000</p>
+                  <p>$150.000</p>
+                  <p>90.00</p>
+                </div>
+              </div>
+              <div className="border-bottom py-3">
+                <h4>Salario</h4>
+                <div className="row col-12 p-0 justify-content-between m-0">
+                  <h5 className="m-0">Budget</h5>
+                  <h5 className="m-0">Real</h5>
+                  <h5 className="m-0">Variation</h5>
+                </div>
+                <div className="row col-12 p-0 justify-content-between m-0">
+                  <p>$200.000</p>
+                  <p>$150.000</p>
+                  <p>90.00</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card> */}
+          </>
+        )}
       </Container>
     </>
   );
