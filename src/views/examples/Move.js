@@ -795,7 +795,15 @@ function Account() {
                 <Label>Date</Label>
                 <Form.Control
                   type="datetime-local"
-                  defaultValue={stateform.datetime}
+                  defaultValue={`${new Date().getFullYear()}-${`${
+                    new Date().getMonth() + 1
+                  }`.padStart(2, 0)}-${`${new Date().getDate() + 1}`.padStart(
+                    2,
+                    0
+                  )}T${`${new Date().getHours()}`.padStart(
+                    2,
+                    0
+                  )}:${`${new Date().getMinutes()}`.padStart(2, 0)}`}
                   name="datetime"
                   onChange={handleChange}
                 ></Form.Control>
@@ -956,7 +964,15 @@ function Account() {
                 <Form.Control
                   type="datetime-local"
                   name="datetime"
-                  defaultValue={stateformtrans.datetime}
+                  defaultValue={`${new Date().getFullYear()}-${`${
+                    new Date().getMonth() + 1
+                  }`.padStart(2, 0)}-${`${new Date().getDate() + 1}`.padStart(
+                    2,
+                    0
+                  )}T${`${new Date().getHours()}`.padStart(
+                    2,
+                    0
+                  )}:${`${new Date().getMinutes()}`.padStart(2, 0)}`}
                   onChange={handleChangeTrans}
                 ></Form.Control>
               </FormGroup>

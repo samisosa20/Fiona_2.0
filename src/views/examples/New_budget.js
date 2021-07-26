@@ -30,7 +30,7 @@ function ViewBudget() {
   /* Declaracion de estados de los modals */
   const [ShowStep1, SetShowStep1] = useState(false);
   const [ShowStep2, SetShowStep2] = useState(false);
-  const [refreshData, setrefreshData] = useState(false);
+  const [refreshData, /* setrefreshData */] = useState(false);
 
   // Funcion para cambiar de estado de los modals
   const ModStep1 = () => SetShowStep1(!ShowStep1);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { Button, Row, Input, FormGroup, Label } from "reactstrap";
 import { Form, InputGroup } from "react-bootstrap";
@@ -15,38 +15,9 @@ const FormAdd = (props) => {
   } = props;
 
   const [showOption, setShowOption] = useState(false);
-  const [dateTime, setDateTime] = useState("");
   const showAdvanceOption = () => {
     setShowOption(!showOption);
   };
-  useEffect(() => {
-    const now = new Date();
-    let year, month, date, hours, minutes, seconds;
-
-    year = now.getFullYear();
-    month =
-      now.getMonth().toString().length === 1
-        ? "0" + (now.getMonth() + 1).toString()
-        : now.getMonth() + 1;
-    date =
-      now.getDate().toString().length === 1
-        ? "0" + now.getDate().toString()
-        : now.getDate();
-    hours =
-      now.getHours().toString().length === 1
-        ? "0" + now.getHours().toString()
-        : now.getHours();
-    minutes =
-      now.getMinutes().toString().length === 1
-        ? "0" + now.getMinutes().toString()
-        : now.getMinutes();
-    seconds =
-      now.getSeconds().toString().length === 1
-        ? "0" + now.getSeconds().toString()
-        : now.getSeconds();
-
-    setDateTime(`${year}-${month}-${date}T${hours}:${minutes}:${seconds}`);
-  }, []);
 
   return (
     <>
@@ -151,7 +122,15 @@ const FormAdd = (props) => {
         <Input
           type="datetime-local"
           name="datetime"
-          defaultValue={dateTime}
+          defaultValue={`${new Date().getFullYear()}-${`${
+            new Date().getMonth() + 1
+          }`.padStart(2, 0)}-${`${new Date().getDate() + 1}`.padStart(
+            2,
+            0
+          )}T${`${new Date().getHours()}`.padStart(
+            2,
+            0
+          )}:${`${new Date().getMinutes()}`.padStart(2, 0)}`}
           onChange={handleChange}
         />
       </FormGroup>

@@ -11,7 +11,7 @@ import "./index.css"
 import AdminLayout from "layouts/Admin.js";
 import AuthLayout from "layouts/Auth.js";
 import ValidShareAccount from "views/examples/ValidShare.js";
-import Account from "views/examples/Acount";
+
 
 
 function ValidPath() {

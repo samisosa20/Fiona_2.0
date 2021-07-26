@@ -10,11 +10,10 @@ import {
   Label,
   Button
 } from "reactstrap";
-import { Form, Modal, ProgressBar } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 // core components
 import { Header } from "components/Headers/Header.js";
 import API from "../../variables/API";
-import { Link } from "react-router-dom";
 import "../../assets/styles/components/Catego.scss";
 
 import Modaldelete from "../../components/Modals/Delete";
@@ -56,8 +55,6 @@ const Catego = () => {
   const ChangeStateCatego = () => setStateCatego(!stateCatego);
 
   useEffect(() => {
-    let url = window.location.href;
-    let div = url.split("#");
     let idc = sessionStorage.getItem("IdUser");
     API.post("acount", {
       id: 12,
