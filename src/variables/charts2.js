@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Chartjs from "chart.js";
+import { Chart, registerables, LineController, LineElement, PointElement, LinearScale, Title } from "chart.js"
 import API from "./API";
 
 //color donuht
@@ -56,48 +56,52 @@ function Chart_Ingresos(props) {
             res.data.map(
               (data) => (label.push(data.categoria), value.push(data.cantidad))
             );
-            let newChartInstance = new Chartjs(chartContainer.current, {
-              type: "doughnut",
-              data: {
-                labels: label, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [
-                  {
-                    label: "Ingresos",
-                    data: value,
-                    backgroundColor: colorDonuht,
-                    borderColor: colorDonuht,
+            Chart.register(LineController, LineElement, PointElement, LinearScale, Title, registerables);
+            let newChartInstance = new Chart(
+              chartContainer.current,
+              {
+                type: "doughnut",
+                data: {
+                  labels: label, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                  datasets: [
+                    {
+                      label: "Ingresos",
+                      data: value,
+                      backgroundColor: colorDonuht,
+                      borderColor: colorDonuht,
+                    },
+                  ],
+                },
+                options: {
+                  borderWidth: 1,
+                  cutoutPercentage: 83,
+                  title: "Ingresos",
+                  width: 25,
+                  responsive: true,
+                  legend: {
+                    display: false,
                   },
-                ],
-              },
-              options: {
-                borderWidth: 1,
-                cutoutPercentage: 83,
-                title: "Ingresos",
-                width: 25,
-                responsive: true,
-                legend: {
-                  display: false,
+                  legendCallback: function (chart) {
+                    var data = chart.data;
+                    var content = "";
+
+                    data.labels.forEach(function (label, index) {
+                      var bgColor = data.datasets[0].backgroundColor[index];
+
+                      content += '<span class="chart-legend-item">';
+                      content +=
+                        '<i class="chart-legend-indicator" style="background-color: ' +
+                        bgColor +
+                        '"></i>';
+                      content += formatter.format(label);
+                      content += "</span>";
+                    });
+
+                    return content;
+                  },
                 },
-                legendCallback: function (chart) {
-                  var data = chart.data;
-                  var content = "";
-
-                  data.labels.forEach(function (label, index) {
-                    var bgColor = data.datasets[0].backgroundColor[index];
-
-                    content += '<span class="chart-legend-item">';
-                    content +=
-                      '<i class="chart-legend-indicator" style="background-color: ' +
-                      bgColor +
-                      '"></i>';
-                    content += formatter.format(label);
-                    content += "</span>";
-                  });
-
-                  return content;
-                },
-              },
-            });
+              }
+            );
             setChartInstance(newChartInstance);
           }
         });
@@ -132,48 +136,52 @@ function Chart_Egreso(props) {
             res.data.forEach(
               (data) => (label.push(data.categoria), value.push(data.cantidad))
             );
-            let newChartInstanceEgre = new Chartjs(chartContainerEgre.current, {
-              type: "doughnut",
-              data: {
-                labels: label, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [
-                  {
-                    label: "Egresos",
-                    data: value,
-                    backgroundColor: colorDonuht,
-                    borderColor: colorDonuht,
+            Chart.register(LineController, LineElement, PointElement, LinearScale, Title, registerables);
+            let newChartInstanceEgre = new Chart(
+              chartContainerEgre.current,
+              {
+                type: "doughnut",
+                data: {
+                  labels: label, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                  datasets: [
+                    {
+                      label: "Egresos",
+                      data: value,
+                      backgroundColor: colorDonuht,
+                      borderColor: colorDonuht,
+                    },
+                  ],
+                },
+                options: {
+                  borderWidth: 1,
+                  cutoutPercentage: 83,
+                  title: "Egresos",
+                  width: 25,
+                  responsive: true,
+                  legend: {
+                    display: false,
                   },
-                ],
-              },
-              options: {
-                borderWidth: 1,
-                cutoutPercentage: 83,
-                title: "Egresos",
-                width: 25,
-                responsive: true,
-                legend: {
-                  display: false,
+                  legendCallback: function (chart) {
+                    var data = chart.data;
+                    var content = "";
+
+                    data.labels.forEach(function (label, index) {
+                      var bgColor = data.datasets[0].backgroundColor[index];
+
+                      content += '<span class="chart-legend-item">';
+                      content +=
+                        '<i class="chart-legend-indicator" style="background-color: ' +
+                        bgColor +
+                        '"></i>';
+                      content += label;
+                      content += "</span>";
+                    });
+
+                    return content;
+                  },
                 },
-                legendCallback: function (chart) {
-                  var data = chart.data;
-                  var content = "";
-
-                  data.labels.forEach(function (label, index) {
-                    var bgColor = data.datasets[0].backgroundColor[index];
-
-                    content += '<span class="chart-legend-item">';
-                    content +=
-                      '<i class="chart-legend-indicator" style="background-color: ' +
-                      bgColor +
-                      '"></i>';
-                    content += label;
-                    content += "</span>";
-                  });
-
-                  return content;
-                },
-              },
-            });
+              }
+            );
             setChartInstanceEgre(newChartInstanceEgre);
           }
         });
@@ -205,51 +213,58 @@ function Chart_Ahorros(props) {
           if (chartContainerEgre && chartContainerEgre.current) {
             let label = [];
             let value = [];
-            res.data.map(
-              (data) => (label.push(data.nombre), value.push(data.cantidad))
-            );
-            let newChartInstanceEgre = new Chartjs(chartContainerEgre.current, {
-              type: "doughnut",
-              data: {
-                labels: label, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [
-                  {
-                    label: "Ahorros",
-                    data: value,
-                    backgroundColor: colorDonuht,
-                    borderColor: colorDonuht,
-                  },
-                ],
-              },
-              options: {
-                borderWidth: 1,
-                cutoutPercentage: 83,
-                title: "Ahorros",
-                width: 25,
-                responsive: true,
-                legend: {
-                  display: false,
-                },
-                legendCallback: function (chart) {
-                  var data = chart.data;
-                  var content = "";
-
-                  data.labels.forEach(function (label, index) {
-                    var bgColor = data.datasets[0].backgroundColor[index];
-
-                    content += '<span class="chart-legend-item">';
-                    content +=
-                      '<i class="chart-legend-indicator" style="background-color: ' +
-                      bgColor +
-                      '"></i>';
-                    content += formatter.format(label);
-                    content += "</span>";
-                  });
-
-                  return content;
-                },
-              },
+            res.data.map((data) => {
+              label.push(data.nombre);
+              value.push(data.cantidad);
             });
+            console.log(chartContainerEgre);
+            Chart.register(LineController, LineElement, PointElement, LinearScale, Title, registerables);
+            let newChartInstanceEgre = new Chart(
+              chartContainerEgre.current,
+              {
+                type: "doughnut",
+                data: {
+                  labels: label,
+                  datasets: [
+                    {
+                      label: "Ahorros",
+                      data: value,
+                      backgroundColor: colorDonuht,
+                      borderColor: colorDonuht,
+                    },
+                  ],
+                },
+                options: {
+                  borderWidth: 1,
+                  cutoutPercentage: 83,
+                  title: "Ahorros",
+                  width: 25,
+                  responsive: true,
+                  legend: {
+                    display: false,
+                  },
+                  legendCallback: function (chart) {
+                    console.log(chart.data)
+                    var data = chart.data;
+                    var content = "";
+
+                    data.labels.forEach(function (label, index) {
+                      var bgColor = data.datasets[0].backgroundColor[index];
+
+                      content += '<span class="chart-legend-item">';
+                      content +=
+                        '<i class="chart-legend-indicator" style="background-color: ' +
+                        bgColor +
+                        '"></i>';
+                      content += formatter.format(label);
+                      content += "</span>";
+                    });
+
+                    return content;
+                  },
+                },
+              }
+            );
             setChartInstanceEgre(newChartInstanceEgre);
           }
         });

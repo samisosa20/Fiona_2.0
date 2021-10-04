@@ -65,10 +65,10 @@ function ViewBudget() {
       date,
       formattedDateTime,
       formattedDateTimeIni;
-    month_now =
-      now.getMonth().toString().length === 1
-        ? "0" + (now.getMonth() + 1)
-        : now.getMonth() + 1;
+      month_now = (now.getMonth() + 1)
+      month_now = month_now.toString().length === 1
+          ? "0" + month_now
+          : month_now;
 
     let d = new Date();
     if (mode === "-1") {
