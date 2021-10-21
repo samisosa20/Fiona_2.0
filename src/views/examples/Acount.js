@@ -59,7 +59,7 @@ function Account() {
   });
 
   useEffect(() => {
-    var idc = sessionStorage.getItem("IdUser");
+    var idc = localStorage.getItem("IdUser");
     API.post("acount", {
       id: 2,
       idc: idc
@@ -153,7 +153,7 @@ function Account() {
   };
   const OpenModalMovi = e => {
     e.preventDefault();
-    let idc = sessionStorage.getItem("IdUser");
+    let idc = localStorage.getItem("IdUser");
     axios
       .all([
         API.post(`acount`, {
@@ -173,7 +173,14 @@ function Account() {
         axios.spread((firstResponse, secondResponse, thirdResponse) => {
           setCatego(firstResponse.data);
           setAcount(secondResponse.data);
-          setEvent(thirdResponse.data);
+          let d = new Date();
+          let d1 = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+          const eventFilter = thirdResponse.data.filter(event => {
+            let d2 = new Date(event.fecha_fin.split("T")[0]);
+            d2 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate() + 1);
+            return d2.getTime() >= d1.getTime()
+          })
+          setEvent(eventFilter);
         })
       );
     let now = new Date(),
@@ -224,7 +231,7 @@ function Account() {
   };
   const OpenModalTrans = e => {
     e.preventDefault();
-    let idc = sessionStorage.getItem("IdUser");
+    let idc = localStorage.getItem("IdUser");
     API.post("acount", {
       id: 2,
       idc: idc
@@ -302,7 +309,7 @@ function Account() {
     event.preventDefault();
     if (stateform.badge === 0) {
     } else {
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       let save_account = stateform.save_account ? 1 : 0;
       API.post("add_data", {
         id: 2,
@@ -342,7 +349,7 @@ function Account() {
       if (document.getElementById("signo_move").value === "-") {
         valor = valor * -1;
       }
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("add_data", {
         id: 3,
         idu: idc,
@@ -380,7 +387,7 @@ function Account() {
       document.getElementById("btn_new_trans_dash").innerHTML =
         "<span className='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("add_data", {
         id: 4,
         idu: idc,
@@ -407,7 +414,7 @@ function Account() {
     event.preventDefault();
     if (stateformEdit.badge === 0) {
     } else {
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       let include;
       if (stateformEdit.edit_include === false) {
         include = 0;

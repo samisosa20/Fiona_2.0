@@ -51,7 +51,7 @@ function ViewBudget() {
     }
     API.post("report", {
       id: 14,
-      idc: sessionStorage.getItem("IdUser"),
+      idc: localStorage.getItem("IdUser"),
       fecha_ini: document.getElementById("Sdate").value,
       fecha_fin: document.getElementById("Edate").value,
     }).then((response) => setState(response.data));

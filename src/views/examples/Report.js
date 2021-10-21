@@ -48,8 +48,8 @@ function Report() {
     title: "",
     id_modal: 0,
   });
-  let idc = sessionStorage.getItem("IdUser");
-  let divi = sessionStorage.getItem("Divisa");
+  let idc = localStorage.getItem("IdUser");
+  let divi = localStorage.getItem("Divisa");
   const [stateSearch, setSearch] = useState(false);
   /* Declaracion de estados de los modals */
   const [ShowModalMove, setShowModalMove] = useState(false);

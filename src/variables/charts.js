@@ -26,8 +26,8 @@ let colorDonuht = [
   "#17becf",
   "#9edae5",
 ];
-let idc = sessionStorage.getItem("IdUser");
-let divi = sessionStorage.getItem("Divisa");
+let idc = localStorage.getItem("IdUser");
+let divi = localStorage.getItem("Divisa");
 
 function Chart_Ingresos() {
   const chartContainer = useRef(null);

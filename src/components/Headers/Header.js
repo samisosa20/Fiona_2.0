@@ -25,8 +25,8 @@ function Header() {
     currency: "USD",
     minimumFractionDigits: 2,
   });
-  let idc = sessionStorage.getItem("IdUser");
-  let divi = sessionStorage.getItem("Divisa");
+  let idc = localStorage.getItem("IdUser");
+  let divi = localStorage.getItem("Divisa");
   useEffect(() => {
     async function loadInfoCardMoney() {
       await axios

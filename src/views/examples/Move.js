@@ -87,7 +87,7 @@ function Account() {
   let sub_acount = div[1];
   let div2 = sub_acount.split("&");
   let acount = div2[0];
-  let idc = sessionStorage.getItem("IdUser");
+  let idc = localStorage.getItem("IdUser");
 
   // Llamado multiple para la lista y la descripcion
   useEffect(() => {
@@ -152,7 +152,14 @@ function Account() {
       .then(
         axios.spread((firstResponse, secondResponse) => {
           setCatego(firstResponse.data);
-          setEvent(secondResponse.data);
+          let d = new Date();
+          let d1 = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+          const eventFilter = secondResponse.data.filter(event => {
+            let d2 = new Date(event.fecha_fin.split("T")[0]);
+            d2 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate() + 1);
+            return d2.getTime() >= d1.getTime()
+          })
+          setEvent(eventFilter);
         })
       );
     let now = new Date(),
@@ -427,7 +434,7 @@ function Account() {
       if (document.getElementById("signo_move").value === "-") {
         valor = valor * -1;
       }
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("add_data", {
         id: 3,
         idu: idc,
@@ -469,7 +476,7 @@ function Account() {
       document.getElementById("btn_new_trans_move").innerHTML =
         "<span className='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("add_data", {
         id: 4,
         idu: idc,
@@ -505,7 +512,7 @@ function Account() {
       if (document.getElementById("signo_move_edit").value === "-") {
         valor = valor * -1;
       }
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("edit_data", {
         id: 3,
         idu: idc,
@@ -546,7 +553,7 @@ function Account() {
         "<span className='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
       let valor = stateformEditTrans.monto;
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("edit_data", {
         id: 4,
         idu: idc,

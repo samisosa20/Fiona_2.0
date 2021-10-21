@@ -29,7 +29,7 @@ const FormEditor = (props) => {
         event.preventDefault();
         if (stateformEdit.edit_group === 0) {
         } else {
-            let idc = sessionStorage.getItem("IdUser");
+            let idc = localStorage.getItem("IdUser");
             API.post("edit_data", {
                 id: 1,
                 idu: idc,

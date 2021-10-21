@@ -33,7 +33,7 @@ const Modaldelete = props => {
     document.getElementById("btn_dele_move_move").innerHTML =
       "<span className='spinner-border spinner-border-sm mr-1'" +
       "role='status' aria-hidden='true'></span>Loading...";
-    let idc = sessionStorage.getItem("IdUser");
+    let idc = localStorage.getItem("IdUser");
     let data;
     if (action === "catego") {
       data = { id: 1, idu: idc, id_data: state.id_data };

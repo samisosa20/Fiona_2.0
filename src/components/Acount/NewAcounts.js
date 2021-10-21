@@ -11,7 +11,7 @@ const AcountAdd = props => {
     OpenModalDelete,
     OpenModalShare
   } = props;
-  const idc = sessionStorage.getItem("IdUser");
+  const idc = localStorage.getItem("IdUser");
   return (
     <>
       <Row className="col-12 justify-content-between p-0 m-0">

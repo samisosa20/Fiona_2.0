@@ -26,8 +26,8 @@ let colorDonuht = [
   "#17becf",
   "#9edae5",
 ];
-let idc = sessionStorage.getItem("IdUser");
-let divi = sessionStorage.getItem("Divisa");
+const idc = localStorage.getItem("IdUser");
+const divi = localStorage.getItem("Divisa");
 
 const formatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -50,6 +50,7 @@ function Chart_Ingresos(props) {
           Sdate: Sdate,
           Edate: Edate,
         }).then((res) => {
+          console.log(res)
           if (chartContainer && chartContainer.current) {
             let label = [];
             let value = [];

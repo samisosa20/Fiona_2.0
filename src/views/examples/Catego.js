@@ -59,7 +59,7 @@ const Catego = () => {
     let url = window.location.href;
     let div = url.split("#");
     let lvl = div[1];
-    let idc = sessionStorage.getItem("IdUser");
+    let idc = localStorage.getItem("IdUser");
     setform({...stateform, include: lvl ? lvl : 0})
     API.post("acount", {
       id: 4,
@@ -108,7 +108,7 @@ const Catego = () => {
     event.preventDefault();
     if (stateform.group === 0) {
     } else {
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("add_data", {
         id: 1,
         idu: idc,

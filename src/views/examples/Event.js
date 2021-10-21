@@ -55,7 +55,7 @@ const Catego = () => {
   const ChangeStateCatego = () => setStateCatego(!stateCatego);
 
   useEffect(() => {
-    let idc = sessionStorage.getItem("IdUser");
+    let idc = localStorage.getItem("IdUser");
     API.post("acount", {
       id: 12,
       idc: idc
@@ -100,7 +100,7 @@ const Catego = () => {
     ModEdiEventSate();
   };
   const openListModal = event => {
-    let idc = sessionStorage.getItem("IdUser");
+    let idc = localStorage.getItem("IdUser");
     API.post("acount", {
       id: 13,
       idc: idc,
@@ -119,7 +119,7 @@ const Catego = () => {
         setSateAlert({ visible: false, code: 0 });
       }, 2000);
     } else {
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("add_data", {
         id: 6,
         idu: idc,
