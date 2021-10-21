@@ -152,7 +152,14 @@ function Account() {
       .then(
         axios.spread((firstResponse, secondResponse) => {
           setCatego(firstResponse.data);
-          setEvent(secondResponse.data);
+          let d = new Date();
+          let d1 = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+          const eventFilter = secondResponse.data.filter(event => {
+            let d2 = new Date(event.fecha_fin.split("T")[0]);
+            d2 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate() + 1);
+            return d2.getTime() >= d1.getTime()
+          })
+          setEvent(eventFilter);
         })
       );
     let now = new Date(),
