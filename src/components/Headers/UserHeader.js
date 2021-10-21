@@ -10,8 +10,8 @@ const UserHeader = () => {
   const [state, setState] = useState({ first_name: "", last_name: "" });
 
   useEffect(() => {
-    const Name = sessionStorage.getItem("Name");
-    const LastName = sessionStorage.getItem("LastName");
+    const Name = localStorage.getItem("Name");
+    const LastName = localStorage.getItem("LastName");
     setState({ first_name: Name, last_name: LastName });
   }, []);
   return (

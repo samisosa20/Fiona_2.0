@@ -13,7 +13,7 @@ function Budget() {
   const [refreshData, setrefreshData] = useState(false);
 
   useEffect(() => {
-    var idc = sessionStorage.getItem("IdUser");
+    var idc = localStorage.getItem("IdUser");
     API.post("acount", {
       id: 9,
       idc: idc,
@@ -35,7 +35,7 @@ function Budget() {
   // Eliminar data
   const handleDelete = (e, year) => {
     e.preventDefault();
-    let idc = sessionStorage.getItem("IdUser");
+    let idc = localStorage.getItem("IdUser");
     document.getElementById("btn_delete_budget_year").disabled = true;
     document.getElementById("btn_delete_budget_year").innerHTML =
       "<span class='spinner-border spinner-border-sm mr-1'" +

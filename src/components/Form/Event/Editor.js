@@ -26,7 +26,7 @@ const FormEditor = props => {
       stateformEdit.edit_endingdate === ""
     ) {
     } else {
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("edit_data", {
         id: 7,
         idu: idc,

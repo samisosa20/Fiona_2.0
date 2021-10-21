@@ -52,7 +52,7 @@ function ViewBudget() {
   const ModDelCateSate = () => setshowDelMod(!showDelMod);
 
   useEffect(() => {
-    var idc = sessionStorage.getItem("IdUser");
+    var idc = localStorage.getItem("IdUser");
     API.post("acount", {
       id: 10,
       idc: idc,
@@ -66,7 +66,7 @@ function ViewBudget() {
   // Accion al abrir los modals
   const OpenModalListMounth = (e, name_catego, number_cate, year) => {
     e.preventDefault();
-    var idc = sessionStorage.getItem("IdUser");
+    var idc = localStorage.getItem("IdUser");
     API.post("acount", {
       id: 11,
       idc: idc,
@@ -103,7 +103,7 @@ function ViewBudget() {
       document.getElementById("btn_save_budget").innerHTML =
         "<span class='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("edit_data", {
         id: 6,
         idu: idc,

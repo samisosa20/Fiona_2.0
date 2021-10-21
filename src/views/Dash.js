@@ -32,7 +32,7 @@ function Dashboard() {
   /* Declaracion de estados de los modals */
   const [showNewMod, setshowNewMod] = useState(false);
   const [showNewTransMod, setshowNewTransMod] = useState(false);
-  let idc = sessionStorage.getItem("IdUser");
+  let idc = localStorage.getItem("IdUser");
   const [stateCatego, setCatego] = useState([]);
   const [stateAcount, setAcount] = useState([]);
   const [stateSignal, setSignal] = useState({ Signal: "+" });
@@ -231,7 +231,7 @@ function Dashboard() {
       if (document.getElementById("signo_move").value === "-") {
         valor = valor * -1;
       }
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("add_data", {
         id: 3,
         idu: idc,
@@ -263,7 +263,7 @@ function Dashboard() {
       document.getElementById("btn_new_trans_dash").innerHTML =
         "<span class='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("add_data", {
         id: 4,
         idu: idc,

@@ -87,7 +87,7 @@ function Account() {
   let sub_acount = div[1];
   let div2 = sub_acount.split("&");
   let acount = div2[0];
-  let idc = sessionStorage.getItem("IdUser");
+  let idc = localStorage.getItem("IdUser");
 
   // Llamado multiple para la lista y la descripcion
   useEffect(() => {
@@ -427,7 +427,7 @@ function Account() {
       if (document.getElementById("signo_move").value === "-") {
         valor = valor * -1;
       }
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("add_data", {
         id: 3,
         idu: idc,
@@ -469,7 +469,7 @@ function Account() {
       document.getElementById("btn_new_trans_move").innerHTML =
         "<span className='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("add_data", {
         id: 4,
         idu: idc,
@@ -505,7 +505,7 @@ function Account() {
       if (document.getElementById("signo_move_edit").value === "-") {
         valor = valor * -1;
       }
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("edit_data", {
         id: 3,
         idu: idc,
@@ -546,7 +546,7 @@ function Account() {
         "<span className='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
       let valor = stateformEditTrans.monto;
-      let idc = sessionStorage.getItem("IdUser");
+      let idc = localStorage.getItem("IdUser");
       API.post("edit_data", {
         id: 4,
         idu: idc,

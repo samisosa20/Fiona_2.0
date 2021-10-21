@@ -25,8 +25,8 @@ function Header() {
     currency: "USD",
     minimumFractionDigits: 2,
   });
-  let idc = sessionStorage.getItem("IdUser");
-  let divi = sessionStorage.getItem("Divisa");
+  let idc = localStorage.getItem("IdUser");
+  let divi = localStorage.getItem("Divisa");
   useEffect(() => {
     async function loadInfoCardMoney() {
       await axios
@@ -51,7 +51,7 @@ function Header() {
                 ahorros: secondResponse.data[0].cantidad,
                 utilidad: firstResponse.data[0].utilidad,
               });
-              console.log("Value add", secondResponse.data[0].cantidad);
+              //console.log("Value add", secondResponse.data[0].cantidad);
             } catch (error) {
               setState({ ingresos: 0, egresos: 0, ahorros: 0, utilidad: 0 });
             }

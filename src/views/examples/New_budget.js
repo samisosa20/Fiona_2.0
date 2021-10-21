@@ -37,7 +37,7 @@ function ViewBudget() {
   const ModStep2 = () => SetShowStep2(!ShowStep2);
 
   useEffect(() => {
-    /*var idc = sessionStorage.getItem("IdUser");
+    /*var idc = localStorage.getItem("IdUser");
     API.post("acount", {
       id: 10,
       idc: idc,
@@ -93,7 +93,7 @@ function ViewBudget() {
       badge.className = "mt-4 form-control is-valid";
       API.post("acount", {
         id: 5,
-        idc: sessionStorage.getItem("IdUser"),
+        idc: localStorage.getItem("IdUser"),
       }).then((response) => setCatego(response.data));
       ModStep1();
     } else {
@@ -129,10 +129,10 @@ function ViewBudget() {
       document.getElementById("btn_save_budget").innerHTML =
         "<span class='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
-      console.log(stateForm);
+      //console.log(stateForm);
       API.post("add_data", {
         id: 5,
-        idu: sessionStorage.getItem("IdUser"),
+        idu: localStorage.getItem("IdUser"),
         action: stateForm.action,
         month_frist: stateForm.mounth,
         value: stateForm.value,

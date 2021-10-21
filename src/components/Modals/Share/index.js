@@ -24,8 +24,8 @@ const ModalshareAccount = (props) => {
         "<span className='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
         document.querySelector("#emailShare").classList.remove("is-invalid")
-        const idc = sessionStorage.getItem("IdUser");
-        const fullName = sessionStorage.getItem("Name") + " " + sessionStorage.getItem("LastName");
+        const idc = localStorage.getItem("IdUser");
+        const fullName = localStorage.getItem("Name") + " " + localStorage.getItem("LastName");
         const data = {id: 7,
             idu: idc,
             email: email,

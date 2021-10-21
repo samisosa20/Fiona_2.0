@@ -57,11 +57,11 @@ function Login(props) {
             "<div class='alert alert-danger' role='alert'>" +
             "Incorrect user or password!</div>";
         } else if (res.data.data === 200) {
-          sessionStorage.setItem("Name", res.data.name);
-          sessionStorage.setItem("LastName", res.data.lastname);
-          sessionStorage.setItem("Email", res.data.email);
-          sessionStorage.setItem("IdUser", res.data.idUser);
-          sessionStorage.setItem("Divisa", res.data.divisa);
+          localStorage.setItem("Name", res.data.name);
+          localStorage.setItem("LastName", res.data.lastname);
+          localStorage.setItem("Email", res.data.email);
+          localStorage.setItem("IdUser", res.data.idUser);
+          localStorage.setItem("Divisa", res.data.divisa);
           //window.location = "/admin/Acount";
           setKey(true);
         }
@@ -70,7 +70,7 @@ function Login(props) {
   };
 
   const Login_success = () => {
-    if (key) {
+    if (key || (localStorage.getItem("IdUser") !== '' && localStorage.getItem("IdUser") !== null)) {
       return <Redirect to="/admin/Account" />;
     }
   };

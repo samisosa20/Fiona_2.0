@@ -62,11 +62,11 @@ function Register(props){
           document.getElementById("mensaje").innerHTML = "<div class='alert alert-danger' role='alert'>" +
                   "Could not create user!</div>";
         } else if (res.data.data === 200){
-          sessionStorage.setItem("Name", stateform.FirstName);
-          sessionStorage.setItem("LastName", stateform.LastName);
-          sessionStorage.setItem("Email", stateform.Email);
-          sessionStorage.setItem("IdUser", res.data.idUser);
-          sessionStorage.setItem("Divisa", stateform.Badge);
+          localStorage.setItem("Name", stateform.FirstName);
+          localStorage.setItem("LastName", stateform.LastName);
+          localStorage.setItem("Email", stateform.Email);
+          localStorage.setItem("IdUser", res.data.idUser);
+          localStorage.setItem("Divisa", stateform.Badge);
           ReactDOM.render(
             <BrowserRouter>
               <Switch>

@@ -21,10 +21,10 @@ function Profile() {
 
   useEffect(() =>{
     
-    let Email = sessionStorage.getItem("Email");
-    let Name = sessionStorage.getItem("Name");
-    let LastName = sessionStorage.getItem("LastName");
-    let Divisa = sessionStorage.getItem("Divisa");
+    let Email = localStorage.getItem("Email");
+    let Name = localStorage.getItem("Name");
+    let LastName = localStorage.getItem("LastName");
+    let Divisa = localStorage.getItem("Divisa");
     document.getElementById("SaveProfile").disabled=true;
     setState({first_name: Name, last_name: LastName, email: Email, divisa: Divisa, password: ""})
   }, [])
@@ -39,7 +39,7 @@ function Profile() {
       document.getElementById("SaveProfile").disabled=true
       document.getElementById("SaveProfile").innerHTML="<span className='spinner-border spinner-border-sm mr-1'"+
       "role='status' aria-hidden='true'></span>Loading..."
-      let idc = sessionStorage.getItem("IdUser")
+      let idc = localStorage.getItem("IdUser")
       API.post('edit_data',{
         id: 5,
         idu: idc,
@@ -52,9 +52,9 @@ function Profile() {
           //console.log(response.data)
           document.getElementById("SaveProfile").innerHTML="Save"
           if (response.data === "200"){
-            sessionStorage.setItem("Name", state.first_name);
-            sessionStorage.setItem("LastName", state.last_name);
-            sessionStorage.setItem("Divisa", state.divisa);
+            localStorage.setItem("Name", state.first_name);
+            localStorage.setItem("LastName", state.last_name);
+            localStorage.setItem("Divisa", state.divisa);
           }
           document.getElementById("pass_2").value = ""
           document.getElementById("pass_1").value = ""
