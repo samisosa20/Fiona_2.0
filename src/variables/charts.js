@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Chartjs from "chart.js";
+import {Chart} from "chart.js";
 import API from "./API";
 
 //color donuht
@@ -48,7 +48,7 @@ function Chart_Ingresos() {
             res.data.map(
               (data) => (label.push(data.categoria), value.push(data.cantidad))
             );
-            let newChartInstance = new Chartjs(chartContainer.current, {
+            let newChartInstance = new Chart(chartContainer.current, {
               type: "doughnut",
               data: {
                 labels: label, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -122,7 +122,7 @@ function Chart_Egreso() {
             res.data.forEach(
               (data) => (label.push(data.categoria), value.push(data.cantidad))
             );
-            let newChartInstanceEgre = new Chartjs(chartContainerEgre.current, {
+            let newChartInstanceEgre = new Chart(chartContainerEgre.current, {
               type: "doughnut",
               data: {
                 labels: label, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -196,7 +196,7 @@ function Chart_Ahorros() {
             res.data.map(
               (data) => (label.push(data.nombre), value.push(data.cantidad))
             );
-            let newChartInstanceEgre = new Chartjs(chartContainerEgre.current, {
+            let newChartInstanceEgre = new Chart(chartContainerEgre.current, {
               type: "doughnut",
               data: {
                 labels: label, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
