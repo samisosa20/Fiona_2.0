@@ -177,7 +177,7 @@ function Account() {
           let d1 = new Date(d.getFullYear(), d.getMonth(), d.getDate());
           const eventFilter = thirdResponse.data.filter(event => {
             let d2 = new Date(event.fecha_fin.split("T")[0]);
-            d2 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate() + 1);
+            d2 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
             return d2.getTime() >= d1.getTime()
           })
           setEvent(eventFilter);
@@ -189,12 +189,11 @@ function Account() {
       date,
       hours,
       minutes,
-      seconds,
       formattedDateTime;
 
     year = now.getFullYear();
     month =
-      now.getMonth().toString().length === 1
+    (now.getMonth() + 1).toString().length === 1
         ? "0" + (now.getMonth() + 1).toString()
         : now.getMonth() + 1;
     date =
@@ -209,10 +208,10 @@ function Account() {
       now.getMinutes().toString().length === 1
         ? "0" + now.getMinutes().toString()
         : now.getMinutes();
-    seconds =
+    /* seconds =
       now.getSeconds().toString().length === 1
         ? "0" + now.getSeconds().toString()
-        : now.getSeconds();
+        : now.getSeconds(); */
 
     formattedDateTime =
       year +
@@ -223,9 +222,7 @@ function Account() {
       "T" +
       hours +
       ":" +
-      minutes +
-      ":" +
-      seconds;
+      minutes;
     setform({ ...stateform, datetime: formattedDateTime });
     ModNewMoviSate();
   };
@@ -242,12 +239,11 @@ function Account() {
       date,
       hours,
       minutes,
-      seconds,
       formattedDateTime;
 
     year = now.getFullYear();
     month =
-      now.getMonth().toString().length === 1
+    (now.getMonth() + 1).toString().length === 1
         ? "0" + (now.getMonth() + 1).toString()
         : now.getMonth() + 1;
     date =
@@ -262,10 +258,10 @@ function Account() {
       now.getMinutes().toString().length === 1
         ? "0" + now.getMinutes().toString()
         : now.getMinutes();
-    seconds =
+    /* seconds =
       now.getSeconds().toString().length === 1
         ? "0" + now.getSeconds().toString()
-        : now.getSeconds();
+        : now.getSeconds(); */
 
     formattedDateTime =
       year +
@@ -276,9 +272,7 @@ function Account() {
       "T" +
       hours +
       ":" +
-      minutes +
-      ":" +
-      seconds;
+      minutes;
 
     //document.getElementById("datetime_movi").value = formattedDateTime;
     setformtrans({ ...stateformtrans, datetime: formattedDateTime });
@@ -366,6 +360,13 @@ function Account() {
         ModNewMoviSate();
         document.getElementById("btn_new_move_dash").innerHTML = "Add";
         document.getElementById("btn_new_move_dash").disabled = false;
+        setform({
+          catego: "",
+          descrip: "",
+          badge: "COP",
+          monto: 0,
+          save_account: false
+        });
         setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
           setSateAlert({ visible: false, code: 0 });
@@ -401,6 +402,14 @@ function Account() {
         //alert (response.data);
         setrefreshData(!refreshData);
         ModNewTransSate();
+        setformtrans({
+          monto: 0,
+          badge: "COP",
+          account_ini: 0,
+          account_fin: 0,
+          datetime: "",
+          descrip: ""
+        })
         document.getElementById("btn_new_trans_dash").innerHTML = "Add";
         document.getElementById("btn_new_trans_dash").disabled = false;
         setSateAlert({ visible: true, code: response.data });

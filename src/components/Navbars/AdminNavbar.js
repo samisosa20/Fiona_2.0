@@ -18,6 +18,9 @@ import {
   Media,
 } from "reactstrap";
 
+// Assets
+import iconProfile from "../../assets/img/profile/newuser.jpg"
+
 class AdminNavbar extends React.Component {
   logout() {
     window.location = "/";
@@ -53,7 +56,7 @@ class AdminNavbar extends React.Component {
                       {/* Imagen del usuario */}
                       <img
                         alt="..."
-                        src={require("assets/img/profile/newuser.jpg")}
+                        src={iconProfile}
                       />
                     </span>
                     <Media className="ml-2 d-none d-lg-block">

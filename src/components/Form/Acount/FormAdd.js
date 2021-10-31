@@ -124,7 +124,7 @@ const FormAdd = (props) => {
           name="datetime"
           defaultValue={`${new Date().getFullYear()}-${`${
             new Date().getMonth() + 1
-          }`.padStart(2, 0)}-${`${new Date().getDate() + 1}`.padStart(
+          }`.padStart(2, 0)}-${`${new Date().getDate()}`.padStart(
             2,
             0
           )}T${`${new Date().getHours()}`.padStart(

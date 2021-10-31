@@ -168,7 +168,6 @@ function Account() {
       date,
       hours,
       minutes,
-      seconds,
       formattedDateTime;
 
     year = now.getFullYear();
@@ -188,10 +187,10 @@ function Account() {
       now.getMinutes().toString().length === 1
         ? "0" + now.getMinutes().toString()
         : now.getMinutes();
-    seconds =
+    /* seconds =
       now.getSeconds().toString().length === 1
         ? "0" + now.getSeconds().toString()
-        : now.getSeconds();
+        : now.getSeconds(); */
 
     formattedDateTime =
       year +
@@ -202,9 +201,7 @@ function Account() {
       "T" +
       hours +
       ":" +
-      minutes +
-      ":" +
-      seconds;
+      minutes;
 
     //document.getElementById("datetime_movi").value = formattedDateTime;
     setform({ ...stateform, datetime: formattedDateTime });
@@ -222,7 +219,6 @@ function Account() {
       date,
       hours,
       minutes,
-      seconds,
       formattedDateTime;
 
     year = now.getFullYear();
@@ -242,10 +238,10 @@ function Account() {
       now.getMinutes().toString().length === 1
         ? "0" + now.getMinutes().toString()
         : now.getMinutes();
-    seconds =
+    /* seconds =
       now.getSeconds().toString().length === 1
         ? "0" + now.getSeconds().toString()
-        : now.getSeconds();
+        : now.getSeconds(); */
 
     formattedDateTime =
       year +
@@ -256,9 +252,7 @@ function Account() {
       "T" +
       hours +
       ":" +
-      minutes +
-      ":" +
-      seconds;
+      minutes;
 
     //document.getElementById("datetime_movi").value = formattedDateTime;
     setformtrans({ ...stateformtrans, datetime: formattedDateTime });
@@ -450,6 +444,13 @@ function Account() {
         ModNewMoviSate();
         document.getElementById("btn_new_move_move").innerHTML = "Add";
         document.getElementById("btn_new_move_move").disabled = false;
+        setform({
+          monto: 0,
+          badge: "COP",
+          catego: 0,
+          descrip: "",
+          datetime: ""
+        })
         setrefreshData(!refreshData);
         setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
@@ -491,6 +492,14 @@ function Account() {
         ModNewTransSate();
         document.getElementById("btn_new_trans_move").innerHTML = "Add";
         document.getElementById("btn_new_trans_move").disabled = false;
+        setformtrans({
+          monto: 0,
+          badge: "COP",
+          account_ini: 0,
+          account_fin: 0,
+          datetime: "",
+          descrip: ""
+        })
         setrefreshData(!refreshData);
         setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
@@ -804,7 +813,7 @@ function Account() {
                   type="datetime-local"
                   defaultValue={`${new Date().getFullYear()}-${`${
                     new Date().getMonth() + 1
-                  }`.padStart(2, 0)}-${`${new Date().getDate() + 1}`.padStart(
+                  }`.padStart(2, 0)}-${`${new Date().getDate()}`.padStart(
                     2,
                     0
                   )}T${`${new Date().getHours()}`.padStart(
@@ -973,7 +982,7 @@ function Account() {
                   name="datetime"
                   defaultValue={`${new Date().getFullYear()}-${`${
                     new Date().getMonth() + 1
-                  }`.padStart(2, 0)}-${`${new Date().getDate() + 1}`.padStart(
+                  }`.padStart(2, 0)}-${`${new Date().getDate()}`.padStart(
                     2,
                     0
                   )}T${`${new Date().getHours()}`.padStart(
