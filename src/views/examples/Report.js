@@ -18,13 +18,12 @@ import {
   Chart_Egreso,
   Chart_Ahorros,
 } from "../../variables/charts2";
-import ExcelExport from "components/Excel"
+import ExcelExport from "components/Excel";
 import API from "../../variables/API";
 import axios from "axios";
 
 // core components
 import { Header } from "components/Headers/Header.js";
-
 
 function Report() {
   const [stateDate, setDate] = useState({
@@ -37,12 +36,13 @@ function Report() {
     ResumAco: [],
     TopExp: [],
     Budget: [],
+    groupExpensive: [],
     OpenClose: [],
     ClassOpen: "",
     ClassClose: "",
     identify: 0,
   });
-  const [dataToExport, setDataToExport] = useState()
+  const [dataToExport, setDataToExport] = useState();
   const [stateDataModal, setDataModal] = useState({
     data: [],
     title: "",
@@ -55,93 +55,93 @@ function Report() {
   const [ShowModalMove, setShowModalMove] = useState(false);
 
   // Funciones data modal
-  const OpenModalMove = (e, id, cuenta, mes) => {
+  const OpenModalMove = (e, id, cuenta, mes, numberGroup = null) => {
     e.preventDefault();
     API.post(`report`, {
       id: id,
       idc: idc,
       divi: divi,
-      acocate: cuenta,
+      acocate: numberGroup ? numberGroup : cuenta,
       fecha_ini: stateDate.Sdate,
       fecha_fin: stateDate.Fdate,
       mouth: mes,
     }).then((res) => {
       if (id !== 12) {
-        setDataModal({ data: res.data, title: cuenta, id_modal: 0 });
+        setDataModal({ data: res.data, title: cuenta, id_modal: 0, id: id === 16 });
       } else {
         setDataModal({ data: res.data, title: cuenta, id_modal: 1 });
       }
     });
-    ModShowModal();
+    if(!ShowModalMove){
+      ModShowModal();
+    }
   };
 
   function getDate(mode = "1") {
-      let now = new Date(),
-        year,
-        month,
-        month_now,
-        date,
-        formattedDateTime,
-        formattedDateTimeIni;
-      month_now = (now.getMonth() + 1)
-      month_now = month_now.toString().length === 1
-          ? "0" + month_now
-          : month_now;
-      let d = new Date();
-      if (mode === "-1") {
-        d.setFullYear(now.getFullYear(), month_now - 1, 0);
-        year = d.getFullYear();
-        month =
-          d.getMonth().toString().length === 1
-            ? "0" + (d.getMonth() + 1).toString()
-            : d.getMonth() + 1;
-        date =
-          d.getDate().toString().length === 1
-            ? "0" + d.getDate().toString()
-            : d.getDate();
-            formattedDateTime = year + "-" + month + "-" + date;
-        document.getElementById("Edate").value = formattedDateTime;
-        month_now = month;
-        date = "01";
-        formattedDateTimeIni = year + "-" + month_now + "-" + date;
-        document.getElementById("Sdate").value = formattedDateTimeIni;
-
-        setDate({
-          ...stateDate,
-          Sdate: formattedDateTimeIni,
-          Fdate: formattedDateTime,
-          hidden: true,
-        });
-      } else if (mode === "1") {
-        d.setFullYear(now.getFullYear(), month_now, 0);
-        year = d.getFullYear();
-        month =
-        d.getMonth().toString().length === 1
-        ? "0" + (d.getMonth()).toString()
-        : d.getMonth();
-        date =
+    let now = new Date(),
+      year,
+      month,
+      month_now,
+      date,
+      formattedDateTime,
+      formattedDateTimeIni;
+    month_now = now.getMonth() + 1;
+    month_now = month_now.toString().length === 1 ? "0" + month_now : month_now;
+    let d = new Date();
+    if (mode === "-1") {
+      d.setFullYear(now.getFullYear(), month_now - 1, 0);
+      year = d.getFullYear();
+      month =
+        (d.getMonth() + 1).toString().length === 1
+          ? "0" + (d.getMonth() + 1).toString()
+          : d.getMonth() + 1;
+      date =
         d.getDate().toString().length === 1
-        ? "0" + d.getDate().toString()
-        : d.getDate();
-        formattedDateTime = year + "-" + month_now + "-" + date;
-        document.getElementById("Edate").value = formattedDateTime;
+          ? "0" + d.getDate().toString()
+          : d.getDate();
+      formattedDateTime = year + "-" + month + "-" + date;
+      document.getElementById("Edate").value = formattedDateTime;
+      month_now = month;
+      date = "01";
+      formattedDateTimeIni = year + "-" + month_now + "-" + date;
+      document.getElementById("Sdate").value = formattedDateTimeIni;
 
-        if ( month_now === 12 ){
-          d.setFullYear(now.getFullYear(), month_now - 1, 1);
-        }
+      setDate({
+        ...stateDate,
+        Sdate: formattedDateTimeIni,
+        Fdate: formattedDateTime,
+        hidden: true,
+      });
+    } else if (mode === "1") {
+      d.setFullYear(now.getFullYear(), month_now, 0);
+      year = d.getFullYear();
+      month =
+        d.getMonth().toString().length === 1
+          ? "0" + d.getMonth().toString()
+          : d.getMonth();
+      date =
+        d.getDate().toString().length === 1
+          ? "0" + d.getDate().toString()
+          : d.getDate();
+      formattedDateTime = year + "-" + month_now + "-" + date;
+      document.getElementById("Edate").value = formattedDateTime;
 
-        formattedDateTimeIni = year + "-" + month_now + "-01";
-        document.getElementById("Sdate").value = formattedDateTimeIni;
-
-        setDate({
-          ...stateDate,
-          Sdate: formattedDateTimeIni,
-          Fdate: formattedDateTime,
-          hidden: true,
-        });
-      } else {
-        setDate({ ...stateDate, hidden: false });
+      if (month_now === 12) {
+        d.setFullYear(now.getFullYear(), month_now - 1, 1);
       }
+
+      formattedDateTimeIni = year + "-" + month_now + "-01";
+      document.getElementById("Sdate").value = formattedDateTimeIni;
+
+      setDate({
+        ...stateDate,
+        Sdate: formattedDateTimeIni,
+        Fdate: formattedDateTime,
+        hidden: true,
+      });
+    } else {
+      setDate({ ...stateDate, hidden: false });
+    }
   }
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -150,7 +150,7 @@ function Report() {
   });
   useEffect(() => {
     async function getDataReport(idc, divi) {
-      if (stateDate.Sdate === ""){
+      if (stateDate.Sdate === "") {
         getDate("1");
       }
       let Fecha_ini = document.getElementById("Sdate").value;
@@ -191,21 +191,44 @@ function Report() {
             sdate: Fecha_ini,
             edate: Fehca_fin,
           }),
+          API.post(`report`, {
+            id: 15,
+            idc: idc,
+            divi: divi,
+            fecha_ini: Fecha_ini,
+            fecha_fin: Fehca_fin,
+          }),
         ])
         .then(
-          axios.spread((ResumAcount, TopExpenses, Budget, OpenClose, dataExport) => {
-            //console.log(dataExport.data)
-            setData({
-              ResumAco: ResumAcount.data,
-              TopExp: TopExpenses.data,
-              Budget: Budget.data,
-              OpenClose: OpenClose.data[0],
-              ClassOpen: OpenClose.data[0] && OpenClose.data[0].open < 0 ? "text-danger" : "text-success",
-              ClassClose: OpenClose.data[0] && OpenClose.data[0].end < 0 ? "text-danger" : "text-success",
-              identify: 1,
-            });
-            setDataToExport(dataExport.data);
-          })
+          axios.spread(
+            (
+              resumAcount,
+              topExpenses,
+              budget,
+              openClose,
+              dataExport,
+              groupExpensive
+            ) => {
+              //console.log(groupExpensive.data)
+              setData({
+                ResumAco: resumAcount.data,
+                TopExp: topExpenses.data,
+                Budget: budget.data,
+                groupExpensive: groupExpensive.data,
+                OpenClose: openClose.data[0],
+                ClassOpen:
+                  openClose.data[0] && openClose.data[0].open < 0
+                    ? "text-danger"
+                    : "text-success",
+                ClassClose:
+                  openClose.data[0] && openClose.data[0].end < 0
+                    ? "text-danger"
+                    : "text-success",
+                identify: 1,
+              });
+              setDataToExport(dataExport.data);
+            }
+          )
         );
     }
     getDataReport(idc, divi);
@@ -214,7 +237,8 @@ function Report() {
   // Funcion para cambiar de estado de los modals
   const ModShowModal = () => setShowModalMove(!ShowModalMove);
   const consultdate = () => {
-    setDate({...stateDate,
+    setDate({
+      ...stateDate,
       Sdate: document.getElementById("Sdate").value,
       Fdate: document.getElementById("Edate").value,
     });
@@ -269,7 +293,7 @@ function Report() {
               <i className="fas fa-search mr-2"></i>
               Search
             </Button>
-            <ExcelExport data={dataToExport}/>
+            <ExcelExport data={dataToExport} />
           </div>
         </Row>
         <Row className="mt-2 mb-4">
@@ -463,7 +487,7 @@ function Report() {
                   {stateData.identify === 1 && stateData.ResumAco
                     ? stateData.ResumAco.map((data, index) => (
                         <Card
-                          className="card-stats mb-1 shadow"
+                          className="card-stats mb-1 shadow cursor-pointer"
                           key={index}
                           onClick={(e) => OpenModalMove(e, 9, data.nombre, "")}
                         >
@@ -518,7 +542,7 @@ function Report() {
                   {stateData.identify === 1 && stateData.TopExp
                     ? stateData.TopExp.map((data, index) => (
                         <Card
-                          className="card-stats mb-1 shadow"
+                          className="card-stats mb-1 shadow cursor-pointer"
                           key={index}
                           onClick={(e) =>
                             OpenModalMove(e, 10, data.categoria, "")
@@ -552,6 +576,105 @@ function Report() {
                 <Row className="align-items-center">
                   <div className="col">
                     <h6 className="text-uppercase text-light ls-1 mb-1">
+                      Expenses by group
+                    </h6>
+                  </div>
+                </Row>
+              </CardHeader>
+              <CardBody>
+                <div className="scroll-none card-scroll">
+                  {stateData.groupExpensive.length > 0
+                    ? stateData.groupExpensive.map((data, index) => (
+                        <Card
+                          className="card-stats mb-1 shadow cursor-pointer"
+                          key={index}
+                          onClick={(e) =>
+                            OpenModalMove(
+                              e,
+                              16,
+                              data.groupCategorie,
+                              "",
+                              data.groupNumber
+                            )
+                          }
+                        >
+                          <CardBody>
+                            <Row>
+                              <div className="col">
+                                <CardTitle
+                                  tag="h5"
+                                  className="text-uppercase text-muted mb-0"
+                                >
+                                  {data.groupCategorie}
+                                </CardTitle>
+                                <span
+                                  className={`h3 font-weight-bold mb-0 row ml-2 ${
+                                    parseInt(data.value) < 0
+                                      ? "text-danger"
+                                      : "text-success"
+                                  }`}
+                                >
+                                  {`${formatter.format(data.value)} ${
+                                    data.groupCategorie !== "Income"
+                                      ? `(${data.porcent}%)`
+                                      : ""
+                                  }`}
+                                </span>
+                              </div>
+                            </Row>
+                          </CardBody>
+                        </Card>
+                      ))
+                    : "Not found Data"}
+                  {stateData.groupExpensive.length > 0 && (
+                    <Card className="card-stats mb-1 shadow">
+                      <CardBody>
+                        <Row>
+                          <div className="col">
+                            <CardTitle
+                              tag="h5"
+                              className="text-uppercase text-muted mb-0"
+                            >
+                              Savings
+                            </CardTitle>
+                            <span
+                              className={`h3 font-weight-bold mb-0 row ml-2 text-success`}
+                            >
+                              {`${formatter.format(
+                                stateData.groupExpensive.reduce(
+                                  (total, currentValue) =>
+                                    total + parseFloat(currentValue.value),
+                                  0
+                                )
+                              )} (${(
+                                (stateData.groupExpensive.reduce(
+                                  (total, currentValue) =>
+                                    total + parseFloat(currentValue.value),
+                                  0
+                                ) /
+                                  stateData.groupExpensive.find(
+                                    (e) => parseInt(e.value) > 0
+                                  ).value) *
+                                100
+                              ).toFixed(2)}%)`}
+                            </span>
+                          </div>
+                        </Row>
+                      </CardBody>
+                    </Card>
+                  )}
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col className="mb-5 mb-xl-0" xl="4">
+            <Card className="bg-gradient-default shadow">
+              <CardHeader className="bg-transparent">
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h6 className="text-uppercase text-light ls-1 mb-1">
                       Budget
                     </h6>
                   </div>
@@ -562,7 +685,7 @@ function Report() {
                   {stateData.identify === 1 && stateData.Budget
                     ? stateData.Budget.map((data, index) => (
                         <Card
-                          className="card-stats mb-1 shadow"
+                          className="card-stats mb-1 shadow cursor-pointer"
                           key={index}
                           onClick={(e) =>
                             OpenModalMove(e, 12, data.categoria, data.mes)
@@ -577,14 +700,14 @@ function Report() {
                                 >
                                   {data.categoria}
                                 </CardTitle>
-                                <span className="h2 font-weight-bold mb-0 ml-2">
+                                <span className="h6 font-weight-bold mb-0 ml-2">
                                   {(data.cumplimiento >= 95 &&
                                     data.grupo === "4") ||
                                   ((data.grupo === "1" || data.grupo === "2") &&
                                     data.cumplimiento <= 85) ? (
                                     <ProgressBar
                                       striped
-                                      className="height-15"
+                                      className="height-15 m-0"
                                       animated
                                       variant="success"
                                       now={data.cumplimiento}
@@ -599,7 +722,7 @@ function Report() {
                                       data.cumplimiento <= 100) ? (
                                     <ProgressBar
                                       striped
-                                      className="height-15"
+                                      className="height-15 m-0"
                                       animated
                                       variant="warning"
                                       now={data.cumplimiento}
@@ -608,7 +731,7 @@ function Report() {
                                   ) : (
                                     <ProgressBar
                                       striped
-                                      className="height-15"
+                                      className="height-15 m-0"
                                       animated
                                       variant="danger"
                                       now={data.cumplimiento}
@@ -635,35 +758,50 @@ function Report() {
             {stateDataModal.id_modal === 0 && stateDataModal.data
               ? stateDataModal.data.map((data, index) => (
                   <Card
-                    className="border-botton border-right border-left"
+                    className={`border-botton border-right border-left mb-2 ${stateDataModal.id ? 'cursor-pointer' : ''}`}
                     key={index}
+                    onClick={stateDataModal.id ? (e) => OpenModalMove(e, 10, data.category, "") : ''}
                   >
-                    <h4 className="card-title col-md-12 text-muted mt-2">
+                    <h4 className="card-title col-md-12 text-muted mt-2 mb-1">
                       {data.sub_categoria
                         ? data.categoria + " - " + data.sub_categoria
                         : data.categoria
                         ? data.categoria
+                        : data.category
+                        ? data.category
                         : data.nombre}
                     </h4>
                     <Row>
-                      <h6 className="card-title ml-3 row col-md-12 text-muted">
-                        {data.cantidad >= 0 ? (
-                          <p className="text-success mr-2">
-                            {formatter.format(data.cantidad)}
+                      <h6 className="card-title ml-3 row col-md-12 text-muted mb-1">
+                        {data.cantidad >= 0 || data.value >= 0 ? (
+                          <p className="text-success mr-2 mb-0">
+                            {formatter.format(
+                              data.cantidad ? data.cantidad : data.value
+                            )}
                           </p>
                         ) : (
-                          <p className="text-danger mr-2">
-                            {formatter.format(data.cantidad)}
+                          <p className="text-danger mr-2 mb-0">
+                            {formatter.format(
+                              data.cantidad ? data.cantidad : data.value
+                            )}
                           </p>
                         )}
-                        <p className="text-muted ml-1">{data.fecha}</p>
+                        {!stateDataModal.id && <p className="text-muted ml-1 mb-0">
+                          {data.fecha ? data.fecha : data.date}
+                        </p>}
                       </h6>
+                      {data.event && (
+                        <h6 className="card-title ml-3 row col-md-12 text-muted mb-1">
+                          {data.event}
+                        </h6>
+                      )}
                     </Row>
                   </Card>
                 ))
               : stateDataModal.id_modal === 1 && stateDataModal.data
               ? stateDataModal.data.map((data, index) => (
                   <Card className="card-stats mb-1 shadow" key={index}>
+                {console.log(data)}
                     <CardBody>
                       <Row>
                         <div className="col">
@@ -677,13 +815,13 @@ function Report() {
                               ? data.categoria
                               : data.nombre}
                           </CardTitle>
-                          <span className="h2 font-weight-bold mb-0 ml-2">
+                          <span className="h6 font-weight-bold mb-0 ml-2">
                             {(data.cumplimiento >= 95 && data.grupo === "4") ||
                             ((data.grupo === "1" || data.grupo === "2") &&
                               data.cumplimiento <= 85) ? (
                               <ProgressBar
                                 striped
-                                className="height-15"
+                                className="height-15 m-0"
                                 animated
                                 variant="success"
                                 now={data.cumplimiento}

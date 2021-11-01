@@ -66,7 +66,7 @@ function ViewBudget() {
       formattedDateTime,
       formattedDateTimeIni;
       month_now = (now.getMonth() + 1)
-      month_now = month_now.toString().length === 1
+      month_now = (now.getMonth() + 1).toString().length === 1
           ? "0" + month_now
           : month_now;
 
@@ -75,7 +75,7 @@ function ViewBudget() {
       d.setFullYear(now.getFullYear(), month_now - 1, 0);
       year = d.getFullYear();
       month =
-        d.getMonth().toString().length === 1
+      (now.getMonth() + 1).toString().length === 1
           ? "0" + (d.getMonth() + 1).toString()
           : d.getMonth() + 1;
       date =
@@ -99,9 +99,9 @@ function ViewBudget() {
       d.setFullYear(now.getFullYear(), month_now, 0);
       year = d.getFullYear();
       month =
-        d.getMonth().toString().length === 1
-          ? "0" + d.getMonth().toString()
-          : d.getMonth();
+      (now.getMonth() + 1).toString().length === 1
+          ? "0" + (now.getMonth() + 1).toString()
+          : d.getMonth() + 1;
       date =
         d.getDate().toString().length === 1
           ? "0" + d.getDate().toString()
