@@ -17,7 +17,7 @@ import {
   Chart_Ingresos,
   Chart_Egreso,
   Chart_Ahorros,
-} from "../../variables/charts2";
+} from "../../variables/charts";
 import ExcelExport from "components/Excel";
 import API from "../../variables/API";
 import axios from "axios";
@@ -409,6 +409,7 @@ function Report() {
                     <Chart_Ingresos
                       dstart={stateDate.Sdate}
                       dend={stateDate.Fdate}
+                      upload={stateSearch}
                     />
                   ) : (
                     ""
@@ -435,6 +436,7 @@ function Report() {
                     <Chart_Egreso
                       dstart={stateDate.Sdate}
                       dend={stateDate.Fdate}
+                      upload={stateSearch}
                     />
                   ) : (
                     ""
@@ -461,6 +463,7 @@ function Report() {
                     <Chart_Ahorros
                       dstart={stateDate.Sdate}
                       dend={stateDate.Fdate}
+                      upload={stateSearch}
                     />
                   ) : (
                     ""

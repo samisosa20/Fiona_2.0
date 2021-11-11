@@ -23,6 +23,7 @@ import iconProfile from "../../assets/img/profile/newuser.jpg"
 
 class AdminNavbar extends React.Component {
   logout() {
+    localStorage.clear();
     window.location = "/";
   }
   render() {
