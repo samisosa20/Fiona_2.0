@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {Chart} from "chart.js";
+import { Chart } from "chart.js";
 import API from "./API";
 
 //color donuht
@@ -29,18 +29,20 @@ let colorDonuht = [
 let idc = localStorage.getItem("IdUser");
 let divi = localStorage.getItem("Divisa");
 
-function Chart_Ingresos() {
+function Chart_Ingresos(props) {
   const chartContainer = useRef(null);
   const [chartInstance, setChartInstance] = useState(null);
 
   // grafico de ingresos
   useEffect(() => {
-    async function getData(idc, divi) {
+    async function getData(idc, divi, Sdate, Edate) {
       try {
         await API.post("grafic", {
           id: 1,
           idc: idc,
           divi: divi,
+          Sdate: Sdate,
+          Edate: Edate,
         }).then((res) => {
           if (chartContainer && chartContainer.current) {
             let label = [];
@@ -51,7 +53,7 @@ function Chart_Ingresos() {
             let newChartInstance = new Chart(chartContainer.current, {
               type: "doughnut",
               data: {
-                labels: label, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                labels: label,
                 datasets: [
                   {
                     label: "Ingresos",
@@ -97,24 +99,26 @@ function Chart_Ingresos() {
         console.log(e);
       }
     }
-    getData(idc, divi);
-  });
+    getData(idc, divi, props.dstart, props.dend);
+  }, [props.upload]);
 
   return <canvas ref={chartContainer} />;
 }
 
-function Chart_Egreso() {
+function Chart_Egreso(props) {
   const chartContainerEgre = useRef(null);
   const [chartInstanceEgre, setChartInstanceEgre] = useState(null);
 
   // grafico de Egresos
   useEffect(() => {
-    async function getData(idc, divi) {
+    async function getData(idc, divi, Sdate, Edate) {
       try {
         await API.post("grafic", {
           id: 2,
           idc: idc,
           divi: divi,
+          Sdate: Sdate,
+          Edate: Edate,
         }).then((res) => {
           if (chartContainerEgre && chartContainerEgre.current) {
             let label = [];
@@ -122,10 +126,11 @@ function Chart_Egreso() {
             res.data.forEach(
               (data) => (label.push(data.categoria), value.push(data.cantidad))
             );
+            console.log(chartContainerEgre.current)
             let newChartInstanceEgre = new Chart(chartContainerEgre.current, {
               type: "doughnut",
               data: {
-                labels: label, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                labels: label,
                 datasets: [
                   {
                     label: "Egresos",
@@ -137,30 +142,11 @@ function Chart_Egreso() {
               },
               options: {
                 borderWidth: 1,
-                cutoutPercentage: 83,
+                cutoutPercentage: 75,
                 title: "Egresos",
-                width: 25,
                 responsive: true,
                 legend: {
                   display: false,
-                },
-                legendCallback: function (chart) {
-                  var data = chart.data;
-                  var content = "";
-
-                  data.labels.forEach(function (label, index) {
-                    var bgColor = data.datasets[0].backgroundColor[index];
-
-                    content += '<span class="chart-legend-item">';
-                    content +=
-                      '<i class="chart-legend-indicator" style="background-color: ' +
-                      bgColor +
-                      '"></i>';
-                    content += label;
-                    content += "</span>";
-                  });
-
-                  return content;
                 },
               },
             });
@@ -171,24 +157,25 @@ function Chart_Egreso() {
         console.log(e);
       }
     }
-    getData(idc, divi);
-  }, [chartContainerEgre]);
-
+    getData(idc, divi, props.dstart, props.dend);
+  }, [props.upload]);
   return <canvas ref={chartContainerEgre} />;
 }
 
-function Chart_Ahorros() {
+function Chart_Ahorros(props) {
   const chartContainerEgre = useRef(null);
   const [chartInstanceEgre, setChartInstanceEgre] = useState(null);
 
   // grafico de Egresos
   useEffect(() => {
-    async function getData(idc, divi) {
+    async function getData(idc, divi, Sdate, Edate) {
       try {
         await API.post("grafic", {
           id: 3,
           idc: idc,
           divi: divi,
+          Sdate: Sdate,
+          Edate: Edate,
         }).then((res) => {
           if (chartContainerEgre && chartContainerEgre.current) {
             let label = [];
@@ -245,8 +232,8 @@ function Chart_Ahorros() {
         console.log(e);
       }
     }
-    getData(idc, divi);
-  }, [chartContainerEgre]);
+    getData(idc, divi, props.dstart, props.dend);
+  }, [props.upload]);
 
   return <canvas ref={chartContainerEgre} />;
 }
