@@ -54,6 +54,9 @@ import {
 
 var ps;
 
+// Assets
+import iconProfile from "../../assets/img/profile/newuser.jpg"
+
 class Sidebar extends React.Component {
   state = {
     collapseOpen: false
@@ -160,7 +163,7 @@ class Sidebar extends React.Component {
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src={require("assets/img/profile/newuser.jpg")}
+                      src={iconProfile}
                     />
                   </span>
                 </Media>
