@@ -15,6 +15,9 @@ import { Form } from 'react-bootstrap';
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 
+// Assets
+import iconProfile from "../../../assets/img/profile/newuser.jpg"
+
 function Profile() {
   /* Declaracion de variables */
   const [state, setState] = useState({first_name: "", last_name: "", email: "", divisa: "", password: ""});
@@ -97,7 +100,7 @@ function Profile() {
                         <img
                           alt="..."
                           className="rounded-circle"
-                          src={require("assets/img/profile/newuser.jpg")}
+                          src={iconProfile}
                         />
                       </a>
                     </div>
