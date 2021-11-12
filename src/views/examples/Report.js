@@ -14,9 +14,9 @@ import {
 } from "reactstrap";
 import { Form, InputGroup, Modal, ProgressBar } from "react-bootstrap";
 import {
-  Chart_Ingresos,
-  Chart_Egreso,
-  Chart_Ahorros,
+  ChartIncoming,
+  ChartExpense,
+  ChartSaving,
 } from "../../variables/charts";
 import ExcelExport from "components/Excel";
 import API from "../../variables/API";
@@ -67,12 +67,17 @@ function Report() {
       mouth: mes,
     }).then((res) => {
       if (id !== 12) {
-        setDataModal({ data: res.data, title: cuenta, id_modal: 0, id: id === 16 });
+        setDataModal({
+          data: res.data,
+          title: cuenta,
+          id_modal: 0,
+          id: id === 16,
+        });
       } else {
         setDataModal({ data: res.data, title: cuenta, id_modal: 1 });
       }
     });
-    if(!ShowModalMove){
+    if (!ShowModalMove) {
       ModShowModal();
     }
   };
@@ -232,6 +237,7 @@ function Report() {
         );
     }
     getDataReport(idc, divi);
+    // eslint-disable-next-line
   }, [stateSearch]);
 
   // Funcion para cambiar de estado de los modals
@@ -406,7 +412,7 @@ function Report() {
               <CardBody>
                 <div className="chart">
                   {stateDate.Sdate !== "" ? (
-                    <Chart_Ingresos
+                    <ChartIncoming
                       dstart={stateDate.Sdate}
                       dend={stateDate.Fdate}
                       upload={stateSearch}
@@ -433,7 +439,7 @@ function Report() {
               <CardBody>
                 <div className="chart">
                   {stateDate.Sdate !== "" ? (
-                    <Chart_Egreso
+                    <ChartExpense
                       dstart={stateDate.Sdate}
                       dend={stateDate.Fdate}
                       upload={stateSearch}
@@ -460,7 +466,7 @@ function Report() {
               <CardBody>
                 <div className="chart">
                   {stateDate.Sdate !== "" ? (
-                    <Chart_Ahorros
+                    <ChartSaving
                       dstart={stateDate.Sdate}
                       dend={stateDate.Fdate}
                       upload={stateSearch}
@@ -761,9 +767,15 @@ function Report() {
             {stateDataModal.id_modal === 0 && stateDataModal.data
               ? stateDataModal.data.map((data, index) => (
                   <Card
-                    className={`border-botton border-right border-left mb-2 ${stateDataModal.id ? 'cursor-pointer' : ''}`}
+                    className={`border-botton border-right border-left mb-2 ${
+                      stateDataModal.id ? "cursor-pointer" : ""
+                    }`}
                     key={index}
-                    onClick={stateDataModal.id ? (e) => OpenModalMove(e, 10, data.category, "") : ''}
+                    onClick={
+                      stateDataModal.id
+                        ? (e) => OpenModalMove(e, 10, data.category, "")
+                        : ""
+                    }
                   >
                     <h4 className="card-title col-md-12 text-muted mt-2 mb-1">
                       {data.sub_categoria
@@ -789,9 +801,11 @@ function Report() {
                             )}
                           </p>
                         )}
-                        {!stateDataModal.id && <p className="text-muted ml-1 mb-0">
-                          {data.fecha ? data.fecha : data.date}
-                        </p>}
+                        {!stateDataModal.id && (
+                          <p className="text-muted ml-1 mb-0">
+                            {data.fecha ? data.fecha : data.date}
+                          </p>
+                        )}
                       </h6>
                       {data.event && (
                         <h6 className="card-title ml-3 row col-md-12 text-muted mb-1">
@@ -804,7 +818,6 @@ function Report() {
               : stateDataModal.id_modal === 1 && stateDataModal.data
               ? stateDataModal.data.map((data, index) => (
                   <Card className="card-stats mb-1 shadow" key={index}>
-                {console.log(data)}
                     <CardBody>
                       <Row>
                         <div className="col">

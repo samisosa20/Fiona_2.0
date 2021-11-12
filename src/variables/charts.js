@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Chart } from "chart.js";
+import React, { useEffect, useRef } from "react";
+import { Chart, registerables } from "chart.js";
 import API from "./API";
 
 //color donuht
@@ -28,10 +28,13 @@ let colorDonuht = [
 ];
 let idc = localStorage.getItem("IdUser");
 let divi = localStorage.getItem("Divisa");
+let newChartInstanceEgre;
+let newChartInstance;
+let newChartInstanceSaving;
+Chart.register(...registerables);
 
-function Chart_Ingresos(props) {
+const ChartIncoming = (props) => {
   const chartContainer = useRef(null);
-  const [chartInstance, setChartInstance] = useState(null);
 
   // grafico de ingresos
   useEffect(() => {
@@ -47,10 +50,14 @@ function Chart_Ingresos(props) {
           if (chartContainer && chartContainer.current) {
             let label = [];
             let value = [];
-            res.data.map(
-              (data) => (label.push(data.categoria), value.push(data.cantidad))
-            );
-            let newChartInstance = new Chart(chartContainer.current, {
+            res.data.forEach((data) => {
+              label.push(data.categoria);
+              value.push(data.cantidad);
+            });
+            if (newChartInstance) {
+              newChartInstance.destroy();
+            }
+            newChartInstance = new Chart(chartContainer.current, {
               type: "doughnut",
               data: {
                 labels: label,
@@ -69,30 +76,9 @@ function Chart_Ingresos(props) {
                 title: "Ingresos",
                 width: 25,
                 responsive: true,
-                legend: {
-                  display: false,
-                },
-                legendCallback: function (chart) {
-                  var data = chart.data;
-                  var content = "";
-
-                  data.labels.forEach(function (label, index) {
-                    var bgColor = data.datasets[0].backgroundColor[index];
-
-                    content += '<span class="chart-legend-item">';
-                    content +=
-                      '<i class="chart-legend-indicator" style="background-color: ' +
-                      bgColor +
-                      '"></i>';
-                    content += label;
-                    content += "</span>";
-                  });
-
-                  return content;
-                },
+                plugins: { legend: { display: false } },
               },
             });
-            setChartInstance(newChartInstance);
           }
         });
       } catch (e) {
@@ -100,14 +86,14 @@ function Chart_Ingresos(props) {
       }
     }
     getData(idc, divi, props.dstart, props.dend);
+    // eslint-disable-next-line
   }, [props.upload]);
 
   return <canvas ref={chartContainer} />;
-}
+};
 
-function Chart_Egreso(props) {
+const ChartExpense = (props) => {
   const chartContainerEgre = useRef(null);
-  const [chartInstanceEgre, setChartInstanceEgre] = useState(null);
 
   // grafico de Egresos
   useEffect(() => {
@@ -123,11 +109,14 @@ function Chart_Egreso(props) {
           if (chartContainerEgre && chartContainerEgre.current) {
             let label = [];
             let value = [];
-            res.data.forEach(
-              (data) => (label.push(data.categoria), value.push(data.cantidad))
-            );
-            console.log(chartContainerEgre.current)
-            let newChartInstanceEgre = new Chart(chartContainerEgre.current, {
+            res.data.forEach((data) => {
+              label.push(data.categoria);
+              value.push(data.cantidad);
+            });
+            if (newChartInstanceEgre) {
+              newChartInstanceEgre.destroy();
+            }
+            newChartInstanceEgre = new Chart(chartContainerEgre.current, {
               type: "doughnut",
               data: {
                 labels: label,
@@ -142,15 +131,12 @@ function Chart_Egreso(props) {
               },
               options: {
                 borderWidth: 1,
-                cutoutPercentage: 75,
+                cutoutPercentage: 65,
                 title: "Egresos",
                 responsive: true,
-                legend: {
-                  display: false,
-                },
+                plugins: { legend: { display: false } },
               },
             });
-            setChartInstanceEgre(newChartInstanceEgre);
           }
         });
       } catch (e) {
@@ -158,13 +144,13 @@ function Chart_Egreso(props) {
       }
     }
     getData(idc, divi, props.dstart, props.dend);
+    // eslint-disable-next-line
   }, [props.upload]);
   return <canvas ref={chartContainerEgre} />;
-}
+};
 
-function Chart_Ahorros(props) {
-  const chartContainerEgre = useRef(null);
-  const [chartInstanceEgre, setChartInstanceEgre] = useState(null);
+const ChartSaving = (props) => {
+  const chartContainerSaving = useRef(null);
 
   // grafico de Egresos
   useEffect(() => {
@@ -177,13 +163,17 @@ function Chart_Ahorros(props) {
           Sdate: Sdate,
           Edate: Edate,
         }).then((res) => {
-          if (chartContainerEgre && chartContainerEgre.current) {
+          if (chartContainerSaving && chartContainerSaving.current) {
             let label = [];
             let value = [];
-            res.data.map(
-              (data) => (label.push(data.nombre), value.push(data.cantidad))
-            );
-            let newChartInstanceEgre = new Chart(chartContainerEgre.current, {
+            res.data.forEach((data) => {
+              label.push(data.nombre);
+              value.push(data.cantidad);
+            });
+            if (newChartInstanceSaving) {
+              newChartInstanceSaving.destroy();
+            }
+            newChartInstanceSaving = new Chart(chartContainerSaving.current, {
               type: "doughnut",
               data: {
                 labels: label, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -202,30 +192,9 @@ function Chart_Ahorros(props) {
                 title: "Ahorros",
                 width: 25,
                 responsive: true,
-                legend: {
-                  display: false,
-                },
-                legendCallback: function (chart) {
-                  var data = chart.data;
-                  var content = "";
-
-                  data.labels.forEach(function (label, index) {
-                    var bgColor = data.datasets[0].backgroundColor[index];
-
-                    content += '<span class="chart-legend-item">';
-                    content +=
-                      '<i class="chart-legend-indicator" style="background-color: ' +
-                      bgColor +
-                      '"></i>';
-                    content += label;
-                    content += "</span>";
-                  });
-
-                  return content;
-                },
+                plugins: { legend: { display: false } },
               },
             });
-            setChartInstanceEgre(newChartInstanceEgre);
           }
         });
       } catch (e) {
@@ -233,9 +202,10 @@ function Chart_Ahorros(props) {
       }
     }
     getData(idc, divi, props.dstart, props.dend);
+    // eslint-disable-next-line
   }, [props.upload]);
 
-  return <canvas ref={chartContainerEgre} />;
-}
+  return <canvas ref={chartContainerSaving} />;
+};
 
-export { Chart_Ingresos, Chart_Egreso, Chart_Ahorros };
+export { ChartIncoming, ChartExpense, ChartSaving };

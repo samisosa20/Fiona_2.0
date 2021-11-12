@@ -3,9 +3,9 @@ import React, { useState } from "react";
 //import classnames from "classnames";
 // javascipt plugin for creating charts
 import {
-  Chart_Ingresos,
-  Chart_Egreso,
-  Chart_Ahorros,
+  ChartIncoming,
+  ChartExpense,
+  ChartSaving,
 } from "../variables/charts";
 
 // reactstrap components
@@ -313,7 +313,7 @@ function Dashboard() {
               </CardHeader>
               <CardBody>
                 <div className="chart">
-                  <Chart_Ingresos />
+                  <ChartIncoming />
                 </div>
               </CardBody>
             </Card>
@@ -332,7 +332,7 @@ function Dashboard() {
               </CardHeader>
               <CardBody>
                 <div className="chart">
-                  <Chart_Egreso />
+                  <ChartExpense />
                 </div>
               </CardBody>
             </Card>
@@ -351,7 +351,7 @@ function Dashboard() {
               </CardHeader>
               <CardBody>
                 <div className="chart">
-                  <Chart_Ahorros />
+                  <ChartSaving />
                 </div>
               </CardBody>
             </Card>
