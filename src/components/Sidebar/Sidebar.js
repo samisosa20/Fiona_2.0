@@ -101,6 +101,10 @@ class Sidebar extends React.Component {
       }
     });
   };
+  logout() {
+    localStorage.clear();
+    window.location = "/";
+  }
   render() {
     const { bgColor, routes, logo } = this.props;
     let navbarBrandProps;
@@ -189,10 +193,10 @@ class Sidebar extends React.Component {
                   <span>Support</span>
                 </DropdownItem>*/}
                 <DropdownItem divider />
-                <DropdownItem to="/auth/login" tag={Link}>
-                  <i className="ni ni-user-run" />
-                  <span>Logout</span>
-                </DropdownItem>
+                <DropdownItem onClick={this.logout}>
+                    <i className="ni ni-user-run" />
+                    <span>Logout</span>
+                  </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>
