@@ -16,7 +16,7 @@ import { Form } from 'react-bootstrap';
 import UserHeader from "components/Headers/UserHeader.js";
 
 // Assets
-import iconProfile from "../../../assets/img/profile/newuser.jpg"
+import iconProfile from "../../assets/img/profile/newuser.jpg"
 
 function Profile() {
   /* Declaracion de variables */
