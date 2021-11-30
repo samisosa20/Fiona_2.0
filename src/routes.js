@@ -7,6 +7,7 @@ import Catego from "views/examples/Catego.js";
 import Event from "views/examples/Event.js";
 import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
+import Forgot from "views/examples/Forgot.js";
 import Report from "views/examples/Report.js";
 import Move from "views/examples/Move.js";
 import Account from "views/examples/Acount.js";
@@ -98,6 +99,14 @@ var routes = [
     name: "Register",
     icon: "ni ni-circle-08 text-pink",
     component: Register,
+    layout: "/auth",
+    sidebar: false,
+  },
+  {
+    path: "/forgot",
+    name: "Forgot",
+    icon: "ni ni-circle-08 text-pink",
+    component: Forgot,
     layout: "/auth",
     sidebar: false,
   },
