@@ -167,7 +167,7 @@ function ViewBudget() {
                           parseFloat(acumulado) + parseFloat(data.cantidad);
                         if (data.sub_categoria === null) {
                           return [
-                            <tr className="table-dark text-dark" key={index}>
+                            <tr className="table-dark text-dark cursor-pointer" key={index}>
                               <td className="font-weight-bold">
                                 {aux_cat_print}
                               </td>
@@ -206,6 +206,7 @@ function ViewBudget() {
                                 )
                               }
                               key={index * 100}
+                              className="cursor-pointer"
                             >
                               <td>{data.sub_categoria}</td>
                               <td>{formatter.format(data.cantidad)}</td>
@@ -235,6 +236,7 @@ function ViewBudget() {
                                 )
                               }
                               key={index}
+                              className="cursor-pointer"
                             >
                               <td>{data.categoria}</td>
                               <td>{formatter.format(data.cantidad)}</td>
@@ -254,6 +256,7 @@ function ViewBudget() {
                                   year
                                 )
                               }
+                              className="cursor-pointer"
                             >
                               <td>{data.sub_categoria}</td>
                               <td>{formatter.format(data.cantidad)}</td>

@@ -19,9 +19,11 @@ import "../../assets/styles/components/Catego.scss";
 import Modaldelete from "../../components/Modals/Delete";
 import Alert from "../../components/Alert";
 import Modaledit from "../../components/Modals/EditEvent";
+import ContextMenuCustom from "../../components/ContextMenu";
 
 const Catego = () => {
   /* Declaracion de variables */
+  const [contextMenu, setContextMenu] = useState(null);
   const [state, setState] = useState([]);
   const [refreshData, setrefreshData] = useState(false);
   // envio de informacion
@@ -138,6 +140,21 @@ const Catego = () => {
     }
   };
 
+  const handleContextMenu = (event) => {
+    event.preventDefault();
+    setContextMenu(
+      contextMenu === null
+        ? {
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+          }
+        : null
+    );
+  };
+  const handleClose = () => {
+    setContextMenu(null);
+  };
+
   return (
     <>
       <Header />
@@ -148,10 +165,9 @@ const Catego = () => {
                 <Card
                   className="shadow col-md-12 col-lg-5 mr-2 ml-2 mb-3 arrow c-categorie"
                   key={index}
-                  onClick={() => openListModal(data.id)}
+                  onContextMenu={handleContextMenu}
                 >
-                  <CardBody className="card-body">
-                    <Row>
+                  <CardBody className="py-3 rounded" onClick={() => openListModal(data.id)}>
                       <div className="col-10 mt-1">
                         <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-dark m-0">
                           {data.nombre}{" "}
@@ -176,40 +192,38 @@ const Catego = () => {
                           </span>
                         </h4>
                       </div>
-                      <div className="col-2 row align-items-center justify-content-between">
-                        <i
-                          className="far fa-edit float-right mt-2 text-primary"
-                          onClick={e =>
-                            OpenModalEdit(
-                              e,
-                              data.id,
-                              data.nombre,
-                              data.fecha_fin
-                            )
-                          }
-                        ></i>
-                        <i className="fas fa-chevron-right float-right mt-2 ml-2 fa-2x"></i>
-                      </div>
-                    </Row>
                   </CardBody>
+                  <div
+                    onClick={handleContextMenu}
+                    className="position-absolute right-4 top-4"
+                  >
+                    <i className="fa fa-ellipsis-v"></i>
+                  </div>
+                  <ContextMenuCustom
+                    contextMenu={contextMenu}
+                    handleClose={handleClose}
+                    onClickEdit={(e) =>
+                      OpenModalEdit(
+                        e,
+                        data.id,
+                        data.nombre,
+                        data.fecha_fin
+                      )
+                    }
+                  />
                 </Card>
               ))
             : ""}
           <Card
-            className="shadow col-md-12 col-lg-5 mr-2 ml-2 mb-3 arrow"
+            className="shadow col-md-12 col-lg-5 mr-2 ml-2 mb-3 arrow c-categorie"
             onClick={e => OpenModalNew(e)}
           >
-            <CardBody className="card-body">
-              <Row>
+            <CardBody className="rounded">
                 <div className="col">
-                  <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted">
+                  <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted m-0">
                     <i className="fas fa-plus mr-2"></i>New Event
                   </h3>
                 </div>
-                <div className="col">
-                  <i className="fas fa-chevron-right float-right mt-3 mt-xl-0 ml-2 fa-2x"></i>
-                </div>
-              </Row>
             </CardBody>
           </Card>
         </Row>

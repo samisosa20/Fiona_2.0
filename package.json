@@ -46,7 +46,10 @@
         "not op_mini all"
     ],
     "dependencies": {
+        "@emotion/react": "^11.7.0",
+        "@emotion/styled": "^11.6.0",
         "@fortawesome/fontawesome-free": "5.12.1",
+        "@mui/material": "^5.2.2",
         "@tailwindcss/postcss7-compat": "^2.0.2",
         "autoprefixer": "^9.8.6",
         "axios": "^0.21.4",
@@ -64,13 +67,11 @@
         "react-bootstrap": "^1.0.1",
         "react-bootstrap-date-picker": "^5.1.0",
         "react-chartjs-2": "2.9.0",
-        "react-contextmenu": "^2.14.0",
         "react-copy-to-clipboard": "5.0.2",
         "react-datetime": "2.16.3",
         "react-datetime-bootstrap": "^1.4.7",
         "react-dom": "^16.13.1",
         "react-export-excel": "^0.5.3",
-        "react-google-maps": "9.4.5",
         "react-icons": "^4.2.0",
         "react-number-format": "^4.5.5",
         "react-redux": "^7.2.1",
@@ -80,6 +81,7 @@
         "redux": "^4.0.5",
         "redux-form": "^8.3.6",
         "serve": "^11.3.2",
+        "styled-components": "^5.3.3",
         "xlsx": "^0.17.2",
         "yup": "^0.29.1"
     },
