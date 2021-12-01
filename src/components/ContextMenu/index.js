@@ -1,36 +1,61 @@
 // Package
-import { ContextMenu, MenuItem } from "react-contextmenu";
+import MenuItem from "@mui/material/MenuItem";
+
+import { StyledMenu } from "./ContextMenu.styles";
 
 const ContextMenuCustom = (props) => {
-  const { idContext, onClickShare, onClickEdit, onClickDelete } = props;
+  const { onClickShare, onClickEdit, onClickDelete, onClickCopy, handleClose, contextMenu } =
+    props;
+
+  const handleClick = (e, customClick) => {
+    handleClose();
+    customClick(e);
+  };
 
   return (
-    <ContextMenu id={idContext} className="bg-white border rounded z-10">
+    <StyledMenu
+      open={contextMenu !== null}
+      onClose={handleClose}
+      anchorReference="anchorPosition"
+      anchorPosition={
+        contextMenu !== null
+          ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+          : undefined
+      }
+    >
       {onClickEdit && (
         <MenuItem
-          className="py-1 pl-2 pr-4 font-weight-semibold border-bottom cursor-pointer hover:shadow"
-          onClick={onClickEdit}
+          className="py-1 pl-2 pr-4 font-weight-semibold"
+          onClick={(e) => handleClick(e, onClickEdit)}
         >
           <i className="fas fa-pencil-alt mr-2 text-blue"></i>Edit
         </MenuItem>
       )}
-      {onClickDelete && (
+      {onClickCopy && (
         <MenuItem
-          className="py-1 pl-2 pr-4 font-weight-semibold border-bottom cursor-pointer hover:shadow"
-          onClick={onClickDelete}
+          className="py-1 pl-2 pr-4 font-weight-semibold"
+          onClick={(e) => handleClick(e, onClickCopy)}
         >
-          <i className="far fa-trash-alt mr-2 text-blue"></i>Delete
+          <i className="far fa-copy mr-2 text-blue"></i>Copy
         </MenuItem>
       )}
       {onClickShare && (
         <MenuItem
-          className="py-1 pl-2 pr-4 font-weight-semibold border-bottom cursor-pointer hover:shadow"
-          onClick={onClickShare}
+        className="py-1 pl-2 pr-4 font-weight-semibold"
+        onClick={(e) => handleClick(e, onClickShare)}
         >
           <i className="fas fa-share mr-2 text-blue"></i>Share
         </MenuItem>
       )}
-    </ContextMenu>
+      {onClickDelete && (
+        <MenuItem
+          className="py-1 pl-2 pr-4 font-weight-semibold text-danger"
+          onClick={(e) => handleClick(e, onClickDelete)}
+        >
+          <i className="far fa-trash-alt mr-2 "></i>Delete
+        </MenuItem>
+      )}
+    </StyledMenu>
   );
 };
 

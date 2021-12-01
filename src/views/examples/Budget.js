@@ -4,13 +4,20 @@ import { Modal } from "react-bootstrap";
 // core components
 import { Header } from "components/Headers/Header.js";
 import API from "../../variables/API";
-import { Link } from "react-router-dom"; // para navegar entre paginas
+import { Link } from "react-router-dom";
+import ContextMenuCustom from "../../components/ContextMenu";
+import Alert from "../../components/Alert";
 
 function Budget() {
+  const [contextMenu, setContextMenu] = useState(null);
+  const [yearPaste, setYearPaste] = useState(null);
   const [state, setState] = useState([]);
   const [stateDelete, setStateDelete] = useState([]);
   const [showDelMod, setDelMod] = useState(false);
+  const [showCopyMod, setCopyMod] = useState(false);
   const [refreshData, setrefreshData] = useState(false);
+  const [stateAlert, setSateAlert] = useState({ visible: false, code: 200 });
+  let year = new Date().getFullYear();
 
   useEffect(() => {
     var idc = localStorage.getItem("IdUser");
@@ -22,6 +29,7 @@ function Budget() {
 
   // Funcion para cambiar de estado de los modals
   const ModDelCateSate = () => setDelMod(!showDelMod);
+  const ModCopyBudgetSate = () => setCopyMod(!showCopyMod);
 
   const OpenModalDelete = (e, id, year) => {
     e.preventDefault();
@@ -30,6 +38,14 @@ function Budget() {
       id_data: id,
     });
     ModDelCateSate();
+  };
+  const OpenModalCopy = (e, id, year) => {
+    e.preventDefault();
+    setStateDelete({
+      year: year,
+      id_data: id,
+    });
+    ModCopyBudgetSate();
   };
 
   // Eliminar data
@@ -47,9 +63,51 @@ function Budget() {
     }).then((response) => {
       document.getElementById("btn_delete_budget_year").disabled = false;
       document.getElementById("btn_delete_budget_year").innerHTML = "Delete";
+      setSateAlert({ visible: true, code: response.data });
+      setTimeout(() => {
+        setSateAlert({ visible: false, code: 0 });
+      }, 2000);
       ModDelCateSate();
       setrefreshData(!refreshData);
     });
+  };
+
+  const handleCopy = (e) => {
+    e.preventDefault();
+    document.getElementById("btn_copy_budget_year").disabled = true;
+    document.getElementById("btn_copy_budget_year").innerHTML =
+      "<span class='spinner-border spinner-border-sm mr-1'" +
+      "role='status' aria-hidden='true'></span>Loading...";
+    API.post("add_data", {
+      id: 8,
+      idu: localStorage.getItem("IdUser"),
+      yearCopy: stateDelete.year,
+      yearPaste: yearPaste,
+    }).then((response) => {
+      document.getElementById("btn_copy_budget_year").disabled = false;
+      document.getElementById("btn_copy_budget_year").innerHTML = "Confirm";
+      setSateAlert({ visible: true, code: response.data });
+      setTimeout(() => {
+        setSateAlert({ visible: false, code: 0 });
+      }, 2000);
+      ModCopyBudgetSate();
+      setrefreshData(!refreshData);
+    });
+  };
+
+  const handleContextMenu = (event) => {
+    event.preventDefault();
+    setContextMenu(
+      contextMenu === null
+        ? {
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+          }
+        : null
+    );
+  };
+  const handleClose = () => {
+    setContextMenu(null);
   };
 
   return (
@@ -59,73 +117,60 @@ function Budget() {
         <Row>
           {state
             ? state.map((data, index) => (
-                <Card className="shadow col-md-5 mr-2 ml-2 mb-3" key={index}>
-                  <CardHeader className="border-0">
-                    <Row>
+                <Card
+                  className=" hover:shadow col-md-5 mr-2 ml-2 mb-3"
+                  key={index}
+                >
+                  <Link
+                    to={"/admin/ViewBudget/" + data.year}
+                    onContextMenu={handleContextMenu}
+                  >
+                    <CardHeader className="border-0 row rounded">
                       <div className="col-12 p-0">
                         <h3 className="mb-0">Budget - {data.year}</h3>
                       </div>
                       <div className="col-sm-12 col-md-6 justify-content-end text-success p-0">
-                        Income: <br></br>$ {data.ingreso}
+                        Income:
+                        <br />$ {data.ingreso}
                       </div>
                       <div className="col-sm-12 col-md-6 justify-content-end text-danger p-0">
-                        Expenses: <br></br>$ {data.egreso}
+                        Expenses:
+                        <br />$ {data.egreso}
                       </div>
-                    </Row>
-                  </CardHeader>
-                  <CardBody className="mt--4">
-                    <Row className="col-12">
-                      <Link to={"/admin/ViewBudget/" + data.year}>
-                        <Button
-                          className="mr-4 shadow btn-circle"
-                          color="success"
-                          size="sm"
-                        >
-                          <i className="ni ni-curved-next"></i>
-                        </Button>
-                      </Link>
-                      <Link
-                        to={{
-                          pathname: "/admin/ViewBudget",
-                          state: { year: data.year },
-                        }}
-                      >
-                        <Button
-                          className="mr-4 shadow btn-circle"
-                          color="danger"
-                          size="sm"
-                          onClick={(e) =>
-                            OpenModalDelete(e, data.id, data.year)
-                          }
-                        >
-                          <i className="far fa-trash-alt white"></i>
-                        </Button>
-                      </Link>
-                    </Row>
-                  </CardBody>
+                    </CardHeader>
+                  </Link>
+                  <div
+                    onClick={handleContextMenu}
+                    className="position-absolute right-4 top-4"
+                  >
+                    <i className="fa fa-ellipsis-v"></i>
+                  </div>
+                  <ContextMenuCustom
+                    contextMenu={contextMenu}
+                    handleClose={handleClose}
+                    onClickDelete={(e) =>
+                      OpenModalDelete(e, data.id, data.year)
+                    }
+                    onClickCopy={(e) =>
+                      OpenModalCopy(e, data.id, data.year)
+                    }
+                  />
                 </Card>
               ))
             : ""}
-          <Link className="col-md-5 mr-2 ml-2 mb-3" to={"/admin/NewBudget/"}>
+          <Link className="col-md-5 mr-2 ml-2 mb-3 p-0 hover:shadow" to={"/admin/NewBudget/"}>
             <Card className="shadow">
               <CardBody style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-                <Row>
-                  <div className="col" style={{ marginTop: 20 }}>
-                    <h3 className="card-title col-md-12 col-lg-12 col-xl-12 text-muted">
+                    <h3 className="card-title col-md-12 col-lg-12 col-xl-12 text-muted m-0">
                       <i className="fas fa-plus mr-2"></i>New Budget
                     </h3>
-                  </div>
-                  <div className="col">
-                    <i className="fas fa-chevron-right float-right mt-3 ml-2 fa-2x"></i>
-                  </div>
-                </Row>
               </CardBody>
             </Card>
           </Link>
         </Row>
         <Modal show={showDelMod} id="ModalDelete" onHide={ModDelCateSate}>
           <Modal.Header closeButton>
-            <Modal.Title>Delete movement</Modal.Title>
+            <Modal.Title>Delete Budget</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {"Are you sure delete the budget of year " + stateDelete.year + "?"}
@@ -143,6 +188,34 @@ function Budget() {
             </Button>
           </Modal.Footer>
         </Modal>
+        <Modal show={showCopyMod} id="ModalCopy" onHide={ModCopyBudgetSate}>
+          <Modal.Header closeButton>
+            <Modal.Title>Copy Budget</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p className="font-weight-semibold">Please, select which year the information is pasted</p>
+            <select className="form-control" onChange={e=>setYearPaste(e.target.value)} defaultValue="0">
+              <option value="0" hidden>Select a year</option>
+                <option value={year + 1}>{year + 1}</option>
+                <option value={year + 2}>{year + 2}</option>
+                <option value={year + 3}>{year + 3}</option>
+            </select>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button color="secundary" onClick={ModCopyBudgetSate}>
+              Cancel
+            </Button>
+            <Button
+              color="success"
+              id="btn_copy_budget_year"
+              onClick={(e) => handleCopy(e)}
+              disabled={!yearPaste}
+            >
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <Alert visible={stateAlert.visible} code={stateAlert.code} />
       </Container>
     </>
   );

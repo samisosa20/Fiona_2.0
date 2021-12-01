@@ -11,7 +11,7 @@ import Alert from "../../components/Alert";
 import ModalEditAcount from "components/Modals/EditorAcount";
 import Modaldelete from "../../components/Modals/Delete";
 import ModalAcountAdd from "../../components/Modals/AddAcount";
-import AcountAdd from "components/Acount/NewAcounts";
+import AcountAdd from "components/Acount/NewAccounts";
 import ModalAddMovement from "components/Modals/AddMovement";
 import ModalTranfer from "components/Modals/Transfer";
 import ModalshareAccount from "components/Modals/Share";
