@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import API from "../../variables/API";
 import { Redirect, Link } from "react-router-dom"; // para navegar entre paginas
 import store from "../../redux/store";
@@ -68,6 +68,14 @@ function Login(props) {
       });
     }
   };
+  useEffect(()=>{
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    if(urlParams.get('reset')){
+      document.getElementById("mensaje").innerHTML =
+            "<div class='alert alert-success' role='alert'>we send you a message, check your email and junk email.</div>";
+    }
+  },[])
 
   const Login_success = () => {
     if (key || (localStorage.getItem("IdUser") !== '' && localStorage.getItem("IdUser") !== null)) {
@@ -140,13 +148,13 @@ function Login(props) {
         </Card>
         <Row className="mt-3">
           <Col xs="6">
-            <Link className="text-light" to="/auth/register">
+            <Link className="text-light" to="/auth/forgot">
               <small>Forgot password?</small>
             </Link>
           </Col>
           <Col className="text-right" xs="6">
             <Link className="text-light" to="/auth/register">
-              <small>Create new account</small>
+              <small>Sign up</small>
             </Link>
           </Col>
         </Row>
