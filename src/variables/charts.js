@@ -26,12 +26,38 @@ let colorDonuht = [
   "#17becf",
   "#9edae5",
 ];
+
 let idc = localStorage.getItem("IdUser");
 let divi = localStorage.getItem("Divisa");
 let newChartInstanceEgre;
 let newChartInstance;
 let newChartInstanceSaving;
+let newChartInstanceBalance;
 Chart.register(...registerables);
+
+const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 2,
+});
+
+
+let width, height, gradient;
+function getGradient(ctx, chartArea) {
+  const chartWidth = chartArea.right - chartArea.left;
+  const chartHeight = chartArea.bottom - chartArea.top;
+  if (!gradient || width !== chartWidth || height !== chartHeight) {
+    // Create the gradient because this is either the first render
+    // or the size of the chart has changed
+    width = chartWidth;
+    height = chartHeight;
+    gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+    gradient.addColorStop(1, 'rgba(1,202,241,1)');
+    gradient.addColorStop(0, 'rgba(1,202,241, 0)');
+  }
+
+  return gradient;
+}
 
 const ChartIncoming = (props) => {
   const chartContainer = useRef(null);
@@ -208,4 +234,84 @@ const ChartSaving = (props) => {
   return <canvas ref={chartContainerSaving} />;
 };
 
-export { ChartIncoming, ChartExpense, ChartSaving };
+const ChartBalance = (props) => {
+  const chartContainerBalance = useRef(null);
+
+  // grafico de Egresos
+  useEffect(() => {
+    async function getData(idc, divi, Sdate, Edate) {
+      try {
+        await API.post("report", {
+          id: 17,
+          idc: idc,
+          divi: divi,
+          fecha_ini: Sdate,
+          fecha_fin: Edate,
+        }).then((res) => {
+          console.log(res);
+          if (chartContainerBalance && chartContainerBalance.current) {
+            let label = [];
+            let value = [];
+            res.data.forEach((data) => {
+              label.push(data.date);
+              value.push(data.cumulative_sum);
+            });
+            if (newChartInstanceBalance) {
+              newChartInstanceBalance.destroy();
+            }
+            newChartInstanceBalance = new Chart(chartContainerBalance.current, {
+              type: "line",
+              data: {
+                labels: label,
+                datasets: [
+                  {
+                    label: "Balance",
+                    data: value,
+                    borderColor: colorDonuht[2],
+                    fill: true,
+                    backgroundColor : function(context) {
+                      const chart = context.chart;
+                      const {ctx, chartArea} = chart;
+              
+                      if (!chartArea) {
+                        // This case happens on initial chart load
+                        return;
+                      }
+                      return getGradient(ctx, chartArea);
+                    },
+                  },
+                ],
+              },
+              options: {
+                borderWidth: 1,
+                cutoutPercentage: 83,
+                title: "Ahorros",
+                width: 25,
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                  y: {
+                      ticks: {
+                          callback: function(value, index, values) {
+                            const label = formatter.format(value > 1000000 ? value / 1000000 : value > 1000 ? value / 1000 : value)
+                              return value > 1000000 ? label + 'M' : value > 1000 ? label + 'K' : label ;
+                          }
+                      }
+                  }
+              }
+              },
+            });
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    getData(idc, divi, props.dstart, props.dend);
+    // eslint-disable-next-line
+  }, [props.upload]);
+
+  return <canvas ref={chartContainerBalance} />;
+};
+
+export { ChartIncoming, ChartExpense, ChartSaving, ChartBalance };
