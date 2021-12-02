@@ -77,3 +77,12 @@
     min-width: 450px;
     border-radius: $border-radius-lg;
 }
+
+// Fix custom context menu
+
+.StyledMenu {
+    .MuiPaper-elevation {
+        box-shadow: 0 0 11px rgba(33, 33, 33, 0.05);
+        border-radius: 10px;
+    }
+}
