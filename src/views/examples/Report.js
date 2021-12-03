@@ -18,7 +18,8 @@ import {
   ChartExpense,
   ChartSaving,
   ChartBalance,
-  ChartCashFlow
+  ChartCashFlow,
+  ChartBalanceComparison,
 } from "../../variables/charts";
 import ExcelExport from "components/Excel";
 import API from "../../variables/API";
@@ -515,7 +516,7 @@ function Report() {
                 <Row className="align-items-center">
                   <div className="col">
                     <h6 className="text-uppercase text-light ls-1 mb-1">
-                      Line chart
+                      Bar chart
                     </h6>
                     <h2 className="text-white mb-0">Cash Flow</h2>
                   </div>
@@ -538,8 +539,35 @@ function Report() {
           </Col>
         </Row>
         <Row className="mb-4">
-          <Col className="mb-5 mb-xl-0" xl="4">
+          <Col className="mb-5 mb-xl-0" xl="8">
             <Card className="bg-gradient-default shadow">
+              <CardHeader className="bg-transparent">
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h6 className="text-uppercase text-light ls-1 mb-1">
+                      Line chart
+                    </h6>
+                    <h2 className="text-white mb-0">Balance comparison</h2>
+                  </div>
+                </Row>
+              </CardHeader>
+              <CardBody>
+                <div className="chart">
+                  {stateDate.Sdate !== "" ? (
+                    <ChartBalanceComparison
+                      dstart={stateDate.Sdate}
+                      dend={stateDate.Fdate}
+                      upload={stateSearch}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col className="mb-5 mb-xl-0" xl="4">
+            <Card className="bg-gradient-default shadow h-100">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
                   <div className="col">
@@ -593,8 +621,10 @@ function Report() {
               </CardBody>
             </Card>
           </Col>
+        </Row>
+        <Row className="mb-4">
           <Col className="mb-5 mb-xl-0" xl="4">
-            <Card className="bg-gradient-default shadow">
+            <Card className="bg-gradient-default shadow h-100">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
                   <div className="col">
@@ -638,7 +668,7 @@ function Report() {
             </Card>
           </Col>
           <Col className="mb-5 mb-xl-0" xl="4">
-            <Card className="bg-gradient-default shadow">
+            <Card className="bg-gradient-default shadow h-100">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
                   <div className="col">
@@ -735,7 +765,7 @@ function Report() {
             </Card>
           </Col>
           <Col className="mb-5 mb-xl-0" xl="4">
-            <Card className="bg-gradient-default shadow">
+            <Card className="bg-gradient-default shadow h-100">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
                   <div className="col">
