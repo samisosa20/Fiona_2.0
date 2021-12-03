@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Chart, registerables } from "chart.js";
 import API from "./API";
+import { date } from "yup";
 
 //color donuht
 let colorDonuht = [
@@ -345,6 +346,7 @@ const ChartCashFlow = (props) => {
               label.push(data.date);
               value.push(data.valor);
             });
+            console.log(label)
             if (newChartInstanceCashFlow) {
               newChartInstanceCashFlow.destroy();
             }
@@ -356,7 +358,16 @@ const ChartCashFlow = (props) => {
                   {
                     label: "Cash Flow",
                     data: value,
-                    borderColor: colorDonuht[2],
+                    borderColor: function(context) {
+                      const chart = context.chart;
+                      const {ctx, chartArea} = chart;
+              
+                      if (!chartArea) {
+                        // This case happens on initial chart load
+                        return;
+                      }
+                      return parseInt(context.raw) < 0 ? "#ff4f70" : "#98df8a";
+                    },
                     fill: true,
                     backgroundColor : function(context) {
                       const chart = context.chart;
@@ -366,7 +377,8 @@ const ChartCashFlow = (props) => {
                         // This case happens on initial chart load
                         return;
                       }
-                      return getGradient(ctx, chartArea, parseInt(context.raw) < 0 ? "danger" : "success");
+                      return parseInt(context.raw) < 0 ? "#ff4f70" : "#98df8a";
+                      //return getGradient(ctx, chartArea, parseInt(context.raw) < 0 ? "danger" : "success");
                     },
                   },
                 ],
@@ -382,8 +394,8 @@ const ChartCashFlow = (props) => {
                   y: {
                       ticks: {
                           callback: function(value, index, values) {
-                            const label = formatter.format(value > 1000000 ? value / 1000000 : value > 1000 ? value / 1000 : value)
-                              return value > 1000000 ? label + 'M' : value > 1000 ? label + 'K' : label ;
+                            const label = formatter.format(value >= 1000000 || value <= -1000000 ? value / 1000000 : value >= 1000 || value <= -1000 ? value / 1000 : value)
+                              return value >= 1000000 || value <= -1000000 ? label + 'M' : value >= 1000 || value <= -1000 ? label + 'K' : label ;
                           }
                       }
                   }
