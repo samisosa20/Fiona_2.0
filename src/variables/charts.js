@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Chart, registerables } from "chart.js";
 import API from "./API";
-import { date } from "yup";
 
 //color donuht
 let colorDonuht = [
@@ -360,7 +359,7 @@ const ChartCashFlow = (props) => {
                     data: value,
                     borderColor: function(context) {
                       const chart = context.chart;
-                      const {ctx, chartArea} = chart;
+                      const {chartArea} = chart;
               
                       if (!chartArea) {
                         // This case happens on initial chart load
@@ -371,7 +370,7 @@ const ChartCashFlow = (props) => {
                     fill: true,
                     backgroundColor : function(context) {
                       const chart = context.chart;
-                      const {ctx, chartArea} = chart;
+                      const { chartArea} = chart;
               
                       if (!chartArea) {
                         // This case happens on initial chart load

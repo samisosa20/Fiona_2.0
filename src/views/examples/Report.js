@@ -517,7 +517,7 @@ function Report() {
                     <h6 className="text-uppercase text-light ls-1 mb-1">
                       Line chart
                     </h6>
-                    <h2 className="text-white mb-0">Balance per day</h2>
+                    <h2 className="text-white mb-0">Cash Flow</h2>
                   </div>
                 </Row>
               </CardHeader>
