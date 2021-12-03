@@ -33,6 +33,7 @@ let newChartInstanceEgre;
 let newChartInstance;
 let newChartInstanceSaving;
 let newChartInstanceBalance;
+let newChartInstanceCashFlow;
 Chart.register(...registerables);
 
 const formatter = new Intl.NumberFormat("en-US", {
@@ -43,7 +44,7 @@ const formatter = new Intl.NumberFormat("en-US", {
 
 
 let width, height, gradient;
-function getGradient(ctx, chartArea) {
+function getGradient(ctx, chartArea, color = "primary") {
   const chartWidth = chartArea.right - chartArea.left;
   const chartHeight = chartArea.bottom - chartArea.top;
   if (!gradient || width !== chartWidth || height !== chartHeight) {
@@ -52,8 +53,16 @@ function getGradient(ctx, chartArea) {
     width = chartWidth;
     height = chartHeight;
     gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-    gradient.addColorStop(1, 'rgba(1,202,241,1)');
-    gradient.addColorStop(0, 'rgba(1,202,241, 0)');
+    if(color === "primary"){
+      gradient.addColorStop(1, 'rgba(1,202,241,1)');
+      gradient.addColorStop(0, 'rgba(1,202,241, 0)');
+    } else if(color === "success") {
+      gradient.addColorStop(1, 'rgba(152,223,138,1)');
+      gradient.addColorStop(0, 'rgba(152,223,138, 0)');
+    } else if (color === "danger") {
+      gradient.addColorStop(1, 'rgba(255,79,112,1)');
+      gradient.addColorStop(0, 'rgba(255,79,112, 0)');
+    }
   }
 
   return gradient;
@@ -248,7 +257,7 @@ const ChartBalance = (props) => {
           fecha_ini: Sdate,
           fecha_fin: Edate,
         }).then((res) => {
-          console.log(res);
+          //console.log(res);
           if (chartContainerBalance && chartContainerBalance.current) {
             let label = [];
             let value = [];
@@ -314,4 +323,84 @@ const ChartBalance = (props) => {
   return <canvas ref={chartContainerBalance} />;
 };
 
-export { ChartIncoming, ChartExpense, ChartSaving, ChartBalance };
+const ChartCashFlow = (props) => {
+  const chartContainerChasFlow = useRef(null);
+
+  // grafico de Egresos
+  useEffect(() => {
+    async function getData(idc, divi, Sdate, Edate) {
+      try {
+        await API.post("report", {
+          id: 18,
+          idc: idc,
+          divi: divi,
+          fecha_ini: Sdate,
+          fecha_fin: Edate,
+        }).then((res) => {
+          //console.log(res);
+          if (chartContainerChasFlow && chartContainerChasFlow.current) {
+            let label = [];
+            let value = [];
+            res.data.forEach((data) => {
+              label.push(data.date);
+              value.push(data.valor);
+            });
+            if (newChartInstanceCashFlow) {
+              newChartInstanceCashFlow.destroy();
+            }
+            newChartInstanceCashFlow = new Chart(chartContainerChasFlow.current, {
+              type: "bar",
+              data: {
+                labels: label,
+                datasets: [
+                  {
+                    label: "Cash Flow",
+                    data: value,
+                    borderColor: colorDonuht[2],
+                    fill: true,
+                    backgroundColor : function(context) {
+                      const chart = context.chart;
+                      const {ctx, chartArea} = chart;
+              
+                      if (!chartArea) {
+                        // This case happens on initial chart load
+                        return;
+                      }
+                      return getGradient(ctx, chartArea, parseInt(context.raw) < 0 ? "danger" : "success");
+                    },
+                  },
+                ],
+              },
+              options: {
+                borderWidth: 1,
+                cutoutPercentage: 83,
+                title: "Ahorros",
+                width: 25,
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                  y: {
+                      ticks: {
+                          callback: function(value, index, values) {
+                            const label = formatter.format(value > 1000000 ? value / 1000000 : value > 1000 ? value / 1000 : value)
+                              return value > 1000000 ? label + 'M' : value > 1000 ? label + 'K' : label ;
+                          }
+                      }
+                  }
+              }
+              },
+            });
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    getData(idc, divi, props.dstart, props.dend);
+    // eslint-disable-next-line
+  }, [props.upload]);
+
+  return <canvas ref={chartContainerChasFlow} />;
+};
+
+export { ChartIncoming, ChartExpense, ChartSaving, ChartBalance, ChartCashFlow };
