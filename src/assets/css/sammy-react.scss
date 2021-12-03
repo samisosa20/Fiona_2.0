@@ -9,7 +9,8 @@
 }
 
 .card-scroll {
-  max-height: 300px;
+  min-height: 300px;
+  max-height: 425px;
   overflow-x: hidden;
 }
 

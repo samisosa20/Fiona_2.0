@@ -33,6 +33,7 @@ let newChartInstanceEgre;
 let newChartInstance;
 let newChartInstanceSaving;
 let newChartInstanceBalance;
+let newChartInstanceBalanceComparison;
 let newChartInstanceCashFlow;
 Chart.register(...registerables);
 
@@ -42,9 +43,8 @@ const formatter = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 2,
 });
 
-
 let width, height, gradient;
-function getGradient(ctx, chartArea, color = "primary") {
+function getGradient(ctx, chartArea, color) {
   const chartWidth = chartArea.right - chartArea.left;
   const chartHeight = chartArea.bottom - chartArea.top;
   if (!gradient || width !== chartWidth || height !== chartHeight) {
@@ -53,15 +53,15 @@ function getGradient(ctx, chartArea, color = "primary") {
     width = chartWidth;
     height = chartHeight;
     gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-    if(color === "primary"){
-      gradient.addColorStop(1, 'rgba(1,202,241,1)');
-      gradient.addColorStop(0, 'rgba(1,202,241, 0)');
-    } else if(color === "success") {
-      gradient.addColorStop(1, 'rgba(152,223,138,1)');
-      gradient.addColorStop(0, 'rgba(152,223,138, 0)');
+    if (color === "primary") {
+      gradient.addColorStop(1, "rgba(1,202,241,1)");
+      gradient.addColorStop(0, "rgba(1,202,241, 0)");
+    } else if (color === "success") {
+      gradient.addColorStop(1, "rgba(152,223,138,1)");
+      gradient.addColorStop(0, "rgba(152,223,138, 0)");
     } else if (color === "danger") {
-      gradient.addColorStop(1, 'rgba(255,79,112,1)');
-      gradient.addColorStop(0, 'rgba(255,79,112, 0)');
+      gradient.addColorStop(1, "rgba(255,79,112,1)");
+      gradient.addColorStop(0, "rgba(255,79,112, 0)");
     }
   }
 
@@ -257,13 +257,12 @@ const ChartBalance = (props) => {
           fecha_ini: Sdate,
           fecha_fin: Edate,
         }).then((res) => {
-          //console.log(res);
           if (chartContainerBalance && chartContainerBalance.current) {
             let label = [];
-            let value = [];
+            let valueBalance = [];
             res.data.forEach((data) => {
               label.push(data.date);
-              value.push(data.cumulative_sum);
+              valueBalance.push(data.cumulative_sum);
             });
             if (newChartInstanceBalance) {
               newChartInstanceBalance.destroy();
@@ -275,39 +274,60 @@ const ChartBalance = (props) => {
                 datasets: [
                   {
                     label: "Balance",
-                    data: value,
+                    data: valueBalance,
                     borderColor: colorDonuht[2],
                     fill: true,
-                    backgroundColor : function(context) {
+                    tension: 0.2,
+                    backgroundColor: function (context) {
                       const chart = context.chart;
-                      const {ctx, chartArea} = chart;
-              
+                      const { ctx, chartArea } = chart;
+
                       if (!chartArea) {
                         // This case happens on initial chart load
                         return;
                       }
-                      return getGradient(ctx, chartArea);
+                      return getGradient(ctx, chartArea, "primary");
                     },
                   },
                 ],
               },
               options: {
-                borderWidth: 1,
-                cutoutPercentage: 83,
-                title: "Ahorros",
+                borderWidth: 2,
+                title: "Balance per day",
                 width: 25,
                 responsive: true,
                 plugins: { legend: { display: false } },
                 scales: {
                   y: {
-                      ticks: {
-                          callback: function(value, index, values) {
-                            const label = formatter.format(value > 1000000 ? value / 1000000 : value > 1000 ? value / 1000 : value)
-                              return value > 1000000 ? label + 'M' : value > 1000 ? label + 'K' : label ;
-                          }
-                      }
-                  }
-              }
+                    ticks: {
+                      callback: function (value) {
+                        const label = formatter.format(
+                          value >= 1000000 || value <= -1000000
+                            ? value / 1000000
+                            : value >= 1000 || value <= -1000
+                            ? value / 1000
+                            : value
+                        );
+                        return value >= 1000000 || value <= -1000000
+                          ? label + "M"
+                          : value >= 1000 || value <= -1000
+                          ? label + "K"
+                          : label;
+                      },
+                      color: "white",
+                    },
+                  },
+                  x: {
+                    ticks: {
+                      callback: function (val, index) {
+                        return (index % 10 === 0 && index !== valueBalance.length - 2) || index === valueBalance.length - 1
+                          ? this.getLabelForValue(val)
+                          : ""; // Show each 10 data
+                      },
+                      color: "white",
+                    },
+                  },
+                },
               },
             });
           }
@@ -345,62 +365,71 @@ const ChartCashFlow = (props) => {
               label.push(data.date);
               value.push(data.valor);
             });
-            console.log(label)
             if (newChartInstanceCashFlow) {
               newChartInstanceCashFlow.destroy();
             }
-            newChartInstanceCashFlow = new Chart(chartContainerChasFlow.current, {
-              type: "bar",
-              data: {
-                labels: label,
-                datasets: [
-                  {
-                    label: "Cash Flow",
-                    data: value,
-                    borderColor: function(context) {
-                      const chart = context.chart;
-                      const {chartArea} = chart;
-              
-                      if (!chartArea) {
-                        // This case happens on initial chart load
-                        return;
-                      }
-                      return parseInt(context.raw) < 0 ? "#ff4f70" : "#98df8a";
+            newChartInstanceCashFlow = new Chart(
+              chartContainerChasFlow.current,
+              {
+                type: "bar",
+                data: {
+                  labels: label,
+                  datasets: [
+                    {
+                      label: "Cash Flow",
+                      data: value,
+                      borderColor: false,
+                      fill: true,
+                      backgroundColor: function (context) {
+                        const chart = context.chart;
+                        const { chartArea } = chart;
+
+                        if (!chartArea) {
+                          // This case happens on initial chart load
+                          return;
+                        }
+                        return parseInt(context.raw) < 0
+                          ? colorDonuht[1]
+                          : colorDonuht[6];
+                        //return getGradient(ctx, chartArea, parseInt(context.raw) < 0 ? "danger" : "success");
+                      },
                     },
-                    fill: true,
-                    backgroundColor : function(context) {
-                      const chart = context.chart;
-                      const { chartArea} = chart;
-              
-                      if (!chartArea) {
-                        // This case happens on initial chart load
-                        return;
-                      }
-                      return parseInt(context.raw) < 0 ? "#ff4f70" : "#98df8a";
-                      //return getGradient(ctx, chartArea, parseInt(context.raw) < 0 ? "danger" : "success");
+                  ],
+                },
+                options: {
+                  title: "Cash Flow",
+                  width: 25,
+                  responsive: true,
+                  plugins: { legend: { display: false } },
+                  scales: {
+                    y: {
+                      ticks: {
+                        callback: function (value) {
+                          const label = formatter.format(
+                            value >= 1000000 || value <= -1000000
+                              ? value / 1000000
+                              : value >= 1000 || value <= -1000
+                              ? value / 1000
+                              : value
+                          );
+                          return value >= 1000000 || value <= -1000000
+                            ? label + "M"
+                            : value >= 1000 || value <= -1000
+                            ? label + "K"
+                            : label;
+                        },
+                        color: "white",
+                      },
+                    },
+                    x: {
+                      ticks: {
+                        color: "white",
+                      },
                     },
                   },
-                ],
-              },
-              options: {
-                borderWidth: 1,
-                cutoutPercentage: 83,
-                title: "Ahorros",
-                width: 25,
-                responsive: true,
-                plugins: { legend: { display: false } },
-                scales: {
-                  y: {
-                      ticks: {
-                          callback: function(value, index, values) {
-                            const label = formatter.format(value >= 1000000 || value <= -1000000 ? value / 1000000 : value >= 1000 || value <= -1000 ? value / 1000 : value)
-                              return value >= 1000000 || value <= -1000000 ? label + 'M' : value >= 1000 || value <= -1000 ? label + 'K' : label ;
-                          }
-                      }
-                  }
+                },
               }
-              },
-            });
+            );
           }
         });
       } catch (e) {
@@ -414,4 +443,136 @@ const ChartCashFlow = (props) => {
   return <canvas ref={chartContainerChasFlow} />;
 };
 
-export { ChartIncoming, ChartExpense, ChartSaving, ChartBalance, ChartCashFlow };
+const ChartBalanceComparison = (props) => {
+  const chartContainerBalanceComparison = useRef(null);
+
+  // grafico de Egresos
+  useEffect(() => {
+    async function getData(idc, divi, Sdate, Edate) {
+      try {
+        await API.post("report", {
+          id: 19,
+          idc: idc,
+          divi: divi,
+          fecha_ini: Sdate,
+          fecha_fin: Edate,
+        }).then((res) => {
+          console.log(res);
+          if (
+            chartContainerBalanceComparison &&
+            chartContainerBalanceComparison.current
+          ) {
+            let label = [],
+              valueCurrent = [],
+              valueLast = [],
+              valueYear = [];
+            res.data.forEach((data) => {
+              label.push(data.date);
+              valueCurrent.push(data.valueThis);
+              valueYear.push(data.valueLast);
+              valueLast.push(data.valuePrev);
+            });
+            if (newChartInstanceBalanceComparison) {
+              newChartInstanceBalanceComparison.destroy();
+            }
+            newChartInstanceBalanceComparison = new Chart(
+              chartContainerBalanceComparison.current,
+              {
+                type: "line",
+                data: {
+                  labels: label,
+                  datasets: [
+                    {
+                      label: "Current period",
+                      data: valueCurrent,
+                      borderColor: colorDonuht[2],
+                      fill: true,
+                      backgroundColor: colorDonuht[2] + "0C",
+                      tension: 0.2,
+                    },
+                    {
+                      label: "Last Period",
+                      data: valueLast,
+                      borderColor: colorDonuht[1],
+                      fill: true,
+                      backgroundColor: colorDonuht[1] + "0C",
+                      tension: 0.2,
+                    },
+                    {
+                      label: "Same period last year",
+                      data: valueYear,
+                      borderColor: colorDonuht[6],
+                      fill: true,
+                      backgroundColor: colorDonuht[6] + "0C",
+                      tension: 0.2,
+                    },
+                  ],
+                },
+                options: {
+                  borderWidth: 1.5,
+                  title: "Balance comparison",
+                  width: 25,
+                  responsive: true,
+                  plugins: {
+                    legend: {
+                      display: true,
+                      labels: {
+                        color: "#fff",
+                      },
+                    },
+                  },
+                  scales: {
+                    y: {
+                      ticks: {
+                        callback: function (value) {
+                          const label = formatter.format(
+                            value >= 1000000 || value <= -1000000
+                              ? value / 1000000
+                              : value >= 1000 || value <= -1000
+                              ? value / 1000
+                              : value
+                          );
+                          return value >= 1000000 || value <= -1000000
+                            ? label + "M"
+                            : value >= 1000 || value <= -1000
+                            ? label + "K"
+                            : label;
+                        },
+                        color: "white",
+                      },
+                    },
+                    x: {
+                      ticks: {
+                        callback: function (val, index) {
+                          return (index % 10 === 0 && index !== valueCurrent.length - 2) || index === valueCurrent.length - 1
+                          ? this.getLabelForValue(val)
+                          : ""; // Show each 10 data
+                        },
+                        color: "white",
+                      },
+                    },
+                  },
+                },
+              }
+            );
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    getData(idc, divi, props.dstart, props.dend);
+    // eslint-disable-next-line
+  }, [props.upload]);
+
+  return <canvas ref={chartContainerBalanceComparison} />;
+};
+
+export {
+  ChartIncoming,
+  ChartExpense,
+  ChartSaving,
+  ChartBalance,
+  ChartCashFlow,
+  ChartBalanceComparison,
+};
