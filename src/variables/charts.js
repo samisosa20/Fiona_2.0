@@ -297,6 +297,11 @@ const ChartBalance = (props) => {
                 width: 25,
                 responsive: true,
                 plugins: { legend: { display: false } },
+                elements: {
+                  point: {
+                    radius: 0,
+                  },
+                },
                 scales: {
                   y: {
                     ticks: {
@@ -320,7 +325,9 @@ const ChartBalance = (props) => {
                   x: {
                     ticks: {
                       callback: function (val, index) {
-                        return (index % 10 === 0 && index !== valueBalance.length - 2) || index === valueBalance.length - 1
+                        return (index % 10 === 0 &&
+                          index !== valueBalance.length - 2) ||
+                          index === valueBalance.length - 1
                           ? this.getLabelForValue(val)
                           : ""; // Show each 10 data
                       },
@@ -513,9 +520,14 @@ const ChartBalanceComparison = (props) => {
                   title: "Balance comparison",
                   width: 25,
                   responsive: true,
+                  elements: {
+                    point: {
+                      radius: 0,
+                    },
+                  },
                   plugins: {
                     legend: {
-                      display: true,
+                      display: window.innerWidth >= 600,
                       labels: {
                         color: "#fff",
                       },
@@ -544,9 +556,11 @@ const ChartBalanceComparison = (props) => {
                     x: {
                       ticks: {
                         callback: function (val, index) {
-                          return (index % 10 === 0 && index !== valueCurrent.length - 2) || index === valueCurrent.length - 1
-                          ? this.getLabelForValue(val)
-                          : ""; // Show each 10 data
+                          return (index % 10 === 0 &&
+                            index !== valueCurrent.length - 2) ||
+                            index === valueCurrent.length - 1
+                            ? this.getLabelForValue(val)
+                            : ""; // Show each 10 data
                         },
                         color: "white",
                       },

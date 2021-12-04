@@ -122,7 +122,7 @@ class Sidebar extends React.Component {
     return (
       <Navbar
         className="navbar-vertical fixed-left navbar-light bg-white"
-        expand="md"
+        expand="lg"
         id="sidenav-main"
       >
         <Container fluid>
