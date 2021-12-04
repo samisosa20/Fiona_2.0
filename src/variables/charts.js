@@ -453,7 +453,6 @@ const ChartCashFlow = (props) => {
 const ChartBalanceComparison = (props) => {
   const chartContainerBalanceComparison = useRef(null);
 
-  // grafico de Egresos
   useEffect(() => {
     async function getData(idc, divi, Sdate, Edate) {
       try {
@@ -464,7 +463,6 @@ const ChartBalanceComparison = (props) => {
           fecha_ini: Sdate,
           fecha_fin: Edate,
         }).then((res) => {
-          console.log(res);
           if (
             chartContainerBalanceComparison &&
             chartContainerBalanceComparison.current
@@ -519,7 +517,7 @@ const ChartBalanceComparison = (props) => {
                   borderWidth: 1.5,
                   title: "Balance comparison",
                   width: 25,
-                  responsive: true,
+                  responsive: window.innerWidth >= 500,
                   elements: {
                     point: {
                       radius: 0,
@@ -527,7 +525,7 @@ const ChartBalanceComparison = (props) => {
                   },
                   plugins: {
                     legend: {
-                      display: window.innerWidth >= 600,
+                      display: window.innerWidth >= 500,
                       labels: {
                         color: "#fff",
                       },
@@ -577,9 +575,9 @@ const ChartBalanceComparison = (props) => {
     }
     getData(idc, divi, props.dstart, props.dend);
     // eslint-disable-next-line
-  }, [props.upload]);
+  }, [props.upload, props.resize]);
 
-  return <canvas ref={chartContainerBalanceComparison} />;
+  return <canvas ref={chartContainerBalanceComparison} style={{minHeight: '200px', width: '95%'}}/>;
 };
 
 export {

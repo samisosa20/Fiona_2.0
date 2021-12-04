@@ -123,7 +123,7 @@ function ViewBudget() {
         hidden: true,
       });
     } else {
-      setDate({ ...stateDate, Sdate: "ola", hidden: false });
+      setDate({ ...stateDate, Sdate: "", hidden: false });
     }
   }
 

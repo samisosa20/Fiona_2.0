@@ -54,6 +54,7 @@ function Report() {
   let idc = localStorage.getItem("IdUser");
   let divi = localStorage.getItem("Divisa");
   const [stateSearch, setSearch] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   /* Declaracion de estados de los modals */
   const [ShowModalMove, setShowModalMove] = useState(false);
 
@@ -243,6 +244,12 @@ function Report() {
     // eslint-disable-next-line
   }, [stateSearch]);
 
+  useEffect(()=>{
+    window.addEventListener('resize', ()=>{
+      setWindowWidth(window.innerWidth)
+    })
+  }, [])
+
   // Funcion para cambiar de estado de los modals
   const ModShowModal = () => setShowModalMove(!ShowModalMove);
   const consultdate = () => {
@@ -400,7 +407,7 @@ function Report() {
           </Col>
         </Row>
         <Row className="mb-4">
-          <Col className="mb-5 mb-xl-0" xl="4">
+          <Col className="mb-5 mb-xl-0" sm="4" xl="4">
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -427,7 +434,7 @@ function Report() {
               </CardBody>
             </Card>
           </Col>
-          <Col className="mb-5 mb-xl-0" xl="4">
+          <Col className="mb-5 mb-xl-0" sm="4" xl="4">
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -454,7 +461,7 @@ function Report() {
               </CardBody>
             </Card>
           </Col>
-          <Col className="mb-5 mb-xl-0" xl="4">
+          <Col className="mb-5 mb-xl-0" sm="4" xl="4">
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -483,7 +490,7 @@ function Report() {
           </Col>
         </Row>
         <Row className="mb-4">
-          <Col className="mb-5 mb-xl-0" xl="6">
+          <Col className="mb-5 mb-xl-0" sm="12" lg="6">
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -510,7 +517,7 @@ function Report() {
               </CardBody>
             </Card>
           </Col>
-          <Col className="mb-5 mb-xl-0" xl="6">
+          <Col className="mb-5 mb-xl-0" sm="12" lg="6">
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -539,7 +546,7 @@ function Report() {
           </Col>
         </Row>
         <Row className="mb-4">
-          <Col className="mb-5 mb-xl-0" xl="8">
+          <Col className="mb-5 mb-xl-0" sm="12" xl="8">
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -558,6 +565,7 @@ function Report() {
                       dstart={stateDate.Sdate}
                       dend={stateDate.Fdate}
                       upload={stateSearch}
+                      resize={windowWidth}
                     />
                   ) : (
                     ""
@@ -566,7 +574,7 @@ function Report() {
               </CardBody>
             </Card>
           </Col>
-          <Col className="mb-5 mb-xl-0" xl="4">
+          <Col className="mb-5 mb-xl-0 d-none d-lg-block" sm="12" xl="4">
             <Card className="bg-gradient-default shadow h-100">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -623,7 +631,62 @@ function Report() {
           </Col>
         </Row>
         <Row className="mb-4">
-          <Col className="mb-5 mb-xl-0" xl="4">
+        <Col className="mb-5 mb-xl-0 d-lg-none" sm="6" xl="4">
+            <Card className="bg-gradient-default shadow h-100">
+              <CardHeader className="bg-transparent">
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h6 className="text-uppercase text-light ls-1 mb-1">
+                      Resumen by Account
+                    </h6>
+                  </div>
+                </Row>
+              </CardHeader>
+              <CardBody>
+                <div className="scroll-none card-scroll">
+                  {stateData.identify === 1 && stateData.ResumAco
+                    ? stateData.ResumAco.map((data, index) => (
+                        <Card
+                          className="card-stats mb-1 shadow cursor-pointer"
+                          key={index}
+                          onClick={(e) => OpenModalMove(e, 9, data.nombre, "")}
+                        >
+                          <CardBody>
+                            <Row>
+                              <div className="col">
+                                <CardTitle
+                                  tag="h5"
+                                  className="text-uppercase text-muted mb-0"
+                                >
+                                  {data.nombre}
+                                </CardTitle>
+                                <span className="h2 font-weight-bold mb-0 row ml-2">
+                                  <p className="text-dark mr-2 mb-0">
+                                    Incomes:{" "}
+                                  </p>
+                                  <p className="text-success mb-0">
+                                    {data.ingreso}
+                                  </p>
+                                </span>
+                                <span className="h2 font-weight-bold mb-0 row ml-2">
+                                  <p className="text-dark mr-2 mb-0">
+                                    Expenses:{" "}
+                                  </p>
+                                  <p className="text-danger mb-0">
+                                    {data.egreso}
+                                  </p>
+                                </span>
+                              </div>
+                            </Row>
+                          </CardBody>
+                        </Card>
+                      ))
+                    : "Not found Data"}
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col className="mb-5 mb-xl-0" sm="6" xl="4">
             <Card className="bg-gradient-default shadow h-100">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -667,7 +730,7 @@ function Report() {
               </CardBody>
             </Card>
           </Col>
-          <Col className="mb-5 mb-xl-0" xl="4">
+          <Col className="mb-5 mb-xl-0" sm="6" xl="4">
             <Card className="bg-gradient-default shadow h-100">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -764,7 +827,7 @@ function Report() {
               </CardBody>
             </Card>
           </Col>
-          <Col className="mb-5 mb-xl-0" xl="4">
+          <Col className="mb-5 mb-xl-0" sm="6" xl="4">
             <Card className="bg-gradient-default shadow h-100">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
