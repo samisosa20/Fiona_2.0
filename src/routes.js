@@ -5,6 +5,7 @@ import ReportBudget from "views/examples/Report_budget";
 import NewBudget from "views/examples/New_budget";
 import Catego from "views/examples/Catego.js";
 import Event from "views/examples/Event.js";
+import Planned from "views/examples/Planned.js";
 import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Forgot from "views/examples/Forgot.js";
@@ -83,6 +84,14 @@ var routes = [
     name: "Events",
     icon: "ni ni-time-alarm text-green",
     component: Event,
+    layout: "/admin",
+    sidebar: true,
+  },
+  {
+    path: "/planned",
+    name: "Planned Payments",
+    icon: "fas fa-redo-alt text-blue",
+    component: Planned,
     layout: "/admin",
     sidebar: true,
   },
