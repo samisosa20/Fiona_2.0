@@ -52,6 +52,12 @@ const Modaldelete = props => {
         idu: idc,
         id_data: state.id_data
       };
+    } else if (action === "planned") {
+      data = {
+        id: 7,
+        idu: idc,
+        id_data: state.id_data
+      };
     } else {
       data = { id: 5, idu: idc, year: year, category: state.number };
     }

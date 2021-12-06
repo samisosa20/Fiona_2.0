@@ -128,13 +128,23 @@ const Catego = () => {
     }
   };
 
-  const handleContextMenu = (event) => {
+  const handleContextMenu = (event, data) => {
     event.preventDefault();
     setContextMenu(
       contextMenu === null
         ? {
             mouseX: event.clientX - 2,
             mouseY: event.clientY - 4,
+            onClickEdit: (e) =>
+              OpenModalEdit(
+                e,
+                data.id,
+                data.categoria,
+                data.descripcion,
+                data.grupo,
+                data.sub_categoria
+              ),
+            onClickDelete: (e) => OpenModalDelete(e, data.id, data.categoria),
           }
         : null
     );
@@ -155,9 +165,9 @@ const Catego = () => {
                 onClick={() => setrefreshData(!refreshData)}
               >
                 <CardBody className="card-body">
-                      <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted m-0">
-                      <i className="fas fa-arrow-left mr-2"></i> Back
-                      </h3>
+                  <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted m-0">
+                    <i className="fas fa-arrow-left mr-2"></i> Back
+                  </h3>
                 </CardBody>
               </Link>
             </Card>
@@ -173,7 +183,7 @@ const Catego = () => {
                   <Link
                     to={"/admin/catego#" + data.id}
                     onClick={() => setrefreshData(!refreshData)}
-                    onContextMenu={handleContextMenu}
+                    onContextMenu={(e) => handleContextMenu(e, data)}
                   >
                     <CardBody className="card-body">
                       <h3 className="card-title col-md-9 col-lg-9 col-xl-9 m-0">
@@ -182,31 +192,18 @@ const Catego = () => {
                     </CardBody>
                   </Link>
                   <div
-                    onClick={handleContextMenu}
+                    onClick={(e) => handleContextMenu(e, data)}
                     className="position-absolute right-4 top-4"
                   >
                     <i className="fa fa-ellipsis-v"></i>
                   </div>
-                  <ContextMenuCustom
-                    contextMenu={contextMenu}
-                    handleClose={handleClose}
-                    onClickEdit={(e) =>
-                      OpenModalEdit(
-                        e,
-                        data.id,
-                        data.categoria,
-                        data.descripcion,
-                        data.grupo,
-                        data.sub_categoria
-                      )
-                    }
-                    onClickDelete={(e) =>
-                      OpenModalDelete(e, data.id, data.categoria)
-                    }
-                  />
                 </Card>
               ))
             : ""}
+          <ContextMenuCustom
+            contextMenu={contextMenu}
+            handleClose={handleClose}
+          />
           <Card
             className="shadow col-md-5 mr-2 ml-2 mb-3 arrow c-categorie"
             onClick={(e) => OpenModalNew(e)}

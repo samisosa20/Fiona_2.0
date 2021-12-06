@@ -15,13 +15,24 @@ const AcountAdd = (props) => {
     OpenModalShare,
   } = props;
   const idc = localStorage.getItem("IdUser");
-  const handleContextMenu = (event) => {
+  const handleContextMenu = (event, data) => {
     event.preventDefault();
     setContextMenu(
       contextMenu === null
         ? {
             mouseX: event.clientX - 2,
             mouseY: event.clientY - 4,
+            onClickEdit: (event) => {OpenModalEdit(
+              event,
+              data.id,
+              data.nombre,
+              data.descripcion,
+              data.divisa,
+              data.monto_inicial,
+              data.cuenta_ahorro
+            )},
+            onClickDelete: (e) => {OpenModalDelete(e, data.id, data.nombre)},
+            onClickShare: (e) => OpenModalShare(e, data.id, data.nombre)
           }
         : null
     );
@@ -44,7 +55,7 @@ const AcountAdd = (props) => {
                 >
                   <CardHeader
                     className="border-0 rounded"
-                    onContextMenu={handleContextMenu}
+                    onContextMenu={(e) => handleContextMenu(e, data)}
                   >
                     <Row>
                       <div className="col p-0">
@@ -76,34 +87,19 @@ const AcountAdd = (props) => {
                   </CardHeader>
                 </Link>
                 <div
-                  onClick={handleContextMenu}
+                  onClick={(e) => handleContextMenu(e, data)}
                   className="position-absolute right-4 top-4"
                 >
                   <i className="fa fa-ellipsis-v"></i>
                 </div>
 
-                <ContextMenuCustom
-                  contextMenu={contextMenu}
-                  handleClose={handleClose}
-                  onClickShare={(e) => OpenModalShare(e, data.id, data.nombre)}
-                  onClickEdit={(e) =>
-                    OpenModalEdit(
-                      e,
-                      data.id,
-                      data.nombre,
-                      data.descripcion,
-                      data.divisa,
-                      data.monto_inicial,
-                      data.cuenta_ahorro
-                    )
-                  }
-                  onClickDelete={(e) =>
-                    OpenModalDelete(e, data.id, data.nombre)
-                  }
-                />
               </Card>
             ))
-          : ""}
+            : ""}
+            <ContextMenuCustom
+              contextMenu={contextMenu}
+              handleClose={handleClose}
+            />
         <Card
           className="col-12 px-2 col-md-6 mb-3 cursor-pointer hover:shadow"
           onClick={(e) => OpenModalNew(e)}
