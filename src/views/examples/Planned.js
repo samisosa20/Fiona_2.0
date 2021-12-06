@@ -9,7 +9,7 @@ import {
   FormGroup,
   Label,
   Button,
-  Input
+  Input,
 } from "reactstrap";
 import { Form, Modal, InputGroup } from "react-bootstrap";
 
@@ -22,7 +22,7 @@ import "../../assets/styles/components/Catego.scss";
 
 import Modaldelete from "../../components/Modals/Delete";
 import Alert from "../../components/Alert";
-import Modaledit from "../../components/Modals/EditEvent";
+import Modaledit from "../../components/Modals/EditPlanned";
 import ContextMenuCustom from "../../components/ContextMenu";
 
 const Catego = () => {
@@ -34,36 +34,49 @@ const Catego = () => {
   const [stateAcount, setAcount] = useState([]);
   // envio de informacion
   const [stateform, setform] = useState({
-    catego: "",
+    category: "",
     descrip: "",
     badge: "COP",
-    monto: 0,
-    frequency: '0',
-    recurrency: '',
+    value: 0,
+    frequency: "0",
+    recurrency: "",
     startDate: null,
-    endDate: null
+    endDate: null,
   });
   // edicion de informacion
   const [stateformEdit, setformEdit] = useState({
-    edit_namevent: "",
-    prevName: "",
-    edit_endingdate: "",
+    catego: "",
+    description: "",
+    account: "",
+    badge: "COP",
+    monto: 0,
+    frequency: "0",
+    recurrency: "",
+    startDate: null,
+    endDate: null,
     id_data: 0,
   });
-  // edicion de informacion
-  const [listMove, setlistMove] = useState({});
+
+  const translateRecu = {
+    "0.70": "Weekly",
+    "0.15": "Biweekly",
+    "1.00": "Monthly",
+    "2.00": "Bimonthly",
+    "3.00": "Trimestraly",
+    "4.00": "Quarterly",
+    "6.00": "Biannual",
+    "12.00": "Yearly",
+  };
 
   /* Declaracion de estados de los modals */
   const [showNewMod, setshowNewMod] = useState(false);
   const [showDelMod, setshowDelMod] = useState(false);
   const [showEdiMod, setshowEdiMod] = useState(false);
-  const [showListMove, setShowListMove] = useState(false);
   const [stateCatego, setCatego] = useState([]);
   const [stateAlert, setSateAlert] = useState({ visible: false, code: 200 });
 
   // Funcion para cambiar de estado de los modals
   const ModNewPlannedSate = () => setshowNewMod(!showNewMod);
-  const ModListMove = () => setShowListMove(!showListMove);
   const ModDelCateSate = () => setshowDelMod(!showDelMod);
   const ModEdiEventSate = () => setshowEdiMod(!showEdiMod);
 
@@ -76,16 +89,20 @@ const Catego = () => {
       //console.log(response.data);
       setState(response.data);
     });
-    setform({...stateform, startDate: `${new Date().getFullYear()}-${`${
-      new Date().getMonth() + 1
-    }`.padStart(2, 0)}-${`${new Date().getDate()}`.padStart(
-      2,
-      0
-    )}`})
+    setform({
+      ...stateform,
+      startDate: `${new Date().getFullYear()}-${`${
+        new Date().getMonth() + 1
+      }`.padStart(2, 0)}-${`${new Date().getDate()}`.padStart(2, 0)}`,
+    });
   }, [refreshData]);
 
   const handleChange = (event) => {
-    setform({ ...stateform, [event.target.name]: event.target.value });
+    if(event.target.name === 'repeat' && event.target.value === '0') {
+      setform({ ...stateform, endDate: '', [event.target.name]: event.target.value });
+    } else {
+      setform({ ...stateform, [event.target.name]: event.target.value });
+    }
   };
   const handleChangeEdit = (event) => {
     setformEdit({ ...stateformEdit, [event.target.name]: event.target.value });
@@ -98,12 +115,12 @@ const Catego = () => {
       .all([
         API.post(`acount`, {
           id: 5,
-          idc: idc
+          idc: idc,
         }),
         API.post(`acount`, {
           id: 2,
-          idc: idc
-        })
+          idc: idc,
+        }),
       ])
       .then(
         axios.spread((firstResponse, secondResponse) => {
@@ -113,42 +130,56 @@ const Catego = () => {
       );
     ModNewPlannedSate();
   };
-  const OpenModalDelete = (e, id, catego) => {
+  const OpenModalDelete = (e) => {
     e.preventDefault();
-    setformEdit({
-      edit_categor: catego,
-      edit_descrip: stateformEdit.edit_descrip,
-      edit_group: stateformEdit.edit_group,
-      edit_include: stateformEdit.edit_include,
-      id_data: id,
-    });
     ModDelCateSate();
   };
-  const OpenModalEdit = (e, id, name, endDate) => {
+  const OpenModalEdit = (e, data) => {
     e.preventDefault();
-    setformEdit({
-      edit_namevent: name,
-      prevName: name,
-      edit_endingdate: endDate,
-      id_data: id,
-    });
-    ModEdiEventSate();
-  };
-  const openListModal = (event) => {
     let idc = localStorage.getItem("IdUser");
-    API.post("acount", {
-      id: 13,
-      idc: idc,
-      event: event,
-    }).then((response) => {
-      ModListMove();
-      setlistMove(response.data);
-      //console.log(response.data);
-    });
+    axios
+      .all([
+        API.post(`acount`, {
+          id: 5,
+          idc: idc,
+        }),
+        API.post(`acount`, {
+          id: 2,
+          idc: idc,
+        }),
+      ])
+      .then(
+        axios.spread((firstResponse, secondResponse) => {
+          setCatego(firstResponse.data);
+          setAcount(secondResponse.data);
+          setformEdit({
+            category: data.category,
+            account: data.account,
+            description: data.description,
+            badge: data.badge,
+            value: data.value < 0 ? data.value * -1 : data.value,
+            frequency: data.fequency,
+            recurrency: data.recurrency,
+            startDate: data.startDate,
+            endDate: data.endDate,
+            categoryName: data.categoryName,
+            accountName: data.accountName,
+            signal: data.value < 0 ? "-" : "+",
+            repeat: stateformEdit.endDate === '0000-00-00' ? 0 : 1,
+            id_data: data.id,
+          });
+          ModEdiEventSate();
+        })
+      );
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (stateform.startDate === "" || stateform.account === "" || stateform.value === "" || stateform.category === "") {
+    if (
+      stateform.startDate === "" ||
+      stateform.account === "" ||
+      stateform.value === "" ||
+      stateform.category === ""
+    ) {
       setSateAlert({ visible: true, code: 1 });
       setTimeout(() => {
         setSateAlert({ visible: false, code: 0 });
@@ -165,11 +196,14 @@ const Catego = () => {
         frequency: stateform.frequency,
         recurrency: stateform.recurrency,
         endDate: stateform.endDate,
+        description: stateform.description,
       }).then((response) => {
         //alert(response.data);
         ModNewPlannedSate();
         setrefreshData(!refreshData);
+        setSignal({ Signal: "+" });
         setSateAlert({ visible: true, code: response.data });
+        setform({frequency: '0', repeat: '0'})
         setTimeout(() => {
           setSateAlert({ visible: false, code: 0 });
         }, 2000);
@@ -177,13 +211,17 @@ const Catego = () => {
     }
   };
 
-  const handleContextMenu = (event) => {
+  const handleContextMenu = (event, data) => {
     event.preventDefault();
+
     setContextMenu(
       contextMenu === null
         ? {
             mouseX: event.clientX - 2,
             mouseY: event.clientY - 4,
+            onClickEdit: (event) => {
+              OpenModalEdit(event, data);
+            },
           }
         : null
     );
@@ -191,25 +229,25 @@ const Catego = () => {
   const handleClose = () => {
     setContextMenu(null);
   };
-  const ChangeSignal = event => {
+  const ChangeSignal = (event) => {
     setSignal({ Signal: event.target.value !== "+" ? "+" : "-" });
-    if (event.target.value !== "+") {
-      event.target.className = "btn btn-outline-success";
-    } else {
-      event.target.className = "btn btn-outline-danger";
-    }
   };
   const VerifySignal = (event, idSigno) => {
-    let signo = document.getElementById(idSigno);
-
     if (event.target.value < 0) {
       if (idSigno !== "") {
         setSignal({ Signal: "-" });
-        signo.className = "btn btn-outline-danger";
       }
       event.target.value = event.target.value * -1;
+      setform({ ...stateform, [event.target.name]: event.target.value * -1 });
+    } else {
+      setform({
+        ...stateform,
+        [event.target.name]:
+          stateSignal.Signal === "+"
+            ? event.target.value
+            : event.target.value * -1,
+      });
     }
-    setform({ ...stateform, [event.target.name]: event.target.value });
   };
 
   return (
@@ -220,61 +258,70 @@ const Catego = () => {
           {state
             ? state.map((data, index) => (
                 <Card
-                  className="shadow col-md-12 col-lg-5 mr-2 ml-2 mb-3 arrow c-categorie"
+                  className="shadow col-md-12 col-lg-5 mr-2 ml-2 mb-3 arrow c-categorie px-0"
                   key={index}
-                  onContextMenu={handleContextMenu}
+                  onContextMenu={(e) => handleContextMenu(e, data)}
                 >
                   <CardBody
-                    className="py-3 rounded"
-                    onClick={() => openListModal(data.id)}
+                    className="py-3 rounded px-0"
+                    onClick={(e) => OpenModalEdit(e, data)}
                   >
-                    <div className="col-10 mt-1">
+                    <div className="col-10 mt-1 px-0">
                       <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-dark m-0">
-                        {data.nombre}{" "}
-                        {data.activo === "0" && (
+                        {data.categoryName}
+                        {" - "}
+                        {data.accountName}
+                        {data.active === "0" && (
                           <span className="text-gray text-sm float-right">
                             inactive
                           </span>
                         )}
                       </h3>
-                      <h4 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted m-0">
-                        Spent{" "}
-                        <span className="text-dark float-right">
-                          <NumberFormat
-                            className={
-                              data.valor >= 0 ? `text-success` : `text-danger`
-                            }
-                            value={data.valor ? data.valor : 0}
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            prefix={"$"}
-                          />
-                        </span>
-                      </h4>
+                      <div className="row px-3">
+                        <h4 className="card-title col-12 col-md-6 col-xl-6 text-muted m-0">
+                          Amount:{" "}
+                          <span className="text-dark ml-1">
+                            <NumberFormat
+                              className={
+                                data.value >= 0 ? `text-success` : `text-danger`
+                              }
+                              value={data.value ? data.value : 0}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={"$"}
+                            />
+                          </span>
+                        </h4>
+                        <h4 className="card-title col-12 col-md-6 col-xl-6 text-muted m-0">
+                          Frequency:{" "}
+                          <span className="text-dark ml-1">
+                            {data.fequency == "0"
+                              ? "One time"
+                              : translateRecu[data.recurrency]}
+                          </span>
+                        </h4>
+                      </div>
                     </div>
                   </CardBody>
                   <div
-                    onClick={handleContextMenu}
+                    onClick={(e) => handleContextMenu(e, data)}
                     className="position-absolute right-4 top-4"
                   >
                     <i className="fa fa-ellipsis-v"></i>
                   </div>
-                  <ContextMenuCustom
-                    contextMenu={contextMenu}
-                    handleClose={handleClose}
-                    onClickEdit={(e) =>
-                      OpenModalEdit(e, data.id, data.nombre, data.fecha_fin)
-                    }
-                  />
                 </Card>
               ))
             : ""}
+          <ContextMenuCustom
+            contextMenu={contextMenu}
+            handleClose={handleClose}
+          />
           <Card
-            className="shadow col-md-12 col-lg-5 mr-2 ml-2 mb-3 arrow c-categorie"
+            className="shadow col-md-12 col-lg-5 mr-2 ml-2 mb-3 arrow c-categorie px-0"
             onClick={(e) => OpenModalNew(e)}
           >
-            <CardBody className="rounded">
-              <div className="col">
+            <CardBody className="rounded px-0">
+              <div className="col px-0">
                 <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted m-0">
                   <i className="fas fa-plus mr-2"></i>New Planned Payment
                 </h3>
@@ -300,7 +347,11 @@ const Catego = () => {
                             value={stateSignal.Signal}
                             type="button"
                             id="signo_move"
-                            className="btn btn-outline-success"
+                            className={`btn ${
+                              stateSignal.Signal === "+"
+                                ? "btn-outline-success"
+                                : "btn-outline-danger"
+                            }`}
                             onClick={ChangeSignal}
                           >
                             {stateSignal.Signal}
@@ -309,8 +360,8 @@ const Catego = () => {
                         <Form.Control
                           pattern="[0-9]{0,5}"
                           type="number"
-                          name="monto"
-                          id="monto"
+                          name="value"
+                          id="value"
                           step={0.01}
                           aria-describedby="SignalAppend"
                           required
@@ -335,7 +386,7 @@ const Catego = () => {
                   <Label>Acount</Label>
                   <Form.Control
                     as="select"
-                    name="acount"
+                    name="account"
                     onChange={handleChange}
                   >
                     <option></option>
@@ -358,7 +409,7 @@ const Catego = () => {
                   <Label>Category</Label>
                   <Form.Control
                     as="select"
-                    name="catego"
+                    name="category"
                     onChange={handleChange}
                   >
                     <option></option>
@@ -389,7 +440,7 @@ const Catego = () => {
                   <Label>Description</Label>
                   <Form.Control
                     as="textarea"
-                    name="descrip"
+                    name="description"
                     rows="3"
                     onChange={handleChange}
                   ></Form.Control>
@@ -406,7 +457,9 @@ const Catego = () => {
                   </Form.Control>
                 </FormGroup>
                 <FormGroup>
-                  <Label>{stateform.frequency === "0" ? 'Date' : 'Start date'}</Label>
+                  <Label>
+                    {stateform.frequency === "0" ? "Date" : "Start date"}
+                  </Label>
                   <Input
                     type="date"
                     name="startDate"
@@ -422,7 +475,9 @@ const Catego = () => {
                     onChange={handleChange}
                     defaultValue={stateform.recurrency}
                   >
-                    <option value="" hidden>Set recurrence</option>
+                    <option value="" hidden>
+                      Set recurrence
+                    </option>
                     <option value="0.1">Daily</option>
                     <option value="0.7">Weekly</option>
                     <option value="0.15">Biweekly</option>
@@ -435,12 +490,19 @@ const Catego = () => {
                   </Form.Control>
                 </FormGroup>
                 <FormGroup hidden={stateform.frequency === "0"}>
-                  <Label>End Date</Label>
-                  <Input
-                    type="date"
-                    name="endDate"
+                  <Label>Repeat</Label>
+                  <Form.Control
+                    as="select"
+                    name="repeat"
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="0">Forever</option>
+                    <option value="1">Until a date</option>
+                  </Form.Control>
+                </FormGroup>
+                <FormGroup hidden={!stateform.repeat || stateform.repeat === "0"}>
+                  <Label>End Date</Label>
+                  <Input type="date" name="endDate" onChange={handleChange} />
                 </FormGroup>
               </Modal.Body>
               <Modal.Footer>
@@ -454,11 +516,13 @@ const Catego = () => {
             </Form>
           </Modal>
           <Modaldelete
-            action="event"
-            title="Delete event"
+            action="planned"
+            title="Delete planned payment"
             message={
-              "Are you sure delete the event " +
-              stateformEdit.edit_categor +
+              "Are you sure delete the planned payment " +
+              stateformEdit.categoryName +
+              " - " +
+              stateformEdit.accountName +
               "?"
             }
             refreshData={refreshData}
@@ -469,10 +533,12 @@ const Catego = () => {
             setSateAlert={setSateAlert}
           />
           <Modaledit
-            title="Edit event"
+            title="Edit planned payment"
             refreshData={refreshData}
             setrefreshData={setrefreshData}
             stateformEdit={stateformEdit}
+            stateAcount={stateAcount}
+            stateCatego={stateCatego}
             setformEdit={setformEdit}
             showEdiMod={showEdiMod}
             setshowEdiMod={setshowEdiMod}
@@ -480,36 +546,6 @@ const Catego = () => {
             handle={handleChangeEdit}
             OpenModalDelete={OpenModalDelete}
           />
-          <Modal show={showListMove} onHide={ModListMove}>
-            <Modal.Header closeButton>
-              <Modal.Title>movement list</Modal.Title>
-            </Modal.Header>
-            <Modal.Body className="px-2">
-              {listMove.length > 0 ? (
-                listMove.map((v, i) => (
-                  <Card className="p-3 mb-2" key={i}>
-                    <h3>
-                      {v.categoria}
-                      <span className="float-right">{v.cuenta}</span>
-                    </h3>
-                    <h4>
-                      <NumberFormat
-                        value={v.valor}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"$"}
-                      />
-                      <span className="float-right">{v.fecha}</span>
-                    </h4>
-                    <h5 className="m-0">Description:</h5>
-                    <p>{v.descripcion}</p>
-                  </Card>
-                ))
-              ) : (
-                <h3 className="mb-0 text-center">Without Movement</h3>
-              )}
-            </Modal.Body>
-          </Modal>
         </div>
       </Container>
     </>

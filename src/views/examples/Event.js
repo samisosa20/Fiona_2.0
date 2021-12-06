@@ -8,7 +8,7 @@ import {
   Row,
   FormGroup,
   Label,
-  Button
+  Button,
 } from "reactstrap";
 import { Form, Modal } from "react-bootstrap";
 // core components
@@ -29,14 +29,14 @@ const Catego = () => {
   // envio de informacion
   const [stateform, setform] = useState({
     namevent: "",
-    endingdate: ""
+    endingdate: "",
   });
   // edicion de informacion
   const [stateformEdit, setformEdit] = useState({
     edit_namevent: "",
     prevName: "",
     edit_endingdate: "",
-    id_data: 0
+    id_data: 0,
   });
   // edicion de informacion
   const [listMove, setlistMove] = useState({});
@@ -60,23 +60,23 @@ const Catego = () => {
     let idc = localStorage.getItem("IdUser");
     API.post("acount", {
       id: 12,
-      idc: idc
-    }).then(response => {
+      idc: idc,
+    }).then((response) => {
       //console.log(response.data);
       setState(response.data);
     });
   }, [refreshData]);
 
   /* ...state para que no se modifique */
-  const handleChange = event => {
+  const handleChange = (event) => {
     setform({ ...stateform, [event.target.name]: event.target.value });
   };
-  const handleChangeEdit = event => {
+  const handleChangeEdit = (event) => {
     setformEdit({ ...stateformEdit, [event.target.name]: event.target.value });
   };
 
   // Accion al abrir los modals
-  const OpenModalNew = e => {
+  const OpenModalNew = (e) => {
     e.preventDefault();
     ModNewEventSate();
   };
@@ -87,7 +87,7 @@ const Catego = () => {
       edit_descrip: stateformEdit.edit_descrip,
       edit_group: stateformEdit.edit_group,
       edit_include: stateformEdit.edit_include,
-      id_data: id
+      id_data: id,
     });
     ModDelCateSate();
   };
@@ -97,23 +97,23 @@ const Catego = () => {
       edit_namevent: name,
       prevName: name,
       edit_endingdate: endDate,
-      id_data: id
+      id_data: id,
     });
     ModEdiEventSate();
   };
-  const openListModal = event => {
+  const openListModal = (event) => {
     let idc = localStorage.getItem("IdUser");
     API.post("acount", {
       id: 13,
       idc: idc,
-      event: event
-    }).then(response => {
+      event: event,
+    }).then((response) => {
       ModListMove();
       setlistMove(response.data);
       //console.log(response.data);
     });
   };
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     if (stateform.namevent === "" || stateform.endingdate === "") {
       setSateAlert({ visible: true, code: 1 });
@@ -126,8 +126,8 @@ const Catego = () => {
         id: 6,
         idu: idc,
         name: stateform.namevent,
-        date: stateform.endingdate
-      }).then(response => {
+        date: stateform.endingdate,
+      }).then((response) => {
         //alert(response.data);
         ModNewEventSate();
         ChangeStateCatego();
@@ -140,13 +140,15 @@ const Catego = () => {
     }
   };
 
-  const handleContextMenu = (event) => {
+  const handleContextMenu = (event, data) => {
     event.preventDefault();
     setContextMenu(
       contextMenu === null
         ? {
             mouseX: event.clientX - 2,
             mouseY: event.clientY - 4,
+            onClickEdit: (e) =>
+              OpenModalEdit(e, data.id, data.nombre, data.fecha_fin),
           }
         : null
     );
@@ -163,67 +165,62 @@ const Catego = () => {
           {state
             ? state.map((data, index) => (
                 <Card
-                  className="shadow col-md-12 col-lg-5 mr-2 ml-2 mb-3 arrow c-categorie"
+                  className="shadow col-md-12 col-lg-5 mr-2 ml-2 mb-3 arrow c-categorie px-0"
                   key={index}
-                  onContextMenu={handleContextMenu}
+                  onContextMenu={(e) => handleContextMenu(e, data)}
                 >
-                  <CardBody className="py-3 rounded" onClick={() => openListModal(data.id)}>
-                      <div className="col-10 mt-1">
-                        <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-dark m-0">
-                          {data.nombre}{" "}
-                          {data.activo === "0" && (
-                            <span className="text-gray text-sm float-right">
-                              inactive
-                            </span>
-                          )}
-                        </h3>
-                        <h4 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted m-0">
-                          Spent{" "}
-                          <span className="text-dark float-right">
-                            <NumberFormat
-                              className={
-                                data.valor >= 0 ? `text-success` : `text-danger`
-                              }
-                              value={data.valor ? data.valor : 0}
-                              displayType={"text"}
-                              thousandSeparator={true}
-                              prefix={"$"}
-                            />
+                  <CardBody
+                    className="py-3 rounded px-0"
+                    onClick={() => openListModal(data.id)}
+                  >
+                    <div className="col-10 mt-1">
+                      <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-dark m-0">
+                        {data.nombre}{" "}
+                        {data.activo === "0" && (
+                          <span className="text-gray text-sm float-right">
+                            inactive
                           </span>
-                        </h4>
-                      </div>
+                        )}
+                      </h3>
+                      <h4 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted m-0">
+                        Spent{" "}
+                        <span className="text-dark float-right">
+                          <NumberFormat
+                            className={
+                              data.valor >= 0 ? `text-success` : `text-danger`
+                            }
+                            value={data.valor ? data.valor : 0}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"$"}
+                          />
+                        </span>
+                      </h4>
+                    </div>
                   </CardBody>
                   <div
-                    onClick={handleContextMenu}
+                    onClick={(e) => handleContextMenu(e, data)}
                     className="position-absolute right-4 top-4"
                   >
                     <i className="fa fa-ellipsis-v"></i>
                   </div>
-                  <ContextMenuCustom
-                    contextMenu={contextMenu}
-                    handleClose={handleClose}
-                    onClickEdit={(e) =>
-                      OpenModalEdit(
-                        e,
-                        data.id,
-                        data.nombre,
-                        data.fecha_fin
-                      )
-                    }
-                  />
                 </Card>
               ))
             : ""}
+          <ContextMenuCustom
+            contextMenu={contextMenu}
+            handleClose={handleClose}
+          />
           <Card
-            className="shadow col-md-12 col-lg-5 mr-2 ml-2 mb-3 arrow c-categorie"
-            onClick={e => OpenModalNew(e)}
+            className="shadow col-md-12 col-lg-5 mr-2 ml-2 mb-3 arrow c-categorie px-0"
+            onClick={(e) => OpenModalNew(e)}
           >
-            <CardBody className="rounded">
-                <div className="col">
-                  <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted m-0">
-                    <i className="fas fa-plus mr-2"></i>New Event
-                  </h3>
-                </div>
+            <CardBody className="rounded px-0">
+              <div className="col">
+                <h3 className="card-title col-md-9 col-lg-9 col-xl-9 text-muted m-0">
+                  <i className="fas fa-plus mr-2"></i>New Event
+                </h3>
+              </div>
             </CardBody>
           </Card>
         </Row>

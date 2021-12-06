@@ -4,7 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { StyledMenu } from "./ContextMenu.styles";
 
 const ContextMenuCustom = (props) => {
-  const { onClickShare, onClickEdit, onClickDelete, onClickCopy, handleClose, contextMenu } =
+  const { handleClose, contextMenu } =
     props;
 
   const handleClick = (e, customClick) => {
@@ -23,34 +23,34 @@ const ContextMenuCustom = (props) => {
           : undefined
       }
     >
-      {onClickEdit && (
+      {contextMenu?.onClickEdit && (
         <MenuItem
           className="py-1 pl-2 pr-4 font-weight-semibold"
-          onClick={(e) => handleClick(e, onClickEdit)}
+          onClick={(e) => handleClick(e, contextMenu !== null ? contextMenu.onClickEdit : undefined)}
         >
           <i className="fas fa-pencil-alt mr-2 text-blue"></i>Edit
         </MenuItem>
       )}
-      {onClickCopy && (
+      {contextMenu?.onClickCopy && (
         <MenuItem
           className="py-1 pl-2 pr-4 font-weight-semibold"
-          onClick={(e) => handleClick(e, onClickCopy)}
+          onClick={(e) => handleClick(e, contextMenu !== null ? contextMenu.onClickCopy : undefined)}
         >
           <i className="far fa-copy mr-2 text-blue"></i>Copy
         </MenuItem>
       )}
-      {onClickShare && (
+      {contextMenu?.onClickShare && (
         <MenuItem
         className="py-1 pl-2 pr-4 font-weight-semibold"
-        onClick={(e) => handleClick(e, onClickShare)}
+        onClick={(e) => handleClick(e, contextMenu !== null ? contextMenu.onClickShare : undefined)}
         >
           <i className="fas fa-share mr-2 text-blue"></i>Share
         </MenuItem>
       )}
-      {onClickDelete && (
+      {contextMenu?.onClickDelete && (
         <MenuItem
           className="py-1 pl-2 pr-4 font-weight-semibold text-danger"
-          onClick={(e) => handleClick(e, onClickDelete)}
+          onClick={(e) => handleClick(e, contextMenu !== null ? contextMenu.onClickDelete : undefined)}
         >
           <i className="far fa-trash-alt mr-2 "></i>Delete
         </MenuItem>

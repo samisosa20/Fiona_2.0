@@ -95,13 +95,15 @@ function Budget() {
     });
   };
 
-  const handleContextMenu = (event) => {
+  const handleContextMenu = (event, data) => {
     event.preventDefault();
     setContextMenu(
       contextMenu === null
         ? {
             mouseX: event.clientX - 2,
             mouseY: event.clientY - 4,
+            onClickDelete: (e) => OpenModalDelete(e, data.id, data.year),
+            onClickCopy: (e) => OpenModalCopy(e, data.id, data.year),
           }
         : null
     );
@@ -123,7 +125,7 @@ function Budget() {
                 >
                   <Link
                     to={"/admin/ViewBudget/" + data.year}
-                    onContextMenu={handleContextMenu}
+                    onContextMenu={(e) => handleContextMenu(e, data)}
                   >
                     <CardHeader className="border-0 row rounded">
                       <div className="col-12 p-0">
@@ -140,30 +142,27 @@ function Budget() {
                     </CardHeader>
                   </Link>
                   <div
-                    onClick={handleContextMenu}
+                    onClick={(e) => handleContextMenu(e, data)}
                     className="position-absolute right-4 top-4"
                   >
                     <i className="fa fa-ellipsis-v"></i>
                   </div>
-                  <ContextMenuCustom
-                    contextMenu={contextMenu}
-                    handleClose={handleClose}
-                    onClickDelete={(e) =>
-                      OpenModalDelete(e, data.id, data.year)
-                    }
-                    onClickCopy={(e) =>
-                      OpenModalCopy(e, data.id, data.year)
-                    }
-                  />
                 </Card>
               ))
-            : ""}
-          <Link className="col-md-5 mr-2 ml-2 mb-3 p-0 hover:shadow" to={"/admin/NewBudget/"}>
+              : ""}
+              <ContextMenuCustom
+                contextMenu={contextMenu}
+                handleClose={handleClose}
+              />
+          <Link
+            className="col-md-5 mr-2 ml-2 mb-3 p-0 hover:shadow"
+            to={"/admin/NewBudget/"}
+          >
             <Card className="shadow">
               <CardBody style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-                    <h3 className="card-title col-md-12 col-lg-12 col-xl-12 text-muted m-0">
-                      <i className="fas fa-plus mr-2"></i>New Budget
-                    </h3>
+                <h3 className="card-title col-md-12 col-lg-12 col-xl-12 text-muted m-0">
+                  <i className="fas fa-plus mr-2"></i>New Budget
+                </h3>
               </CardBody>
             </Card>
           </Link>
@@ -193,12 +192,20 @@ function Budget() {
             <Modal.Title>Copy Budget</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p className="font-weight-semibold">Please, select which year the information is pasted</p>
-            <select className="form-control" onChange={e=>setYearPaste(e.target.value)} defaultValue="0">
-              <option value="0" hidden>Select a year</option>
-                <option value={year + 1}>{year + 1}</option>
-                <option value={year + 2}>{year + 2}</option>
-                <option value={year + 3}>{year + 3}</option>
+            <p className="font-weight-semibold">
+              Please, select which year the information is pasted
+            </p>
+            <select
+              className="form-control"
+              onChange={(e) => setYearPaste(e.target.value)}
+              defaultValue="0"
+            >
+              <option value="0" hidden>
+                Select a year
+              </option>
+              <option value={year + 1}>{year + 1}</option>
+              <option value={year + 2}>{year + 2}</option>
+              <option value={year + 3}>{year + 3}</option>
             </select>
           </Modal.Body>
           <Modal.Footer>
