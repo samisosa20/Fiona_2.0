@@ -325,11 +325,27 @@ const ChartBalance = (props) => {
                   x: {
                     ticks: {
                       callback: function (val, index) {
-                        return (index % 10 === 0 &&
-                          index !== valueBalance.length - 2) ||
-                          index === valueBalance.length - 1
-                          ? this.getLabelForValue(val)
-                          : ""; // Show each 10 data
+                        if (valueBalance.length > 20) {
+                          return (index % 10 === 0 &&
+                            index !== valueBalance.length - 2) ||
+                            index === valueBalance.length - 1
+                            ? this.getLabelForValue(val)
+                            : ""; // Show each 10 data
+                        } else if (valueBalance.length > 10) {
+                          return (index % 4 === 0 &&
+                            index !== valueBalance.length - 2) ||
+                            index === valueBalance.length - 1
+                            ? this.getLabelForValue(val)
+                            : ""; // Show each 4 data
+                        } else if (valueBalance.length > 5) {
+                          return (index % 2 === 0 &&
+                            index !== valueBalance.length - 2) ||
+                            index === valueBalance.length - 1
+                            ? this.getLabelForValue(val)
+                            : ""; // Show each 4 data
+                        } else {
+                          return this.getLabelForValue(val)
+                        }
                       },
                       color: "white",
                     },
@@ -554,11 +570,27 @@ const ChartBalanceComparison = (props) => {
                     x: {
                       ticks: {
                         callback: function (val, index) {
+                          if (valueCurrent.length > 20) {
                           return (index % 10 === 0 &&
                             index !== valueCurrent.length - 2) ||
                             index === valueCurrent.length - 1
                             ? this.getLabelForValue(val)
                             : ""; // Show each 10 data
+                        } else if (valueCurrent.length > 10) {
+                          return (index % 4 === 0 &&
+                            index !== valueCurrent.length - 2) ||
+                            index === valueCurrent.length - 1
+                            ? this.getLabelForValue(val)
+                            : ""; // Show each 4 data
+                        } else if (valueCurrent.length > 5) {
+                          return (index % 2 === 0 &&
+                            index !== valueCurrent.length - 2) ||
+                            index === valueCurrent.length - 1
+                            ? this.getLabelForValue(val)
+                            : ""; // Show each 4 data
+                        } else {
+                          return this.getLabelForValue(val)
+                        }
                         },
                         color: "white",
                       },

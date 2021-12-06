@@ -97,31 +97,7 @@ function Report() {
     month_now = now.getMonth() + 1;
     month_now = month_now.toString().length === 1 ? "0" + month_now : month_now;
     let d = new Date();
-    if (mode === "-1") {
-      d.setFullYear(now.getFullYear(), month_now - 1, 0);
-      year = d.getFullYear();
-      month =
-        (d.getMonth() + 1).toString().length === 1
-          ? "0" + (d.getMonth() + 1).toString()
-          : d.getMonth() + 1;
-      date =
-        d.getDate().toString().length === 1
-          ? "0" + d.getDate().toString()
-          : d.getDate();
-      formattedDateTime = year + "-" + month + "-" + date;
-      document.getElementById("Edate").value = formattedDateTime;
-      month_now = month;
-      date = "01";
-      formattedDateTimeIni = year + "-" + month_now + "-" + date;
-      document.getElementById("Sdate").value = formattedDateTimeIni;
-
-      setDate({
-        ...stateDate,
-        Sdate: formattedDateTimeIni,
-        Fdate: formattedDateTime,
-        hidden: true,
-      });
-    } else if (mode === "1") {
+    if (mode === "1") {
       d.setFullYear(now.getFullYear(), month_now, 0);
       year = d.getFullYear();
       month =
@@ -148,8 +124,76 @@ function Report() {
         Fdate: formattedDateTime,
         hidden: true,
       });
-    } else {
+    } else if (mode === "0") {
       setDate({ ...stateDate, hidden: false });
+    } else if (mode === "-1") {
+      d.setFullYear(now.getFullYear(), month_now + parseInt(mode), 0);
+      year = d.getFullYear();
+      month =
+        (d.getMonth() + 1).toString().length === 1
+          ? "0" + (d.getMonth() + 1).toString()
+          : d.getMonth() + 1;
+      date =
+        d.getDate().toString().length === 1
+          ? "0" + d.getDate().toString()
+          : d.getDate();
+      formattedDateTime = year + "-" + month + "-" + date;
+      document.getElementById("Edate").value = formattedDateTime;
+      month_now = month;
+      date = "01";
+      formattedDateTimeIni = year + "-" + month_now + "-" + date;
+      document.getElementById("Sdate").value = formattedDateTimeIni;
+
+      setDate({
+        ...stateDate,
+        Sdate: formattedDateTimeIni,
+        Fdate: formattedDateTime,
+        hidden: true,
+      });
+    } else if (mode === "12" || mode === "-12") {
+      d.setFullYear(mode === "-12" ? now.getFullYear() - 1 : now.getFullYear(), month_now, 0);
+      year = d.getFullYear();
+      month =
+        (d.getMonth() + 1).toString().length === 1
+          ? "0" + (d.getMonth() + 1).toString()
+          : d.getMonth() + 1;
+      date =
+        d.getDate().toString().length === 1
+          ? "0" + d.getDate().toString()
+          : d.getDate();
+      formattedDateTime = year + "-" + month + "-" + date;
+      document.getElementById("Edate").value = formattedDateTime;
+      formattedDateTimeIni = year + "-01-01";
+      document.getElementById("Sdate").value = formattedDateTimeIni;
+
+      setDate({
+        ...stateDate,
+        Sdate: formattedDateTimeIni,
+        Fdate: formattedDateTime,
+        hidden: true,
+      });
+    } else {
+      d.setFullYear(now.getFullYear(), month_now + parseInt(mode), 0);
+      year = d.getFullYear();
+      month =
+        (d.getMonth() + 1).toString().length === 1
+          ? "0" + (d.getMonth() + 1).toString()
+          : d.getMonth() + 1;
+      date =
+        d.getDate().toString().length === 1
+          ? "0" + d.getDate().toString()
+          : d.getDate();
+      formattedDateTime = year + "-" + month_now + "-" + date;
+      formattedDateTimeIni = year + "-" + month + "-01";
+      document.getElementById("Edate").value = formattedDateTime;
+      document.getElementById("Sdate").value = formattedDateTimeIni;
+
+      setDate({
+        ...stateDate,
+        Sdate: formattedDateTimeIni,
+        Fdate: formattedDateTime,
+        hidden: true,
+      });
     }
   }
   const formatter = new Intl.NumberFormat("en-US", {
@@ -244,11 +288,11 @@ function Report() {
     // eslint-disable-next-line
   }, [stateSearch]);
 
-  useEffect(()=>{
-    window.addEventListener('resize', ()=>{
-      setWindowWidth(window.innerWidth)
-    })
-  }, [])
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      setWindowWidth(window.innerWidth);
+    });
+  }, []);
 
   // Funcion para cambiar de estado de los modals
   const ModShowModal = () => setShowModalMove(!ShowModalMove);
@@ -273,9 +317,13 @@ function Report() {
               name="catego"
               onChange={(e) => getDate(e.target.value)}
             >
-              <option value="1">THIS MONTH</option>
-              <option value="-1">LAST MONTH</option>
-              <option value="0">CUSTOM DATE</option>
+              <option value="1">This Month</option>
+              <option value="-1">Last Month</option>
+              <option value="-3">Last Trimester</option>
+              <option value="-6">Last Semester</option>
+              <option value="12">This Year</option>
+              <option value="-12">Last Year</option>
+              <option value="0">Custom Date</option>
             </Form.Control>
           </div>
           <div className="col-md-4" hidden={stateDate.hidden}>
@@ -631,7 +679,7 @@ function Report() {
           </Col>
         </Row>
         <Row className="mb-4">
-        <Col className="mb-5 mb-xl-0 d-lg-none" sm="6" xl="4">
+          <Col className="mb-5 mb-xl-0 d-lg-none" sm="6" xl="4">
             <Card className="bg-gradient-default shadow h-100">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">

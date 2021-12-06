@@ -55,6 +55,7 @@ function ViewBudget() {
       fecha_ini: document.getElementById("Sdate").value,
       fecha_fin: document.getElementById("Edate").value,
     }).then((response) => setState(response.data));
+    // eslint-disable-next-line
   }, [stateSearch]);
 
   function getDateLocal(mode = "1") {
