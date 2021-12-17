@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import TrmApi from "trm-api";
 // reactstrap components
 import { Button, Container } from "reactstrap";
 
@@ -55,7 +56,10 @@ function Account() {
     account_ini: 0,
     account_fin: 0,
     datetime: "",
-    descrip: ""
+    descrip: "",
+    trm: 1,
+    customDeposit: 0,
+    inBadge: "COP"
   });
 
   useEffect(() => {
@@ -131,9 +135,11 @@ function Account() {
     if (idSigno === "signo_move") {
       setform({ ...stateform, [event.target.name]: event.target.value });
     } else {
+      const customDeposit = stateformtrans.badge === "COP" && stateformtrans.inBadge === 'USD' ? parseFloat(event.target.value / stateformtrans.trm).toFixed(2) : parseFloat(event.target.value * stateformtrans.trm).toFixed(2)
       setformtrans({
         ...stateformtrans,
-        [event.target.name]: event.target.value
+        [event.target.name]: event.target.value,
+        customDeposit: customDeposit,
       });
     }
   };
@@ -146,10 +152,38 @@ function Account() {
     }
   };
   const handleChangeTrans = event => {
-    setformtrans({
-      ...stateformtrans,
-      [event.target.name]: event.target.value
-    });
+    if (event.target.name === "inBadge" || event.target.name === "badge") {
+      let value = event.target.value
+      let name = event.target.name
+      if (event.target.value !== stateformtrans.badge || event.target.value !== stateformtrans.inBadge ){
+        const trmApi = new TrmApi("HNgPywsjYTxDDwnGPdpyVbOth");
+        trmApi
+        .latest()
+        .then((data) => {
+          const valueTRM = name === "inBadge" && stateformtrans.badge === value ? 1 : name === "badge" && stateformtrans.inBadge === value ? 1 : data.valor
+          const customDeposit = stateformtrans.badge === "COP" && value === 'USD' ? parseFloat(stateformtrans.monto / valueTRM).toFixed(2) : parseFloat(stateformtrans.monto * valueTRM).toFixed(2)
+          setformtrans({
+          ...stateformtrans,
+          trm: valueTRM,
+          [name]: value,
+          customDeposit: customDeposit
+        })}
+        )
+        .catch((error) => console.log(error));
+      }
+    } else if (event.target.name === "customDeposit"){
+      const valueTRM = stateformtrans.badge === "COP" && stateformtrans.inBadge === 'USD' ? parseFloat(stateformtrans.monto / event.target.value).toFixed(2) : parseFloat(stateformtrans.monto * event.target.value).toFixed(2)
+      setformtrans({
+        ...stateformtrans,
+        trm: valueTRM,
+        [event.target.name]: event.target.value
+      });
+    } else {
+      setformtrans({
+        ...stateformtrans,
+        [event.target.name]: event.target.value
+      });
+    }
   };
   const OpenModalMovi = e => {
     e.preventDefault();
@@ -303,11 +337,10 @@ function Account() {
     event.preventDefault();
     if (stateform.badge === 0) {
     } else {
-      let idc = localStorage.getItem("IdUser");
       let save_account = stateform.save_account ? 1 : 0;
       API.post("add_data", {
         id: 2,
-        idu: idc,
+        idu: localStorage.getItem("IdUser"),
         name: stateform.catego,
         descrip: stateform.descrip,
         divisa: stateform.badge,
@@ -388,16 +421,18 @@ function Account() {
       document.getElementById("btn_new_trans_dash").innerHTML =
         "<span className='spinner-border spinner-border-sm mr-1'" +
         "role='status' aria-hidden='true'></span>Loading...";
-      let idc = localStorage.getItem("IdUser");
       API.post("add_data", {
         id: 4,
-        idu: idc,
+        idu: localStorage.getItem("IdUser"),
         acco_frist: stateformtrans.account_ini,
         value: stateformtrans.monto,
         divisa: stateformtrans.badge,
         acco_sec: stateformtrans.account_fin,
         descri: stateformtrans.descrip,
-        date: stateformtrans.datetime
+        date: stateformtrans.datetime,
+        trm: stateformtrans.trm,
+        customDeposit: stateformtrans.customDeposit,
+        inBadge: stateformtrans.inBadge
       }).then(response => {
         //alert (response.data);
         setrefreshData(!refreshData);
@@ -408,7 +443,10 @@ function Account() {
           account_ini: 0,
           account_fin: 0,
           datetime: "",
-          descrip: ""
+          descrip: "",
+          trm: 1,
+          customDeposit: 0,
+          inBadge: "COP"
         })
         document.getElementById("btn_new_trans_dash").innerHTML = "Add";
         document.getElementById("btn_new_trans_dash").disabled = false;
@@ -532,6 +570,7 @@ function Account() {
           stateCatego={stateCatego}
           handleChangeTrans={handleChangeTrans}
           ModNewTransSate={ModNewTransSate}
+          stateformtrans={stateformtrans}
         />
         <Alert visible={stateAlert.visible} code={stateAlert.code} />
       </Container>

@@ -82,6 +82,7 @@
         "redux-form": "^8.3.6",
         "serve": "^11.3.2",
         "styled-components": "^5.3.3",
+        "trm-api": "^1.4.13",
         "xlsx": "^0.17.2",
         "yup": "^0.29.1"
     },

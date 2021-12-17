@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import TrmApi from "trm-api";
 
 import API from "../../variables/API";
 import axios from "axios";
@@ -13,7 +14,7 @@ import {
   Row,
   FormGroup,
   Label,
-  ModalFooter
+  ModalFooter,
 } from "reactstrap";
 import { Form, InputGroup, Modal } from "react-bootstrap";
 // core components
@@ -28,7 +29,7 @@ function Account() {
     json_movi: [],
     Balance: 0,
     Divisa: "",
-    Descripcion: ""
+    Descripcion: "",
   });
   const [moveJson, setMoveJson] = useState([]);
   // envio de informacion
@@ -37,7 +38,7 @@ function Account() {
     badge: "COP",
     catego: 0,
     descrip: "",
-    datetime: ""
+    datetime: "",
   });
   const [stateformtrans, setformtrans] = useState({
     monto: 0,
@@ -45,7 +46,10 @@ function Account() {
     account_ini: 0,
     account_fin: 0,
     datetime: "",
-    descrip: ""
+    descrip: "",
+    trm: 1,
+    customDeposit: 0,
+    inBadge: "COP",
   });
   const [stateformEdit, setformEdit] = useState({
     id_data: 0,
@@ -56,7 +60,7 @@ function Account() {
     descrip: "",
     datetime: "",
     Signal: "+",
-    Modal: ""
+    Modal: "",
   });
   const [stateformEditTrans, setformEditTrans] = useState({
     id_data: 0,
@@ -65,7 +69,10 @@ function Account() {
     account_ini: 0,
     account_fin: 0,
     datetime: "",
-    descrip: ""
+    descrip: "",
+    trm: 1,
+    customDeposit: 0,
+    editInBadge: "COP",
   });
   const [stateCatego, setCatego] = useState([]);
   const [stateEvent, setEvent] = useState([]);
@@ -97,13 +104,13 @@ function Account() {
           API.post(`acount`, {
             id: 3,
             idc: idc,
-            idacount: acount
+            idacount: acount,
           }),
           API.post(`acount`, {
             id: 1,
             idc: idc,
-            acount: acount
-          })
+            acount: acount,
+          }),
         ])
         .then(
           axios.spread((firstResponse, secondResponse) => {
@@ -118,7 +125,7 @@ function Account() {
               Descripcion: firstResponse.data[0]
                 ? firstResponse.data[0].descripcion
                 : "",
-              json_movi: secondResponse.data
+              json_movi: secondResponse.data,
             });
             setMoveJson(secondResponse.data);
           })
@@ -136,29 +143,29 @@ function Account() {
   const showAdvanceOption = () => setShowOption(!showOption);
 
   // Accion al abrir los modals
-  const OpenModalMovi = e => {
+  const OpenModalMovi = (e) => {
     e.preventDefault();
     axios
       .all([
         API.post("acount", {
           id: 5,
-          idc: idc
+          idc: idc,
         }),
         API.post(`acount`, {
           id: 12,
-          idc: idc
-        })
+          idc: idc,
+        }),
       ])
       .then(
         axios.spread((firstResponse, secondResponse) => {
           setCatego(firstResponse.data);
           let d = new Date();
           let d1 = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-          const eventFilter = secondResponse.data.filter(event => {
+          const eventFilter = secondResponse.data.filter((event) => {
             let d2 = new Date(event.fecha_fin.split("T")[0]);
             d2 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate() + 1);
-            return d2.getTime() >= d1.getTime()
-          })
+            return d2.getTime() >= d1.getTime();
+          });
           setEvent(eventFilter);
         })
       );
@@ -193,26 +200,18 @@ function Account() {
         : now.getSeconds(); */
 
     formattedDateTime =
-      year +
-      "-" +
-      month +
-      "-" +
-      date +
-      "T" +
-      hours +
-      ":" +
-      minutes;
+      year + "-" + month + "-" + date + "T" + hours + ":" + minutes;
 
     //document.getElementById("datetime_movi").value = formattedDateTime;
     setform({ ...stateform, datetime: formattedDateTime });
     ModNewMoviSate();
   };
-  const OpenModalTrans = e => {
+  const OpenModalTrans = (e) => {
     e.preventDefault();
     API.post("acount", {
       id: 2,
-      idc: idc
-    }).then(response => setCatego(response.data));
+      idc: idc,
+    }).then((response) => setCatego(response.data));
     let now = new Date(),
       year,
       month,
@@ -244,15 +243,7 @@ function Account() {
         : now.getSeconds(); */
 
     formattedDateTime =
-      year +
-      "-" +
-      month +
-      "-" +
-      date +
-      "T" +
-      hours +
-      ":" +
-      minutes;
+      year + "-" + month + "-" + date + "T" + hours + ":" + minutes;
 
     //document.getElementById("datetime_movi").value = formattedDateTime;
     setformtrans({ ...stateformtrans, datetime: formattedDateTime });
@@ -273,12 +264,12 @@ function Account() {
       .all([
         API.post("acount", {
           id: 5,
-          idc: idc
+          idc: idc,
         }),
         API.post(`acount`, {
           id: 12,
-          idc: idc
-        })
+          idc: idc,
+        }),
       ])
       .then(
         axios.spread((firstResponse, secondResponse) => {
@@ -302,7 +293,7 @@ function Account() {
       event: event,
       descrip: descripcion,
       datetime: fecha2,
-      Signal: signo
+      Signal: signo,
     });
     setSignal({ Signal: signo });
     ModEditSate();
@@ -314,13 +305,14 @@ function Account() {
     divisa,
     descripcion,
     fecha,
-    id_transe
+    id_transe,
+    trm
   ) => {
     e.preventDefault();
     API.post("acount", {
       id: 2,
-      idc: idc
-    }).then(response => setCatego(response.data));
+      idc: idc,
+    }).then((response) => setCatego(response.data));
 
     let div = fecha.split(" ");
     let fecha2 = div[0] + "T" + div[1];
@@ -340,7 +332,10 @@ function Account() {
       account_ini: account_ini,
       account_fin: account_fin,
       datetime: fecha2,
-      descrip: descripcion
+      descrip: descripcion,
+      trm: trm,
+      customDeposit: parseFloat(trm).toFixed(2) > 1 ? parseFloat(valor_int / trm).toFixed(2) : parseFloat(valor_int * trm).toFixed(2),
+      editInBadge: parseFloat(trm).toFixed(2) > 1 ? "USD" : "COP",
     });
     setSignal({ Signal: signo });
     ModEditTransSate();
@@ -355,28 +350,112 @@ function Account() {
       descrip: stateformEdit.descrip,
       datetime: date,
       Signal: stateformEdit.Signal,
-      Modal: modal
+      Modal: modal,
     });
     ModDelCateSate();
   };
   /* ...state para que no se modifique */
-  const handleChange = event => {
+  const handleChange = (event) => {
     setform({ ...stateform, [event.target.name]: event.target.value });
   };
-  const handleChangeTrans = event => {
-    setformtrans({
-      ...stateformtrans,
-      [event.target.name]: event.target.value
-    });
+  const handleChangeTrans = (event) => {
+    if (event.target.name === "inBadge" || event.target.name === "badge") {
+      let value = event.target.value;
+      let name = event.target.name;
+      if (
+        event.target.value !== stateformtrans.badge ||
+        event.target.value !== stateformtrans.inBadge
+      ) {
+        const trmApi = new TrmApi("HNgPywsjYTxDDwnGPdpyVbOth");
+        trmApi
+          .latest()
+          .then((data) => {
+            const valueTRM =
+              name === "inBadge" && stateformtrans.badge === value
+                ? 1
+                : name === "badge" && stateformtrans.inBadge === value
+                ? 1
+                : data.valor;
+            const customDeposit =
+              stateformtrans.badge === "COP" && value === "USD"
+                ? parseFloat(stateformtrans.monto / valueTRM).toFixed(2)
+                : parseFloat(stateformtrans.monto * valueTRM).toFixed(2);
+            setformtrans({
+              ...stateformtrans,
+              trm: valueTRM,
+              [name]: value,
+              customDeposit: customDeposit,
+            });
+          })
+          .catch((error) => console.log(error));
+      }
+    } else if (event.target.name === "customDeposit") {
+      const valueTRM =
+        stateformtrans.badge === "COP" && stateformtrans.inBadge === "USD"
+          ? parseFloat(stateformtrans.monto / event.target.value).toFixed(2)
+          : parseFloat(stateformtrans.monto * event.target.value).toFixed(2);
+      setformtrans({
+        ...stateformtrans,
+        trm: valueTRM,
+        [event.target.name]: event.target.value,
+      });
+    } else {
+      setformtrans({
+        ...stateformtrans,
+        [event.target.name]: event.target.value,
+      });
+    }
   };
-  const handleChangeEdit = event => {
+  const handleChangeEdit = (event) => {
     setformEdit({ ...stateformEdit, [event.target.name]: event.target.value });
   };
-  const handleChangeEditTrans = event => {
-    setformEditTrans({
-      ...stateformEditTrans,
-      [event.target.name]: event.target.value
-    });
+  const handleChangeEditTrans = (event) => {
+    if (event.target.name === "editInBadge" || event.target.name === "badge") {
+      let value = event.target.value;
+      let name = event.target.name;
+      if (
+        event.target.value !== stateformEditTrans.badge ||
+        event.target.value !== stateformEditTrans.editInBadge
+      ) {
+        const trmApi = new TrmApi("HNgPywsjYTxDDwnGPdpyVbOth");
+        trmApi
+          .latest()
+          .then((data) => {
+            const valueTRM =
+            name === "editInBadge" && stateformEditTrans.badge === value
+            ? 1
+            : name === "badge" && stateformEditTrans.editInBadge === value
+            ? 1
+            : data.valor;
+            const customDeposit =
+            stateformEditTrans.badge === "COP" && value === "USD"
+            ? parseFloat(stateformEditTrans.monto / valueTRM).toFixed(2)
+            : parseFloat(stateformEditTrans.monto * valueTRM).toFixed(2);
+            setformEditTrans({
+              ...stateformEditTrans,
+              trm: valueTRM,
+              [name]: value,
+              customDeposit: customDeposit,
+            });
+          })
+          .catch((error) => console.log(error));
+      }
+    } else if (event.target.name === "customDeposit") {
+      const valueTRM =
+        stateformEditTrans.badge === "COP" && stateformEditTrans.editInBadge === "USD"
+          ? parseFloat(stateformEditTrans.monto / event.target.value).toFixed(2)
+          : parseFloat(stateformEditTrans.monto * event.target.value).toFixed(2);
+          setformEditTrans({
+        ...stateformEditTrans,
+        trm: valueTRM,
+        [event.target.name]: event.target.value,
+      });
+    } else {
+      setformEditTrans({
+        ...stateformEditTrans,
+        [event.target.name]: event.target.value,
+      });
+    }
   };
   const VerifySignal = (event, idSigno) => {
     let signo = document.getElementById(idSigno);
@@ -393,21 +472,32 @@ function Account() {
     } else if (idSigno === "signo_move_edit") {
       setformEdit({
         ...stateformEdit,
-        [event.target.name]: event.target.value
+        [event.target.name]: event.target.value,
       });
     } else if (idSigno === "signo_trans_edit") {
+      const customDeposit =
+        stateformEditTrans.badge === "COP" &&
+        stateformEditTrans.editInBadge === "USD"
+          ? parseFloat(event.target.value / stateformEditTrans.trm).toFixed(2)
+          : parseFloat(event.target.value * stateformEditTrans.trm).toFixed(2);
       setformEditTrans({
         ...stateformEditTrans,
-        [event.target.name]: event.target.value
+        [event.target.name]: event.target.value,
+        customDeposit: customDeposit,
       });
     } else {
+      const customDeposit =
+        stateformtrans.badge === "COP" && stateformtrans.inBadge === "USD"
+          ? parseFloat(event.target.value / stateformtrans.trm).toFixed(2)
+          : parseFloat(event.target.value * stateformtrans.trm).toFixed(2);
       setformtrans({
         ...stateformtrans,
-        [event.target.name]: event.target.value
+        [event.target.name]: event.target.value,
+        customDeposit: customDeposit,
       });
     }
   };
-  const ChangeSignal = event => {
+  const ChangeSignal = (event) => {
     setSignal({ Signal: event.target.value !== "+" ? "+" : "-" });
     if (event.target.value !== "+") {
       event.target.className = "btn btn-outline-success";
@@ -415,7 +505,7 @@ function Account() {
       event.target.className = "btn btn-outline-danger";
     }
   };
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     if (stateform.badge === "" || stateform.catego === 0) {
       alert("Fill in all the fields");
@@ -438,8 +528,8 @@ function Account() {
         catego: stateform.catego,
         descrip: stateform.descrip,
         date: stateform.datetime,
-        event: stateform.event ? stateform.event : ""
-      }).then(response => {
+        event: stateform.event ? stateform.event : "",
+      }).then((response) => {
         //alert (response.data);
         ModNewMoviSate();
         document.getElementById("btn_new_move_move").innerHTML = "Add";
@@ -449,8 +539,8 @@ function Account() {
           badge: "COP",
           catego: 0,
           descrip: "",
-          datetime: ""
-        })
+          datetime: "",
+        });
         setrefreshData(!refreshData);
         setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
@@ -459,7 +549,7 @@ function Account() {
       });
     }
   };
-  const handleSubmit_trans = event => {
+  const handleSubmit_trans = (event) => {
     event.preventDefault();
     let account_ini = stateformtrans.account_ini;
     if (account_ini === 0) {
@@ -486,8 +576,11 @@ function Account() {
         divisa: stateformtrans.badge,
         acco_sec: stateformtrans.account_fin,
         descri: stateformtrans.descrip,
-        date: stateformtrans.datetime
-      }).then(response => {
+        date: stateformtrans.datetime,
+        trm: stateformtrans.trm,
+        customDeposit: stateformtrans.customDeposit,
+        inBadge: stateformtrans.inBadge,
+      }).then((response) => {
         //alert (response.data);
         ModNewTransSate();
         document.getElementById("btn_new_trans_move").innerHTML = "Add";
@@ -498,8 +591,11 @@ function Account() {
           account_ini: 0,
           account_fin: 0,
           datetime: "",
-          descrip: ""
-        })
+          descrip: "",
+          trm: 1,
+          customDeposit: 0,
+          inBadge: "COP",
+        });
         setrefreshData(!refreshData);
         setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
@@ -508,7 +604,7 @@ function Account() {
       });
     }
   };
-  const handleSubmitEdit = event => {
+  const handleSubmitEdit = (event) => {
     event.preventDefault();
     if (stateformEdit.badge === "" || stateformEdit.catego === 0) {
       alert("Fill in all the fields");
@@ -532,8 +628,8 @@ function Account() {
         date: stateformEdit.datetime,
         catego: stateformEdit.catego,
         account: acount,
-        event: stateformEdit.event ? stateformEdit.event : ""
-      }).then(response => {
+        event: stateformEdit.event ? stateformEdit.event : "",
+      }).then((response) => {
         //alert (response.data);
         ModEditSate();
         document.getElementById("btn_edit_move_move").innerHTML =
@@ -547,7 +643,7 @@ function Account() {
       });
     }
   };
-  const handleSubmitEditTrans = event => {
+  const handleSubmitEditTrans = (event) => {
     event.preventDefault();
     if (
       stateformEditTrans.badge === "" ||
@@ -572,8 +668,11 @@ function Account() {
         descrip: stateformEditTrans.descrip,
         date: stateformEditTrans.datetime,
         account_ini: stateformEditTrans.account_ini,
-        account_fin: stateformEditTrans.account_fin
-      }).then(response => {
+        account_fin: stateformEditTrans.account_fin,
+        trm: stateformEditTrans.trm,
+        customDeposit: stateformEditTrans.customDeposit,
+        inBadge: stateformEditTrans.editInBadge,
+      }).then((response) => {
         //alert (response.data);
         ModEditTransSate();
         document.getElementById("btn_edit_trans_move").innerHTML =
@@ -587,18 +686,16 @@ function Account() {
       });
     }
   };
-  const searchMove = e => {
-
-    const newJson = moveJson.filter(data => {
+  const searchMove = (e) => {
+    const newJson = moveJson.filter((data) => {
       if (
         data.categoria.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
-        -1 ||
+          -1 ||
         data.valor_int.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
-        -1 ||
+          -1 ||
         data.descripcion.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
-        -1 ||
-        data.fecha.toLowerCase().indexOf(e.target.value.toLowerCase()) !==
-        -1
+          -1 ||
+        data.fecha.toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1
       ) {
         return true;
       }
@@ -618,13 +715,13 @@ function Account() {
             </h3>
           </div>
           <div className="col justify-content-end row">
-            <Button className="btn-info mb-3" onClick={e => OpenModalMovi(e)}>
+            <Button className="btn-info mb-3" onClick={(e) => OpenModalMovi(e)}>
               <i className="fas fa-plus mr-2"></i>
               Move
             </Button>
             <Button
               className="mr-3 mb-3 btn-success"
-              onClick={e => OpenModalTrans(e)}
+              onClick={(e) => OpenModalTrans(e)}
             >
               <i className="fas fa-exchange-alt mr-2"></i>
               Transfer
@@ -655,7 +752,7 @@ function Account() {
                   type="text"
                   name="search"
                   placeholder="Search"
-                  onKeyUp={e => searchMove(e)}
+                  onKeyUp={(e) => searchMove(e)}
                 ></Form.Control>
               </FormGroup>
             </div>
@@ -671,7 +768,7 @@ function Account() {
                 key={index}
                 onClick={
                   data.categoria !== "Transferencia"
-                    ? e =>
+                    ? (e) =>
                         OpenModalEdit(
                           e,
                           data.id,
@@ -682,7 +779,7 @@ function Account() {
                           data.nro_cate,
                           data.evento
                         )
-                    : e =>
+                    : (e) =>
                         OpenModalEditTras(
                           e,
                           data.id,
@@ -690,7 +787,8 @@ function Account() {
                           data.divisa,
                           data.descripcion,
                           data.fecha,
-                          data.id_transfe
+                          data.id_transfe,
+                          data.trm
                         )
                 }
               >
@@ -754,7 +852,7 @@ function Account() {
                         step={0.01}
                         aria-describedby="SignalAppend"
                         required
-                        onChange={e => VerifySignal(e, "signo_move")}
+                        onChange={(e) => VerifySignal(e, "signo_move")}
                       ></Form.Control>
                     </InputGroup>
                   </div>
@@ -897,7 +995,7 @@ function Account() {
                         step={0.01}
                         aria-describedby="SignalAppend"
                         required
-                        onChange={e => VerifySignal(e, "")}
+                        onChange={(e) => VerifySignal(e, "")}
                       ></Form.Control>
                     </InputGroup>
                   </div>
@@ -992,6 +1090,74 @@ function Account() {
                   onChange={handleChangeTrans}
                 ></Form.Control>
               </FormGroup>
+              <p
+                className="text-sm text-info"
+                onClick={() => showAdvanceOption()}
+              >
+                Advanced Options
+                <i
+                  className={`fas ${
+                    showOption ? "fa-chevron-up" : "fa-chevron-down"
+                  } ml-2`}
+                ></i>
+              </p>
+              {showOption && (
+                <FormGroup>
+                  <Row className="align-items-end">
+                    <div className="col-md-8">
+                      <Label>TRM</Label>
+                      <Form.Control
+                        pattern="[0-9]{0,5}"
+                        type="number"
+                        name="trm"
+                        id="trm"
+                        step={0.01}
+                        required
+                        disabled
+                        key={
+                          stateformtrans.monto +
+                          stateformtrans.inBadge +
+                          stateformtrans.badge +
+                          stateformtrans.trm
+                        }
+                        defaultValue={stateformtrans.trm}
+                        onChange={handleChangeTrans}
+                      ></Form.Control>
+                    </div>
+                    <div className="col-md-3">
+                      <Label>In Badge</Label>
+                      <Form.Control
+                        as="select"
+                        name="inBadge"
+                        onChange={handleChangeTrans}
+                      >
+                        <option>COP</option>
+                        <option>USD</option>
+                      </Form.Control>
+                    </div>
+                  </Row>
+                </FormGroup>
+              )}
+              {showOption && (
+                <FormGroup>
+                  <Label>Custom deposit amount</Label>
+                  <Form.Control
+                    pattern="[0-9]{0,5}"
+                    type="number"
+                    name="customDeposit"
+                    id="customDeposit"
+                    step={0.01}
+                    required
+                    key={
+                      stateformtrans.monto +
+                      stateformtrans.badge +
+                      stateformtrans.inBadge
+                    }
+                    defaultValue={stateformtrans.customDeposit}
+                    onChange={handleChangeTrans}
+                  ></Form.Control>
+                </FormGroup>
+              )}
             </Modal.Body>
             <Modal.Footer>
               <Button color="danger" onClick={ModNewTransSate}>
@@ -1039,7 +1205,7 @@ function Account() {
                         aria-describedby="SignalAppend"
                         required
                         defaultValue={stateformEdit.monto}
-                        onChange={e => VerifySignal(e, "signo_move_edit")}
+                        onChange={(e) => VerifySignal(e, "signo_move_edit")}
                       ></Form.Control>
                     </InputGroup>
                   </div>
@@ -1125,7 +1291,7 @@ function Account() {
                     as="select"
                     name="event"
                     onChange={handleChangeEdit}
-                    value={stateformEdit.event ? stateformEdit.event : ''}
+                    value={stateformEdit.event ? stateformEdit.event : ""}
                   >
                     <option></option>
                     {stateEvent.length > 0
@@ -1146,7 +1312,7 @@ function Account() {
             <ModalFooter>
               <Button
                 color="danger"
-                onClick={e =>
+                onClick={(e) =>
                   OpenModalDelete(
                     e,
                     stateformEdit.id_data,
@@ -1216,7 +1382,7 @@ function Account() {
                         aria-describedby="SignalAppend"
                         required
                         defaultValue={stateformEditTrans.monto}
-                        onChange={e => VerifySignal(e, "signo_trans_edit")}
+                        onChange={(e) => VerifySignal(e, "signo_trans_edit")}
                       ></Form.Control>
                     </InputGroup>
                   </div>
@@ -1316,11 +1482,80 @@ function Account() {
                   onChange={handleChangeEditTrans}
                 ></Form.Control>
               </FormGroup>
+              <p
+                className="text-sm text-info"
+                onClick={() => showAdvanceOption()}
+              >
+                Advanced Options
+                <i
+                  className={`fas ${
+                    showOption ? "fa-chevron-up" : "fa-chevron-down"
+                  } ml-2`}
+                ></i>
+              </p>
+              {showOption && (
+                <FormGroup>
+                  <Row className="align-items-end">
+                    <div className="col-md-8">
+                      <Label>TRM</Label>
+                      <Form.Control
+                        pattern="[0-9]{0,2}"
+                        type="number"
+                        name="trm"
+                        id="trm"
+                        step={0.01}
+                        required
+                        disabled
+                        key={
+                          stateformEditTrans.monto +
+                          stateformEditTrans.editInBadge +
+                          stateformEditTrans.badge +
+                          stateformEditTrans.trm
+                        }
+                        defaultValue={stateformEditTrans.trm}
+                        onChange={handleChangeEditTrans}
+                      ></Form.Control>
+                    </div>
+                    <div className="col-md-3">
+                      <Label>In Badge</Label>
+                      <Form.Control
+                        as="select"
+                        name="editInBadge"
+                        defaultValue={stateformEditTrans.editInBadge}
+                        onChange={handleChangeEditTrans}
+                      >
+                        <option>COP</option>
+                        <option>USD</option>
+                      </Form.Control>
+                    </div>
+                  </Row>
+                </FormGroup>
+              )}
+              {showOption && (
+                <FormGroup>
+                  <Label>Custom deposit amount</Label>
+                  <Form.Control
+                    pattern="[0-9]{0,2}"
+                    type="number"
+                    name="customDeposit"
+                    id="customDeposit"
+                    step={0.01}
+                    required
+                    key={
+                      stateformEditTrans.monto +
+                      stateformEditTrans.badge +
+                      stateformEditTrans.editInBadge
+                    }
+                    defaultValue={stateformEditTrans.customDeposit}
+                    onChange={handleChangeEditTrans}
+                  ></Form.Control>
+                </FormGroup>
+              )}
             </Modal.Body>
             <ModalFooter>
               <Button
                 color="danger"
-                onClick={e =>
+                onClick={(e) =>
                   OpenModalDelete(
                     e,
                     stateformEditTrans.id_data,
