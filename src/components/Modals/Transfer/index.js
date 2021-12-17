@@ -12,6 +12,7 @@ const ModalTranfer = (props) => {
         stateCatego,
         handleChangeTrans,
         ModNewTransSate,
+        stateformtrans
       } = props;
 
   return (
@@ -26,6 +27,7 @@ const ModalTranfer = (props) => {
         stateCatego={stateCatego}
         handleChangeTrans={handleChangeTrans}
         ModNewTransSate={ModNewTransSate}
+        stateformtrans={stateformtrans}
       />
     </Modal>
   );

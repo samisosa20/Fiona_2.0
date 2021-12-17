@@ -13,26 +13,34 @@ const FormAccount = (props) => {
     stateCatego,
     handleChangeTrans,
     ModNewTransSate,
+    stateformtrans
   } = props;
   const [dateTime, setDateTime] = useState("");
 
-  useEffect(() => {
+  const [showOption, setShowOption] = useState(false);
+  const showAdvanceOption = () => {
+    setShowOption(!showOption);
+  };
 
-    setDateTime(`${new Date().getFullYear()}-${`${
-      new Date().getMonth() + 1
-    }`.padStart(2, 0)}-${`${new Date().getDate()}`.padStart(
-      2,
-      0
-    )}T${`${new Date().getHours()}`.padStart(
-      2,
-      0
-    )}:${`${new Date().getMinutes()}`.padStart(2, 0)}`);
+  useEffect(() => {
+    setDateTime(
+      `${new Date().getFullYear()}-${`${new Date().getMonth() + 1}`.padStart(
+        2,
+        0
+      )}-${`${new Date().getDate()}`.padStart(
+        2,
+        0
+      )}T${`${new Date().getHours()}`.padStart(
+        2,
+        0
+      )}:${`${new Date().getMinutes()}`.padStart(2, 0)}`
+    );
   }, []);
   return (
     <Form role="form" onSubmit={handleSubmit_trans}>
       <Modal.Body>
         <FormGroup>
-          <Row>
+          <Row className="align-items-end">
             <div className="col-md-8">
               <Label>Value</Label>
               <InputGroup>
@@ -127,6 +135,62 @@ const FormAccount = (props) => {
             onChange={handleChangeTrans}
           ></Form.Control>
         </FormGroup>
+        <p className="text-sm text-info" onClick={() => showAdvanceOption()}>
+          Advanced Options
+          <i
+            className={`fas ${
+              showOption ? "fa-chevron-up" : "fa-chevron-down"
+            } ml-2`}
+          ></i>
+        </p>
+        {showOption && (
+          <FormGroup>
+            <Row className="align-items-end">
+              <div className="col-md-8">
+                <Label>TRM</Label>
+                <Form.Control
+                  pattern="[0-9]{0,5}"
+                  type="number"
+                  name="trm"
+                  id="trm"
+                  step={0.01}
+                  required
+                  disabled
+                  key={stateformtrans.monto + stateformtrans.inBadge + stateformtrans.badge + stateformtrans.trm}
+                  defaultValue={stateformtrans.trm}
+                  onChange={handleChangeTrans}
+                ></Form.Control>
+              </div>
+              <div className="col-md-3">
+                <Label>In Badge</Label>
+                <Form.Control
+                  as="select"
+                  name="inBadge"
+                  onChange={handleChangeTrans}
+                >
+                  <option>COP</option>
+                  <option>USD</option>
+                </Form.Control>
+              </div>
+            </Row>
+          </FormGroup>
+        )}
+        {showOption && (
+          <FormGroup>
+            <Label>Custom deposit amount</Label>
+            <Form.Control
+              pattern="[0-9]{0,5}"
+              type="number"
+              name="customDeposit"
+              id="customDeposit"
+              step={0.01}
+              required
+              key={stateformtrans.monto + stateformtrans.badge + stateformtrans.inBadge}
+              defaultValue={stateformtrans.customDeposit}
+              onChange={handleChangeTrans}
+            ></Form.Control>
+          </FormGroup>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button color="danger" onClick={ModNewTransSate}>
