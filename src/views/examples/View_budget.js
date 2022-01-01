@@ -16,10 +16,12 @@ import { Header } from "components/Headers/Header.js";
 import API from "../../variables/API";
 
 import Modaldelete from "../../components/Modals/Delete";
+import Alert from "../../components/Alert";
 
 function ViewBudget() {
   const [state, setState] = useState([]);
   const [showDelMod, setshowDelMod] = useState(false);
+  const [stateAlert, setSateAlert] = useState({ visible: false, code: 200 });
   const [stateBudget, setstateBudget] = useState({ number: 0, name: "", data: [] });
   const [stateEdit, setstateEdit] = useState({
     pass: 0,
@@ -354,6 +356,7 @@ function ViewBudget() {
           state={stateBudget}
           year={year}
           extraModal={ModMounthSate}
+          setSateAlert={setSateAlert}
         />
         <Modal show={showEditMod} id="ModalEditBudget" onHide={ModEditSate}>
           <Modal.Header closeButton>
@@ -405,6 +408,7 @@ function ViewBudget() {
           </Form>
         </Modal>
       </Container>
+      <Alert visible={stateAlert.visible} code={stateAlert.code} />
     </>
   );
 }

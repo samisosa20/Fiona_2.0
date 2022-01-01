@@ -8,9 +8,10 @@ import {
   Container,
   FormGroup,
 } from "reactstrap";
-import { Form, Modal, option } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 // core components
 import { Header } from "components/Headers/Header.js";
+import Alert from "../../components/Alert";
 import API from "../../variables/API";
 
 function ViewBudget() {
@@ -29,6 +30,7 @@ function ViewBudget() {
 
   /* Declaracion de estados de los modals */
   const [ShowStep1, SetShowStep1] = useState(false);
+  const [stateAlert, setSateAlert] = useState({ visible: false, code: 200 });
   const [ShowStep2, SetShowStep2] = useState(false);
   const [refreshData, /* setrefreshData */] = useState(false);
 
@@ -142,7 +144,10 @@ function ViewBudget() {
         replica: replicar_val,
         year: stateForm.year,
       }).then((response) => {
-        response.data === 200 ? alert("Data save") : alert("Data doesn't save");
+        setSateAlert({ visible: true, code: response.data })
+        setTimeout(() => {
+          setSateAlert({ visible: false, code: 0 });
+        }, 2000);
         //alert(response.data);
         if (stateForm.action === 1 || replicar_val === 1) {
           ModStep2();
@@ -303,6 +308,7 @@ function ViewBudget() {
                   name="mounth"
                   disabled={stateForm.action === 2 ? true : false}
                   id="mounth"
+                  onChange={handleChange}
                   defaultValue={stateForm.mounth}
                 >
                   <option value="0">Select a option</option>
@@ -360,6 +366,7 @@ function ViewBudget() {
           </Form>
         </Modal>
       </Container>
+      <Alert visible={stateAlert.visible} code={stateAlert.code} />
     </>
   );
 }
