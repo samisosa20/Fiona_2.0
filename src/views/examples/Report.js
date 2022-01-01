@@ -151,19 +151,64 @@ function Report() {
         hidden: true,
       });
     } else if (mode === "12" || mode === "-12") {
-      d.setFullYear(mode === "-12" ? now.getFullYear() - 1 : now.getFullYear(), month_now, 0);
+      year = mode === "-12" ? now.getFullYear() - 1 : now.getFullYear()
+      formattedDateTime = year + "-12-31";
+      document.getElementById("Edate").value = formattedDateTime;
+      formattedDateTimeIni = year + "-01-01";
+      document.getElementById("Sdate").value = formattedDateTimeIni;
+
+      setDate({
+        ...stateDate,
+        Sdate: formattedDateTimeIni,
+        Fdate: formattedDateTime,
+        hidden: true,
+      });
+    } else if (mode === "-3") {
+      let threeDate = new Date(now.setMonth(now.getMonth()-2));
+      const lastYear = threeDate.getFullYear();
+      const lastMonth =
+      threeDate.getMonth().toString().length === 1
+          ? "0" + threeDate.getMonth().toString()
+          : threeDate.getMonth();
+
+      d.setFullYear(d.getFullYear(), month_now, 0);
       year = d.getFullYear();
-      month =
-        (d.getMonth() + 1).toString().length === 1
-          ? "0" + (d.getMonth() + 1).toString()
-          : d.getMonth() + 1;
       date =
         d.getDate().toString().length === 1
           ? "0" + d.getDate().toString()
           : d.getDate();
-      formattedDateTime = year + "-" + month + "-" + date;
+
+      formattedDateTime = year + "-" + month_now + "-" + date;
       document.getElementById("Edate").value = formattedDateTime;
-      formattedDateTimeIni = year + "-01-01";
+
+      formattedDateTimeIni = lastYear + "-" + lastMonth + "-01";
+      document.getElementById("Sdate").value = formattedDateTimeIni;
+
+      setDate({
+        ...stateDate,
+        Sdate: formattedDateTimeIni,
+        Fdate: formattedDateTime,
+        hidden: true,
+      });
+    } else if (mode === "-6") {
+      let sixDate = new Date(now.setMonth(now.getMonth()-5));
+      const lastYear = sixDate.getFullYear();
+      const lastMonth =
+      sixDate.getMonth().toString().length === 1
+          ? "0" + sixDate.getMonth().toString()
+          : sixDate.getMonth();
+
+      d.setFullYear(d.getFullYear(), month_now, 0);
+      year = d.getFullYear();
+      date =
+        d.getDate().toString().length === 1
+          ? "0" + d.getDate().toString()
+          : d.getDate();
+
+      formattedDateTime = year + "-" + month_now + "-" + date;
+      document.getElementById("Edate").value = formattedDateTime;
+
+      formattedDateTimeIni = lastYear + "-" + lastMonth + "-01";
       document.getElementById("Sdate").value = formattedDateTimeIni;
 
       setDate({
