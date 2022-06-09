@@ -9,6 +9,9 @@
         "type": "git",
         "url": "git+https://github.com/itpmsoftware/Fiona_React.git"
     },
+    "engines": {
+        "node": "14.15.0"
+    },
     "keywords": [
         "react",
         "reactjs",
