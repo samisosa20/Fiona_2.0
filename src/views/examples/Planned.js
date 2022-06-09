@@ -58,6 +58,7 @@ const Catego = () => {
   });
 
   const translateRecu = {
+    "-1.00": "Specific Day",
     "0.70": "Weekly",
     "0.15": "Biweekly",
     "1.00": "Monthly",
@@ -164,6 +165,7 @@ const Catego = () => {
             endDate: data.endDate,
             categoryName: data.categoryName,
             accountName: data.accountName,
+            specificDay: data.specificDay,
             signal: data.value < 0 ? "-" : "+",
             repeat: stateformEdit.endDate === '0000-00-00' ? 0 : 1,
             id_data: data.id,
@@ -195,6 +197,7 @@ const Catego = () => {
         startDate: stateform.startDate,
         frequency: stateform.frequency,
         recurrency: stateform.recurrency,
+        specificDay: stateform.specificDay,
         endDate: stateform.endDate,
         description: stateform.description,
       }).then((response) => {
@@ -478,15 +481,33 @@ const Catego = () => {
                     <option value="" hidden>
                       Set recurrence
                     </option>
+                    <option value="-1.00">specific day</option>
                     <option value="0.1">Daily</option>
                     <option value="0.7">Weekly</option>
                     <option value="0.15">Biweekly</option>
-                    <option value="1">Monthly</option>
-                    <option value="2">Bimonthly</option>
-                    <option value="3">Trimestraly</option>
-                    <option value="4">Quarterly</option>
-                    <option value="6">Biannual</option>
-                    <option value="12">Yearly</option>
+                    <option value="1.00">Monthly</option>
+                    <option value="2.00">Bimonthly</option>
+                    <option value="3.00">Trimestraly</option>
+                    <option value="4.00">Quarterly</option>
+                    <option value="6.00">Biannual</option>
+                    <option value="12.00">Yearly</option>
+                  </Form.Control>
+                </FormGroup>
+                <FormGroup hidden={stateform.recurrency !== "-1.00"}>
+                  <Label>Choose a day</Label>
+                  <Form.Control
+                    as="select"
+                    name="specificDay"
+                    onChange={handleChange}
+                    defaultValue={stateform.specificDay}
+                  >
+                    <option value="" hidden>
+                      Select a day
+                    </option>
+                    {Array.from(Array(31), (e, i) => {
+                      return <option key={i+1}>{i+1}</option>
+                    })
+                    }
                   </Form.Control>
                 </FormGroup>
                 <FormGroup hidden={stateform.frequency === "0"}>

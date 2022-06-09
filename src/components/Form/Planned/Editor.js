@@ -45,10 +45,17 @@ const FormEditor = (props) => {
   };
 
   const handleChange = (event) => {
-    if(event.target.name === 'repeat' && event.target.value === '0') {
-      setformEdit({ ...stateformEdit, endDate: '', [event.target.name]: event.target.value });
+    if (event.target.name === "repeat" && event.target.value === "0") {
+      setformEdit({
+        ...stateformEdit,
+        endDate: "",
+        [event.target.name]: event.target.value,
+      });
     } else {
-      setformEdit({ ...stateformEdit, [event.target.name]: event.target.value });
+      setformEdit({
+        ...stateformEdit,
+        [event.target.name]: event.target.value,
+      });
     }
   };
   const handleSubmitEdit = (event) => {
@@ -72,6 +79,7 @@ const FormEditor = (props) => {
         frequency: stateformEdit.frequency,
         recurrency: stateformEdit.recurrency,
         endDate: stateformEdit.endDate,
+        specificDay: stateformEdit.specificDay,
         description: stateformEdit.description,
       }).then((response) => {
         ModEdiCateSate();
@@ -233,6 +241,7 @@ const FormEditor = (props) => {
           <option value="" hidden>
             Set recurrence
           </option>
+          <option value="-1.00">specific day</option>
           <option value="0.10">Daily</option>
           <option value="0.70">Weekly</option>
           <option value="0.15">Biweekly</option>
@@ -244,9 +253,30 @@ const FormEditor = (props) => {
           <option value="12.00">Yearly</option>
         </Form.Control>
       </FormGroup>
+      <FormGroup hidden={stateformEdit.recurrency !== "-1.00"}>
+        <Label>Choose a day</Label>
+        <Form.Control
+          as="select"
+          name="specificDay"
+          onChange={handleChange}
+          defaultValue={stateformEdit.specificDay}
+        >
+          <option value="" hidden>
+            Select a day
+          </option>
+          {Array.from(Array(31), (e, i) => {
+            return <option key={i + 1}>{i + 1}</option>;
+          })}
+        </Form.Control>
+      </FormGroup>
       <FormGroup hidden={stateformEdit.frequency === "0"}>
         <Label>Repeat</Label>
-        <Form.Control as="select" name="repeat" onChange={handleChange} defaultValue={stateformEdit.repeat}>
+        <Form.Control
+          as="select"
+          name="repeat"
+          onChange={handleChange}
+          defaultValue={stateformEdit.repeat}
+        >
           <option value="0">Forever</option>
           <option value="1">Until a date</option>
         </Form.Control>
