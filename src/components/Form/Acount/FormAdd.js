@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import CurrencyInput from 'react-currency-input-field';
 
 import { Button, Row, Input, FormGroup, Label } from "reactstrap";
 import { Form, InputGroup } from "react-bootstrap";
@@ -12,6 +13,7 @@ const FormAdd = (props) => {
     stateAcount,
     stateCatego,
     stateEvent,
+    stateform,
   } = props;
 
   const [showOption, setShowOption] = useState(false);
@@ -22,7 +24,7 @@ const FormAdd = (props) => {
   return (
     <>
       <FormGroup>
-        <Row>
+        <Row className="align-items-end">
           <div className="col-md-8">
             <Label>Value</Label>
             <InputGroup>
@@ -37,22 +39,24 @@ const FormAdd = (props) => {
                   {stateSignal.Signal}
                 </Button>
               </InputGroup.Prepend>
-              <Form.Control
-                pattern="[0-9]{0,5}"
-                type="number"
-                name="monto"
+              <CurrencyInput
                 id="monto"
-                step={0.01}
-                aria-describedby="SignalAppend"
+                name="monto"
+                placeholder=" Please enter a value"
+                decimalsLimit={2}
+                value={stateform.monto}
                 required
-                onChange={(e) => VerifySignal(e, "signo_move")}
-              ></Form.Control>
+                decimalSeparator=","
+                groupSeparator="."
+                step={0.01}
+                className="form-control"
+                onValueChange={(value, name) => VerifySignal(value, name, "signo_move")}
+              />
             </InputGroup>
           </div>
           <div className="col-md-3">
             <Form.Control
               as="select"
-              className="mt-4"
               name="badge"
               onChange={handleChange}
             >
@@ -65,7 +69,7 @@ const FormAdd = (props) => {
       <FormGroup>
         <Label>Acount</Label>
         <Form.Control as="select" name="acount" onChange={handleChange}>
-          <option></option>
+          <option value="" hidden>Choose an account</option>
           {stateAcount.id !== -1000 && stateAcount.length > 0
             ? stateAcount.map((data, index) => {
                 return (
@@ -84,7 +88,7 @@ const FormAdd = (props) => {
       <FormGroup>
         <Label>Category</Label>
         <Form.Control as="select" name="catego" onChange={handleChange}>
-          <option></option>
+          <option value="" hidden>Choose a category</option>
           {stateCatego.id !== -1000
             ? stateCatego.map((data, index) => {
                 if (data.sub_categoria === data.categoria) {
@@ -146,7 +150,7 @@ const FormAdd = (props) => {
         <FormGroup>
           <Label>Event</Label>
           <Form.Control as="select" name="event" onChange={handleChange}>
-            <option></option>
+            <option value="" hidden>Choose an event</option>
             {stateEvent.length > 0
               ? stateEvent.map((data, index) => {
                   if (data.activo === "1") {

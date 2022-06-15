@@ -24,7 +24,7 @@ function Account() {
     catego: "",
     descrip: "",
     badge: "COP",
-    monto: 0,
+    monto: null,
     save_account: false
   });
   // edicion de informacion
@@ -51,7 +51,7 @@ function Account() {
   const [stateAlert, setSateAlert] = useState({ visible: false, code: 200 });
   const [stateSignal, setSignal] = useState({ Signal: "+" });
   const [stateformtrans, setformtrans] = useState({
-    monto: 0,
+    monto: null,
     badge: "COP",
     account_ini: 0,
     account_fin: 0,
@@ -122,23 +122,23 @@ function Account() {
     ModEdiCateSate();
     //document.getElementById("edit_badge").value = group;
   };
-  const VerifySignal = (event, idSigno) => {
-    let signo = document.getElementById(idSigno);
+  const VerifySignal = (value, nameContainer, idSigno) => {
+    let signo = document.getElementById(idSigno), valuePrice = value === undefined ? null : parseFloat(value)
 
-    if (event.target.value < 0) {
+    if (valuePrice < 0) {
       if (idSigno !== "") {
         setSignal({ Signal: "-" });
         signo.className = "btn btn-outline-danger";
       }
-      event.target.value = event.target.value * -1;
+      valuePrice = valuePrice * -1;
     }
     if (idSigno === "signo_move") {
-      setform({ ...stateform, [event.target.name]: event.target.value });
+      setform({ ...stateform, [nameContainer]: valuePrice });
     } else {
-      const customDeposit = stateformtrans.badge === "COP" && stateformtrans.inBadge === 'USD' ? parseFloat(event.target.value / stateformtrans.trm).toFixed(2) : parseFloat(event.target.value * stateformtrans.trm).toFixed(2)
+      const customDeposit = stateformtrans.badge === "COP" && stateformtrans.inBadge === 'USD' ? parseFloat(valuePrice / stateformtrans.trm).toFixed(2) : parseFloat(valuePrice * stateformtrans.trm).toFixed(2)
       setformtrans({
         ...stateformtrans,
-        [event.target.name]: event.target.value,
+        [nameContainer]: valuePrice,
         customDeposit: customDeposit,
       });
     }
@@ -397,9 +397,10 @@ function Account() {
           catego: "",
           descrip: "",
           badge: "COP",
-          monto: 0,
+          monto: null,
           save_account: false
         });
+        setSignal({ Signal: "+" });
         setSateAlert({ visible: true, code: response.data });
         setTimeout(() => {
           setSateAlert({ visible: false, code: 0 });
@@ -438,7 +439,7 @@ function Account() {
         setrefreshData(!refreshData);
         ModNewTransSate();
         setformtrans({
-          monto: 0,
+          monto: null,
           badge: "COP",
           account_ini: 0,
           account_fin: 0,
@@ -524,6 +525,7 @@ function Account() {
           stateAcount={stateAcount}
           stateCatego={stateCatego}
           stateEvent={stateEvent}
+          stateform={stateform}
           showNewModMovi={showNewModMovi}
           handleSubmitMovi={handleSubmitMovi}
           ModNewMoviSate={ModNewMoviSate}

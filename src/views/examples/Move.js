@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TrmApi from "trm-api";
+import CurrencyInput from 'react-currency-input-field';
 
 import API from "../../variables/API";
 import axios from "axios";
@@ -34,14 +35,14 @@ function Account() {
   const [moveJson, setMoveJson] = useState([]);
   // envio de informacion
   const [stateform, setform] = useState({
-    monto: 0,
+    monto: null,
     badge: "COP",
     catego: 0,
     descrip: "",
     datetime: "",
   });
   const [stateformtrans, setformtrans] = useState({
-    monto: 0,
+    monto: null,
     badge: "COP",
     account_ini: 0,
     account_fin: 0,
@@ -457,42 +458,41 @@ function Account() {
       });
     }
   };
-  const VerifySignal = (event, idSigno) => {
-    let signo = document.getElementById(idSigno);
-
-    if (event.target.value < 0) {
+  const VerifySignal = (value, nameContainer, idSigno) => {
+    let signo = document.getElementById(idSigno), valuePrice = value === undefined ? null : parseFloat(value)
+    if (valuePrice < 0) {
       if (idSigno !== "") {
         setSignal({ Signal: "-" });
         signo.className = "btn btn-outline-danger";
       }
-      event.target.value = event.target.value * -1;
+      valuePrice = valuePrice * -1;
     }
     if (idSigno === "signo_move") {
-      setform({ ...stateform, [event.target.name]: event.target.value });
+      setform({ ...stateform, [nameContainer]: valuePrice });
     } else if (idSigno === "signo_move_edit") {
       setformEdit({
         ...stateformEdit,
-        [event.target.name]: event.target.value,
+        [nameContainer]: valuePrice,
       });
     } else if (idSigno === "signo_trans_edit") {
       const customDeposit =
         stateformEditTrans.badge === "COP" &&
         stateformEditTrans.editInBadge === "USD"
-          ? parseFloat(event.target.value / stateformEditTrans.trm).toFixed(2)
-          : parseFloat(event.target.value * stateformEditTrans.trm).toFixed(2);
+          ? parseFloat(valuePrice / stateformEditTrans.trm).toFixed(2)
+          : parseFloat(valuePrice * stateformEditTrans.trm).toFixed(2);
       setformEditTrans({
         ...stateformEditTrans,
-        [event.target.name]: event.target.value,
+        [nameContainer]: valuePrice,
         customDeposit: customDeposit,
       });
     } else {
       const customDeposit =
         stateformtrans.badge === "COP" && stateformtrans.inBadge === "USD"
-          ? parseFloat(event.target.value / stateformtrans.trm).toFixed(2)
-          : parseFloat(event.target.value * stateformtrans.trm).toFixed(2);
+          ? parseFloat(valuePrice / stateformtrans.trm).toFixed(2)
+          : parseFloat(valuePrice * stateformtrans.trm).toFixed(2);
       setformtrans({
         ...stateformtrans,
-        [event.target.name]: event.target.value,
+        [nameContainer]: valuePrice,
         customDeposit: customDeposit,
       });
     }
@@ -535,7 +535,7 @@ function Account() {
         document.getElementById("btn_new_move_move").innerHTML = "Add";
         document.getElementById("btn_new_move_move").disabled = false;
         setform({
-          monto: 0,
+          monto: null,
           badge: "COP",
           catego: 0,
           descrip: "",
@@ -586,7 +586,7 @@ function Account() {
         document.getElementById("btn_new_trans_move").innerHTML = "Add";
         document.getElementById("btn_new_trans_move").disabled = false;
         setformtrans({
-          monto: 0,
+          monto: null,
           badge: "COP",
           account_ini: 0,
           account_fin: 0,
@@ -829,7 +829,7 @@ function Account() {
           <Form role="form" onSubmit={handleSubmit}>
             <Modal.Body>
               <FormGroup>
-                <Row>
+                <Row className="align-items-end">
                   <div className="col-md-8">
                     <Label>Value</Label>
                     <InputGroup>
@@ -844,22 +844,24 @@ function Account() {
                           {stateSignal.Signal}
                         </Button>
                       </InputGroup.Prepend>
-                      <Form.Control
-                        pattern="[0-9]{0,5}"
-                        type="number"
-                        name="monto"
+                      <CurrencyInput
                         id="monto"
-                        step={0.01}
-                        aria-describedby="SignalAppend"
+                        name="monto"
+                        placeholder=" Please enter a value"
+                        decimalsLimit={2}
+                        value={stateform.monto}
                         required
-                        onChange={(e) => VerifySignal(e, "signo_move")}
-                      ></Form.Control>
+                        decimalSeparator=","
+                        groupSeparator="."
+                        step={0.01}
+                        className="form-control"
+                        onValueChange={(value, name) => VerifySignal(value, name, "signo_move")}
+                      />
                     </InputGroup>
                   </div>
                   <div className="col-md-3">
                     <Form.Control
                       as="select"
-                      className="mt-4"
                       name="badge"
                       onChange={handleChange}
                     >
@@ -872,7 +874,7 @@ function Account() {
               <FormGroup>
                 <Label>Category</Label>
                 <Form.Control as="select" name="catego" onChange={handleChange}>
-                  <option></option>
+                  <option value="" hidden>Choose a category</option>
                   {stateCatego.id !== -1000
                     ? stateCatego.map((data, index) => {
                         if (data.sub_categoria === data.categoria) {
@@ -941,7 +943,7 @@ function Account() {
                     name="event"
                     onChange={handleChange}
                   >
-                    <option></option>
+                    <option value="" hidden>Choose an event</option>
                     {stateEvent.length > 0
                       ? stateEvent.map((data, index) => {
                           if (data.activo === "1") {
@@ -974,7 +976,7 @@ function Account() {
           <Form role="form" onSubmit={handleSubmit_trans}>
             <Modal.Body>
               <FormGroup>
-                <Row>
+                <Row className="align-items-end">
                   <div className="col-md-8">
                     <Label>Value</Label>
                     <InputGroup>
@@ -987,22 +989,24 @@ function Account() {
                           +
                         </Button>
                       </InputGroup.Prepend>
-                      <Form.Control
-                        pattern="[0-9]{0,5}"
-                        type="number"
-                        name="monto"
+                      <CurrencyInput
                         id="monto"
-                        step={0.01}
-                        aria-describedby="SignalAppend"
+                        name="monto"
+                        placeholder=" Please enter a value"
+                        decimalsLimit={2}
+                        value={stateformtrans.monto}
                         required
-                        onChange={(e) => VerifySignal(e, "")}
-                      ></Form.Control>
+                        decimalSeparator=","
+                        groupSeparator="."
+                        step={0.01}
+                        className="form-control"
+                        onValueChange={(value, name) => VerifySignal(value, name, "")}
+                      />
                     </InputGroup>
                   </div>
                   <div className="col-md-3">
                     <Form.Control
                       as="select"
-                      className="mt-4"
                       name="badge"
                       onChange={handleChangeTrans}
                     >
@@ -1020,7 +1024,7 @@ function Account() {
                   name="account_ini"
                   onChange={handleChangeTrans}
                 >
-                  <option></option>
+                  <option value="" hidden>Choose an account</option>
                   {stateCatego.id !== -1000
                     ? stateCatego.map((data, index) => {
                         if (data.id === acount) {
@@ -1052,7 +1056,7 @@ function Account() {
                   name="account_fin"
                   onChange={handleChangeTrans}
                 >
-                  <option></option>
+                  <option value="" hidden>Choose an account</option>
                   {stateCatego.id !== -1000
                     ? stateCatego.map((data, index) => {
                         return (
@@ -1176,7 +1180,7 @@ function Account() {
           <Form role="form" onSubmit={handleSubmitEdit}>
             <Modal.Body>
               <FormGroup>
-                <Row>
+                <Row className="align-items-end">
                   <div className="col-md-8">
                     <Label>Value</Label>
                     <InputGroup>
@@ -1196,23 +1200,24 @@ function Account() {
                           {stateSignal.Signal}
                         </Button>
                       </InputGroup.Prepend>
-                      <Form.Control
-                        pattern="[0-9]{0,5}"
-                        type="number"
-                        name="monto"
-                        step={0.01}
+                      <CurrencyInput
                         id="monto_edit"
-                        aria-describedby="SignalAppend"
-                        required
+                        name="monto"
+                        placeholder=" Please enter a value"
+                        decimalsLimit={2}
                         defaultValue={stateformEdit.monto}
-                        onChange={(e) => VerifySignal(e, "signo_move_edit")}
-                      ></Form.Control>
+                        required
+                        decimalSeparator=","
+                        groupSeparator="."
+                        step={0.01}
+                        className="form-control"
+                        onValueChange={(value, name) => VerifySignal(value, name, "signo_move_edit")}
+                      />
                     </InputGroup>
                   </div>
                   <div className="col-md-3">
                     <Form.Control
                       as="select"
-                      className="mt-4"
                       name="badge"
                       onChange={handleChangeEdit}
                     >
@@ -1293,7 +1298,7 @@ function Account() {
                     onChange={handleChangeEdit}
                     value={stateformEdit.event ? stateformEdit.event : ""}
                   >
-                    <option></option>
+                    <option value="" hidden>Choose an event</option>
                     {stateEvent.length > 0
                       ? stateEvent.map((data, index) => {
                           if (data.activo === "1") {
@@ -1354,7 +1359,7 @@ function Account() {
           <Form role="form" onSubmit={handleSubmitEditTrans}>
             <Modal.Body>
               <FormGroup>
-                <Row>
+                <Row className="align-items-end">
                   <div className="col-md-8">
                     <Label>Value</Label>
                     <InputGroup>
@@ -1373,23 +1378,24 @@ function Account() {
                           {stateSignal.Signal}
                         </Button>
                       </InputGroup.Prepend>
-                      <Form.Control
-                        pattern="[0-9]{0,5}"
-                        type="number"
-                        name="monto"
+                      <CurrencyInput
                         id="monto_edit"
-                        step={0.01}
-                        aria-describedby="SignalAppend"
-                        required
+                        name="monto"
+                        placeholder=" Please enter a value"
+                        decimalsLimit={2}
                         defaultValue={stateformEditTrans.monto}
-                        onChange={(e) => VerifySignal(e, "signo_trans_edit")}
-                      ></Form.Control>
+                        required
+                        decimalSeparator=","
+                        groupSeparator="."
+                        step={0.01}
+                        className="form-control"
+                        onValueChange={(value, name) => VerifySignal(value, name, "signo_trans_edit")}
+                      />
                     </InputGroup>
                   </div>
                   <div className="col-md-3">
                     <Form.Control
                       as="select"
-                      className="mt-4"
                       name="badge"
                       onChange={handleChangeEditTrans}
                     >

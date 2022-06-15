@@ -16,7 +16,8 @@ const ModalAddMovement = (props) => {
         stateEvent,
         showNewModMovi,
         handleSubmitMovi,
-        ModNewMoviSate
+        ModNewMoviSate,
+        stateform
       } = props;
   return (
     <Modal show={showNewModMovi} id="ModalAdd" onHide={ModNewMoviSate}>
@@ -33,6 +34,7 @@ const ModalAddMovement = (props) => {
             stateAcount={stateAcount}
             stateCatego={stateCatego}
             stateEvent={stateEvent}
+            stateform={stateform}
           />
         </Modal.Body>
         <Modal.Footer>

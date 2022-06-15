@@ -97,6 +97,7 @@
         "gulp": "4.0.2",
         "gulp-append-prepend": "1.0.8",
         "http-proxy-middleware": "^1.0.5",
+        "react-currency-input-field": "^3.6.4",
         "typescript": "3.7.5"
     }
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import CurrencyInput from 'react-currency-input-field';
 
 // reactstrap components
 import { Button, Row, FormGroup, Label } from "reactstrap";
@@ -53,7 +54,20 @@ const FormAccount = (props) => {
                     +
                   </Button>
                 </InputGroup.Prepend>
-                <Form.Control
+                <CurrencyInput
+                id="monto"
+                name="monto"
+                placeholder=" Please enter a value"
+                decimalsLimit={2}
+                value={stateformtrans.monto}
+                required
+                decimalSeparator=","
+                groupSeparator="."
+                step={0.01}
+                className="form-control"
+                onValueChange={(value, name) => VerifySignal(value, name, "")}
+              />
+                {/* <Form.Control
                   pattern="[0-9]{0,5}"
                   type="number"
                   name="monto"
@@ -62,13 +76,12 @@ const FormAccount = (props) => {
                   aria-describedby="SignalAppend"
                   required
                   onChange={(e) => VerifySignal(e, "")}
-                ></Form.Control>
+                ></Form.Control> */}
               </InputGroup>
             </div>
             <div className="col-md-3">
               <Form.Control
                 as="select"
-                className="mt-4"
                 name="badge"
                 onChange={handleChangeTrans}
               >
@@ -86,7 +99,7 @@ const FormAccount = (props) => {
             name="account_ini"
             onChange={handleChangeTrans}
           >
-            <option></option>
+            <option value="" hidden>Choose an account</option>
             {stateCatego.id !== -1000
               ? stateCatego.map((data, index) => {
                   return (
@@ -105,7 +118,7 @@ const FormAccount = (props) => {
             name="account_fin"
             onChange={handleChangeTrans}
           >
-            <option></option>
+            <option value="" hidden>Choose an account</option>
             {stateCatego.id !== -1000
               ? stateCatego.map((data, index) => {
                   return (
