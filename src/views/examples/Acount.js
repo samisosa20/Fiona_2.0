@@ -123,15 +123,16 @@ function Account() {
     //document.getElementById("edit_badge").value = group;
   };
   const VerifySignal = (value, nameContainer, idSigno) => {
-    let signo = document.getElementById(idSigno), valuePrice = value === undefined ? null : parseFloat(value)
-
-    if (valuePrice < 0) {
+    let signo = document.getElementById(idSigno), valuePrice = value === undefined ? null : value
+    
+    if (valuePrice?.includes('-')) {
       if (idSigno !== "") {
         setSignal({ Signal: "-" });
         signo.className = "btn btn-outline-danger";
       }
-      valuePrice = valuePrice * -1;
+      valuePrice = valuePrice.replace('-', '');
     }
+
     if (idSigno === "signo_move") {
       setform({ ...stateform, [nameContainer]: valuePrice });
     } else {
