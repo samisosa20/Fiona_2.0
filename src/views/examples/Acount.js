@@ -124,7 +124,7 @@ function Account() {
   };
   const VerifySignal = (value, nameContainer, idSigno) => {
     let signo = document.getElementById(idSigno)
-
+    value = value ? value.replace(",", ".") : value
     if (value?.includes("-")) {
       if (idSigno !== "") {
         setSignal({ Signal: "-" });
