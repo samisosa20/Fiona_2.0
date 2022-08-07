@@ -467,6 +467,7 @@ function Account() {
       }
       value = value * -1;
     }
+    
     if (idSigno === "signo_move") {
       setform({ ...stateform, [nameContainer]: value });
     } else if (idSigno === "signo_move_edit") {
