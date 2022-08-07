@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CurrencyInput from 'react-currency-input-field';
+import CurrencyInput from "react-currency-input-field";
 
 import { Button, Row, Input, FormGroup, Label } from "reactstrap";
 import { Form, InputGroup } from "react-bootstrap";
@@ -19,6 +19,25 @@ const FormAdd = (props) => {
   const [showOption, setShowOption] = useState(false);
   const showAdvanceOption = () => {
     setShowOption(!showOption);
+  };
+
+  const renderRecursion = (listCategories) => {
+    return listCategories.map((category) => (
+      <>
+        <option
+          key={category.id + category.name}
+          className={
+            category.lvl === 1 || category.subCategories.length > 0
+              ? "font-weight-bold"
+              : ""
+          }
+          value={category.id}
+          dangerouslySetInnerHTML={{__html: '&nbsp;'.repeat(category.lvl - 1) + category.name}}
+        />
+        {category.subCategories.length > 0 &&
+          renderRecursion(category.subCategories)}
+      </>
+    ));
   };
 
   return (
@@ -46,20 +65,18 @@ const FormAdd = (props) => {
                 decimalsLimit={2}
                 value={stateform.monto}
                 required
-                decimalSeparator=","
-                groupSeparator="."
+                decimalSeparator="."
+                groupSeparator=","
                 step={0.01}
                 className="form-control"
-                onValueChange={(value, name) => VerifySignal(value, name, "signo_move")}
+                onValueChange={(value, name) =>
+                  VerifySignal(value, name, "signo_move")
+                }
               />
             </InputGroup>
           </div>
           <div className="col-md-3">
-            <Form.Control
-              as="select"
-              name="badge"
-              onChange={handleChange}
-            >
+            <Form.Control as="select" name="badge" onChange={handleChange}>
               <option>COP</option>
               <option>USD</option>
             </Form.Control>
@@ -69,7 +86,9 @@ const FormAdd = (props) => {
       <FormGroup>
         <Label>Acount</Label>
         <Form.Control as="select" name="acount" onChange={handleChange}>
-          <option value="" hidden>Choose an account</option>
+          <option value="" hidden>
+            Choose an account
+          </option>
           {stateAcount.id !== -1000 && stateAcount.length > 0
             ? stateAcount.map((data, index) => {
                 return (
@@ -88,28 +107,10 @@ const FormAdd = (props) => {
       <FormGroup>
         <Label>Category</Label>
         <Form.Control as="select" name="catego" onChange={handleChange}>
-          <option value="" hidden>Choose a category</option>
-          {stateCatego.id !== -1000
-            ? stateCatego.map((data, index) => {
-                if (data.sub_categoria === data.categoria) {
-                  return (
-                    <option
-                      key={index}
-                      className="font-weight-bold"
-                      value={data.nro_sub_catego}
-                    >
-                      {data.sub_categoria}
-                    </option>
-                  );
-                } else {
-                  return (
-                    <option key={index} value={data.nro_sub_catego}>
-                      &nbsp;&nbsp;&nbsp;{data.sub_categoria}
-                    </option>
-                  );
-                }
-              })
-            : ""}
+          <option value="" hidden>
+            Choose a category
+          </option>
+          {stateCatego.id !== -1000 ? renderRecursion(stateCatego) : ""}
         </Form.Control>
       </FormGroup>
       <FormGroup>
@@ -150,7 +151,9 @@ const FormAdd = (props) => {
         <FormGroup>
           <Label>Event</Label>
           <Form.Control as="select" name="event" onChange={handleChange}>
-            <option value="" hidden>Choose an event</option>
+            <option value="" hidden>
+              Choose an event
+            </option>
             {stateEvent.length > 0
               ? stateEvent.map((data, index) => {
                   if (data.activo === "1") {

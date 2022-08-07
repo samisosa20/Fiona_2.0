@@ -253,6 +253,25 @@ const Catego = () => {
     }
   };
 
+  const renderRecursion = (listCategories) => {
+    return listCategories.map((category) => (
+      <>
+        <option
+          key={category.id + category.name}
+          className={
+            category.lvl === 1 || category.subCategories.length > 0
+              ? "font-weight-bold"
+              : ""
+          }
+          value={category.id}
+          dangerouslySetInnerHTML={{__html: '&nbsp;'.repeat(category.lvl - 1) + category.name}}
+        />
+        {category.subCategories.length > 0 &&
+          renderRecursion(category.subCategories)}
+      </>
+    ));
+  };
+
   return (
     <>
       <Header />
@@ -417,26 +436,7 @@ const Catego = () => {
                   >
                     <option></option>
                     {stateCatego.id !== -1000
-                      ? stateCatego.map((data, index) => {
-                          if (data.sub_categoria === data.categoria) {
-                            return (
-                              <option
-                                key={index}
-                                className="font-weight-bold"
-                                value={data.nro_sub_catego}
-                              >
-                                {data.sub_categoria}
-                              </option>
-                            );
-                          } else {
-                            return (
-                              <option key={index} value={data.nro_sub_catego}>
-                                &nbsp;&nbsp;&nbsp;{data.sub_categoria}
-                              </option>
-                            );
-                          }
-                        })
-                      : ""}
+                  ? renderRecursion(stateCatego): ""}
                   </Form.Control>
                 </FormGroup>
                 <FormGroup>

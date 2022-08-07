@@ -459,40 +459,40 @@ function Account() {
     }
   };
   const VerifySignal = (value, nameContainer, idSigno) => {
-    let signo = document.getElementById(idSigno), valuePrice = value === undefined ? null : parseFloat(value)
-    if (valuePrice < 0) {
+    let signo = document.getElementById(idSigno)
+    if (value?.includes("-")) {
       if (idSigno !== "") {
         setSignal({ Signal: "-" });
         signo.className = "btn btn-outline-danger";
       }
-      valuePrice = valuePrice * -1;
+      value = value * -1;
     }
     if (idSigno === "signo_move") {
-      setform({ ...stateform, [nameContainer]: valuePrice });
+      setform({ ...stateform, [nameContainer]: value });
     } else if (idSigno === "signo_move_edit") {
       setformEdit({
         ...stateformEdit,
-        [nameContainer]: valuePrice,
+        [nameContainer]: value,
       });
     } else if (idSigno === "signo_trans_edit") {
       const customDeposit =
         stateformEditTrans.badge === "COP" &&
         stateformEditTrans.editInBadge === "USD"
-          ? parseFloat(valuePrice / stateformEditTrans.trm).toFixed(2)
-          : parseFloat(valuePrice * stateformEditTrans.trm).toFixed(2);
+          ? parseFloat(value / stateformEditTrans.trm).toFixed(2)
+          : parseFloat(value * stateformEditTrans.trm).toFixed(2);
       setformEditTrans({
         ...stateformEditTrans,
-        [nameContainer]: valuePrice,
+        [nameContainer]: value,
         customDeposit: customDeposit,
       });
     } else {
       const customDeposit =
         stateformtrans.badge === "COP" && stateformtrans.inBadge === "USD"
-          ? parseFloat(valuePrice / stateformtrans.trm).toFixed(2)
-          : parseFloat(valuePrice * stateformtrans.trm).toFixed(2);
+          ? parseFloat(value / stateformtrans.trm).toFixed(2)
+          : parseFloat(value * stateformtrans.trm).toFixed(2);
       setformtrans({
         ...stateformtrans,
-        [nameContainer]: valuePrice,
+        [nameContainer]: value,
         customDeposit: customDeposit,
       });
     }
@@ -702,6 +702,24 @@ function Account() {
     });
     setState({ ...state, json_movi: newJson });
   };
+  const renderRecursion = (listCategories) => {
+    return listCategories.map((category) => (
+      <>
+        <option
+          key={category.id + category.name}
+          className={
+            category.lvl === 1 || category.subCategories.length > 0
+              ? "font-weight-bold"
+              : ""
+          }
+          value={category.id}
+          dangerouslySetInnerHTML={{__html: '&nbsp;'.repeat(category.lvl - 1) + category.name}}
+        />
+        {category.subCategories.length > 0 &&
+          renderRecursion(category.subCategories)}
+      </>
+    ));
+  };
   return (
     <>
       <Header />
@@ -851,8 +869,8 @@ function Account() {
                         decimalsLimit={2}
                         value={stateform.monto}
                         required
-                        decimalSeparator=","
-                        groupSeparator="."
+                        decimalSeparator="."
+                        groupSeparator=","
                         step={0.01}
                         className="form-control"
                         onValueChange={(value, name) => VerifySignal(value, name, "signo_move")}
@@ -876,26 +894,7 @@ function Account() {
                 <Form.Control as="select" name="catego" onChange={handleChange}>
                   <option value="" hidden>Choose a category</option>
                   {stateCatego.id !== -1000
-                    ? stateCatego.map((data, index) => {
-                        if (data.sub_categoria === data.categoria) {
-                          return (
-                            <option
-                              key={index}
-                              className="font-weight-bold"
-                              value={data.nro_sub_catego}
-                            >
-                              {data.sub_categoria}
-                            </option>
-                          );
-                        } else {
-                          return (
-                            <option key={index} value={data.nro_sub_catego}>
-                              &nbsp;&nbsp;&nbsp;{data.sub_categoria}
-                            </option>
-                          );
-                        }
-                      })
-                    : ""}
+                    ? renderRecursion(stateCatego): ""}
                 </Form.Control>
               </FormGroup>
               <FormGroup>
@@ -996,8 +995,8 @@ function Account() {
                         decimalsLimit={2}
                         value={stateformtrans.monto}
                         required
-                        decimalSeparator=","
-                        groupSeparator="."
+                        decimalSeparator="."
+                        groupSeparator=","
                         step={0.01}
                         className="form-control"
                         onValueChange={(value, name) => VerifySignal(value, name, "")}
@@ -1207,8 +1206,8 @@ function Account() {
                         decimalsLimit={2}
                         defaultValue={stateformEdit.monto}
                         required
-                        decimalSeparator=","
-                        groupSeparator="."
+                        decimalSeparator="."
+                        groupSeparator=","
                         step={0.01}
                         className="form-control"
                         onValueChange={(value, name) => VerifySignal(value, name, "signo_move_edit")}
@@ -1237,26 +1236,7 @@ function Account() {
                 >
                   <option></option>
                   {stateCatego.id !== -1000
-                    ? stateCatego.map((data, index) => {
-                        if (data.sub_categoria === data.categoria) {
-                          return (
-                            <option
-                              key={index}
-                              className="font-weight-bold"
-                              value={data.nro_sub_catego}
-                            >
-                              {data.sub_categoria}
-                            </option>
-                          );
-                        } else {
-                          return (
-                            <option key={index} value={data.nro_sub_catego}>
-                              &nbsp;&nbsp;&nbsp;{data.sub_categoria}
-                            </option>
-                          );
-                        }
-                      })
-                    : ""}
+                    ? renderRecursion(stateCatego): ""}
                 </Form.Control>
               </FormGroup>
               <FormGroup>
@@ -1385,8 +1365,8 @@ function Account() {
                         decimalsLimit={2}
                         defaultValue={stateformEditTrans.monto}
                         required
-                        decimalSeparator=","
-                        groupSeparator="."
+                        decimalSeparator="."
+                        groupSeparator=","
                         step={0.01}
                         className="form-control"
                         onValueChange={(value, name) => VerifySignal(value, name, "signo_trans_edit")}

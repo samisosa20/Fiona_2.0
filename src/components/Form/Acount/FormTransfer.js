@@ -61,8 +61,8 @@ const FormAccount = (props) => {
                 decimalsLimit={2}
                 value={stateformtrans.monto}
                 required
-                decimalSeparator=","
-                groupSeparator="."
+                decimalSeparator="."
+                groupSeparator=","
                 step={0.01}
                 className="form-control"
                 onValueChange={(value, name) => VerifySignal(value, name, "")}

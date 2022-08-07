@@ -123,22 +123,22 @@ function Account() {
     //document.getElementById("edit_badge").value = group;
   };
   const VerifySignal = (value, nameContainer, idSigno) => {
-    let signo = document.getElementById(idSigno), valuePrice = value === undefined ? null : parseFloat(value)
+    let signo = document.getElementById(idSigno)
 
-    if (valuePrice < 0) {
+    if (value?.includes("-")) {
       if (idSigno !== "") {
         setSignal({ Signal: "-" });
         signo.className = "btn btn-outline-danger";
       }
-      valuePrice = valuePrice * -1;
+      value = value * -1;
     }
     if (idSigno === "signo_move") {
-      setform({ ...stateform, [nameContainer]: valuePrice });
+      setform({ ...stateform, [nameContainer]: value });
     } else {
-      const customDeposit = stateformtrans.badge === "COP" && stateformtrans.inBadge === 'USD' ? parseFloat(valuePrice / stateformtrans.trm).toFixed(2) : parseFloat(valuePrice * stateformtrans.trm).toFixed(2)
+      const customDeposit = stateformtrans.badge === "COP" && stateformtrans.inBadge === 'USD' ? parseFloat(value / stateformtrans.trm).toFixed(2) : parseFloat(value * stateformtrans.trm).toFixed(2)
       setformtrans({
         ...stateformtrans,
-        [nameContainer]: valuePrice,
+        [nameContainer]: value,
         customDeposit: customDeposit,
       });
     }
