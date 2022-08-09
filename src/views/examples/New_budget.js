@@ -92,14 +92,14 @@ function ViewBudget() {
         <option
           key={category.id + category.name}
           className={
-            category.lvl === 1 || category.subCategories.length > 0
+            category.lvl === 1 || category.subCategories?.length > 0
               ? "font-weight-bold"
               : ""
           }
           value={category.id}
           dangerouslySetInnerHTML={{__html: '&nbsp;'.repeat(category.lvl - 1) + category.name}}
         />
-        {category.subCategories.length > 0 &&
+        {category.subCategories?.length > 0 &&
           renderRecursion(category.subCategories)}
       </>
     ));

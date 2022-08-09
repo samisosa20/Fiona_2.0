@@ -710,14 +710,14 @@ function Account() {
         <option
           key={category.id + category.name}
           className={
-            category.lvl === 1 || category.subCategories.length > 0
+            category.lvl === 1 || category.subCategories?.length > 0
               ? "font-weight-bold"
               : ""
           }
           value={category.id}
           dangerouslySetInnerHTML={{__html: '&nbsp;'.repeat(category.lvl - 1) + category.name}}
         />
-        {category.subCategories.length > 0 &&
+        {category.subCategories?.length > 0 &&
           renderRecursion(category.subCategories)}
       </>
     ));
@@ -874,6 +874,7 @@ function Account() {
                         decimalSeparator="."
                         groupSeparator=","
                         step={0.01}
+                        intlConfig={{ locale: 'en-US', currency: 'USD' }}
                         className="form-control"
                         onValueChange={(value, name) => VerifySignal(value, name, "signo_move")}
                       />
@@ -1000,6 +1001,7 @@ function Account() {
                         decimalSeparator="."
                         groupSeparator=","
                         step={0.01}
+                        intlConfig={{ locale: 'en-US', currency: 'USD' }}
                         className="form-control"
                         onValueChange={(value, name) => VerifySignal(value, name, "")}
                       />
@@ -1211,6 +1213,7 @@ function Account() {
                         decimalSeparator="."
                         groupSeparator=","
                         step={0.01}
+                        intlConfig={{ locale: 'en-US', currency: 'USD' }}
                         className="form-control"
                         onValueChange={(value, name) => VerifySignal(value, name, "signo_move_edit")}
                       />
@@ -1370,6 +1373,7 @@ function Account() {
                         decimalSeparator="."
                         groupSeparator=","
                         step={0.01}
+                        intlConfig={{ locale: 'en-US', currency: 'USD' }}
                         className="form-control"
                         onValueChange={(value, name) => VerifySignal(value, name, "signo_trans_edit")}
                       />
