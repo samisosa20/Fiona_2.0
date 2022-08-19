@@ -122,6 +122,11 @@ const ChartIncoming = (props) => {
                     x: {
                       display: false,
                     },
+                    y: {
+                      ticks: {
+                        color: 'white'
+                      }
+                    }
                 },
                 plugins: {
                   legend: {
@@ -166,7 +171,7 @@ const ChartExpense = (props) => {
             const value = new Array(res.data.length).fill("");
 
             res.data.forEach((data, i) => {
-              label.splice(i, 1, data.categoria);
+              label.splice(i, 1, data.categoria.substring(0,10));
               value.splice(i, 1, data.cantidad);
             });
             if (newChartInstanceEgre) {
@@ -193,12 +198,18 @@ const ChartExpense = (props) => {
                 elements: {
                   bar: {
                     borderWidth: 2,
+                    lineWidth: 5,
                   },
                 },
                 responsive: true,
                 scales: {
                     x: {
                       display: false,
+                    },
+                    y: {
+                      ticks: {
+                        color: 'white'
+                      }
                     },
                 },
                 plugins: {
@@ -210,6 +221,9 @@ const ChartExpense = (props) => {
                     display: false,
                   },
                 },
+                onClick: (e) => {
+                  console.log("click function", e)
+                }
               },
             });
           }

@@ -58,19 +58,16 @@ const FormAdd = (props) => {
                   {stateSignal.Signal}
                 </Button>
               </InputGroup.Prepend>
-              <CurrencyInput
+              <Form.Control
+                type="number"
                 id="monto"
                 name="monto"
                 placeholder=" Please enter a value"
-                decimalsLimit={2}
                 value={stateform.monto}
                 required
-                decimalSeparator="."
-                groupSeparator=","
                 step={0.01}
                 className="form-control"
-                onValueChange={(value, name) =>
-                  VerifySignal(value, name, "signo_move")
+                onChange={(e) => VerifySignal(e, "signo_move")
                 }
               />
             </InputGroup>

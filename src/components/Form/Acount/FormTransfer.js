@@ -54,18 +54,16 @@ const FormAccount = (props) => {
                     +
                   </Button>
                 </InputGroup.Prepend>
-                <CurrencyInput
+                <Form.Control
+                type="number"
                 id="monto"
                 name="monto"
                 placeholder=" Please enter a value"
-                decimalsLimit={2}
                 value={stateformtrans.monto}
                 required
-                decimalSeparator="."
-                groupSeparator=","
                 step={0.01}
                 className="form-control"
-                onValueChange={(value, name) => VerifySignal(value, name, "")}
+                onValueChange={(e) => VerifySignal(e, "")}
               />
                 {/* <Form.Control
                   pattern="[0-9]{0,5}"

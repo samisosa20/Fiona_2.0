@@ -122,9 +122,9 @@ function Account() {
     ModEdiCateSate();
     //document.getElementById("edit_badge").value = group;
   };
-  const VerifySignal = (value, nameContainer, idSigno) => {
+  const VerifySignal = (event, idSigno) => {
+    let value = event.target.value
     let signo = document.getElementById(idSigno)
-    value = value ? value.replace(",", ".") : value
     if (value?.includes("-")) {
       if (idSigno !== "") {
         setSignal({ Signal: "-" });
@@ -134,12 +134,12 @@ function Account() {
     }
 
     if (idSigno === "signo_move") {
-      setform({ ...stateform, [nameContainer]: value });
+      setform({ ...stateform, [event.target.name]: value });
     } else {
       const customDeposit = stateformtrans.badge === "COP" && stateformtrans.inBadge === 'USD' ? parseFloat(value / stateformtrans.trm).toFixed(2) : parseFloat(value * stateformtrans.trm).toFixed(2)
       setformtrans({
         ...stateformtrans,
-        [nameContainer]: value,
+        [event.target.name]: value,
         customDeposit: customDeposit,
       });
     }

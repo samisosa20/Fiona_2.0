@@ -505,9 +505,6 @@ function Report() {
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h6 className="text-uppercase text-light ls-1 mb-1">
-                      Cake chart
-                    </h6>
                     <h2 className="text-white mb-0">Income</h2>
                   </div>
                 </Row>
@@ -532,10 +529,7 @@ function Report() {
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h6 className="text-uppercase text-light ls-1 mb-1">
-                      Cake chart
-                    </h6>
-                    <h2 className="text-white mb-0">Expenses</h2>
+                    <h2 className="text-white mb-0">Main Categories Expenses</h2>
                   </div>
                 </Row>
               </CardHeader>
@@ -898,8 +892,16 @@ function Report() {
                                   (total, currentValue) =>
                                     total + parseFloat(currentValue.value),
                                   0
+                                ) < 0 ? 0 : stateData.groupExpensive.reduce(
+                                  (total, currentValue) =>
+                                    total + parseFloat(currentValue.value),
+                                  0
                                 )
-                              )} (${(
+                              )} (${(stateData.groupExpensive.reduce(
+                                  (total, currentValue) =>
+                                    total + parseFloat(currentValue.value),
+                                  0
+                                ) < 0 ? 0 :
                                 (stateData.groupExpensive.reduce(
                                   (total, currentValue) =>
                                     total + parseFloat(currentValue.value),

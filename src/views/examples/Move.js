@@ -458,9 +458,9 @@ function Account() {
       });
     }
   };
-  const VerifySignal = (value, nameContainer, idSigno) => {
+  const VerifySignal = (event, idSigno) => {
+    let value = event.target.value
     let signo = document.getElementById(idSigno)
-    value = value ? value.replace(",", ".") : value
     if (value?.includes("-")) {
       if (idSigno !== "") {
         setSignal({ Signal: "-" });
@@ -470,11 +470,11 @@ function Account() {
     }
     
     if (idSigno === "signo_move") {
-      setform({ ...stateform, [nameContainer]: value });
+      setform({ ...stateform, [event.target.name]: value });
     } else if (idSigno === "signo_move_edit") {
       setformEdit({
         ...stateformEdit,
-        [nameContainer]: value,
+        [event.target.name]: value,
       });
     } else if (idSigno === "signo_trans_edit") {
       const customDeposit =
@@ -484,7 +484,7 @@ function Account() {
           : parseFloat(value * stateformEditTrans.trm).toFixed(2);
       setformEditTrans({
         ...stateformEditTrans,
-        [nameContainer]: value,
+        [event.target.name]: value,
         customDeposit: customDeposit,
       });
     } else {
@@ -494,7 +494,7 @@ function Account() {
           : parseFloat(value * stateformtrans.trm).toFixed(2);
       setformtrans({
         ...stateformtrans,
-        [nameContainer]: value,
+        [event.target.name]: value,
         customDeposit: customDeposit,
       });
     }
@@ -864,19 +864,16 @@ function Account() {
                           {stateSignal.Signal}
                         </Button>
                       </InputGroup.Prepend>
-                      <CurrencyInput
+                      <Form.Control
+                        type="number"
                         id="monto"
                         name="monto"
                         placeholder=" Please enter a value"
-                        decimalsLimit={2}
                         value={stateform.monto}
                         required
-                        decimalSeparator="."
-                        groupSeparator=","
                         step={0.01}
-                        intlConfig={{ locale: 'en-US', currency: 'USD' }}
                         className="form-control"
-                        onValueChange={(value, name) => VerifySignal(value, name, "signo_move")}
+                        onChange={(e) => VerifySignal(e, "signo_move")}
                       />
                     </InputGroup>
                   </div>
@@ -991,19 +988,16 @@ function Account() {
                           +
                         </Button>
                       </InputGroup.Prepend>
-                      <CurrencyInput
+                      <Form.Control
+                        type="number"
                         id="monto"
                         name="monto"
                         placeholder=" Please enter a value"
-                        decimalsLimit={2}
                         value={stateformtrans.monto}
                         required
-                        decimalSeparator="."
-                        groupSeparator=","
                         step={0.01}
-                        intlConfig={{ locale: 'en-US', currency: 'USD' }}
                         className="form-control"
-                        onValueChange={(value, name) => VerifySignal(value, name, "")}
+                        onChange={(e) => VerifySignal(e, "")}
                       />
                     </InputGroup>
                   </div>
@@ -1203,19 +1197,16 @@ function Account() {
                           {stateSignal.Signal}
                         </Button>
                       </InputGroup.Prepend>
-                      <CurrencyInput
+                      <Form.Control
+                        type="number"
                         id="monto_edit"
                         name="monto"
                         placeholder=" Please enter a value"
-                        decimalsLimit={2}
                         defaultValue={stateformEdit.monto}
                         required
-                        decimalSeparator="."
-                        groupSeparator=","
                         step={0.01}
-                        intlConfig={{ locale: 'en-US', currency: 'USD' }}
                         className="form-control"
-                        onValueChange={(value, name) => VerifySignal(value, name, "signo_move_edit")}
+                        onChange={(e) => VerifySignal(e, "signo_move_edit")}
                       />
                     </InputGroup>
                   </div>
@@ -1363,19 +1354,16 @@ function Account() {
                           {stateSignal.Signal}
                         </Button>
                       </InputGroup.Prepend>
-                      <CurrencyInput
+                      <Form.Control
+                        type="number"
                         id="monto_edit"
                         name="monto"
                         placeholder=" Please enter a value"
-                        decimalsLimit={2}
                         defaultValue={stateformEditTrans.monto}
                         required
-                        decimalSeparator="."
-                        groupSeparator=","
                         step={0.01}
-                        intlConfig={{ locale: 'en-US', currency: 'USD' }}
                         className="form-control"
-                        onValueChange={(value, name) => VerifySignal(value, name, "signo_trans_edit")}
+                        onChange={(e) => VerifySignal(e, "signo_trans_edit")}
                       />
                     </InputGroup>
                   </div>
