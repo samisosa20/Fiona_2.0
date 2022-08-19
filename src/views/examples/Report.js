@@ -500,7 +500,7 @@ function Report() {
           </Col>
         </Row>
         <Row className="mb-4">
-          <Col className="mb-5 mb-xl-0" sm="4" xl="4">
+          <Col className="mb-5 mb-xl-0" sm="6" xl="6">
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -527,7 +527,7 @@ function Report() {
               </CardBody>
             </Card>
           </Col>
-          <Col className="mb-5 mb-xl-0" sm="4" xl="4">
+          <Col className="mb-5 mb-xl-0" sm="6" xl="6">
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -554,7 +554,7 @@ function Report() {
               </CardBody>
             </Card>
           </Col>
-          <Col className="mb-5 mb-xl-0" sm="4" xl="4">
+          {/* <Col className="mb-5 mb-xl-0" sm="4" xl="4">
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -580,7 +580,7 @@ function Report() {
                 </div>
               </CardBody>
             </Card>
-          </Col>
+          </Col> */}
         </Row>
         <Row className="mb-4">
           <Col className="mb-5 mb-xl-0" sm="12" lg="6">

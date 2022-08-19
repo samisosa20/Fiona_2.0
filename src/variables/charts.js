@@ -83,35 +83,55 @@ const ChartIncoming = (props) => {
           Edate: Edate,
         }).then((res) => {
           if (chartContainer && chartContainer.current) {
-            let label = [];
-            let value = [];
-            res.data.forEach((data) => {
-              label.push(data.categoria);
-              value.push(data.cantidad);
+            const label = new Array(res.data.length).fill("");
+            const value = new Array(res.data.length).fill("");
+
+            res.data.forEach((data, i) => {
+              label.splice(i, 1, data.categoria);
+              value.splice(i, 1, data.cantidad);
             });
+
             if (newChartInstance) {
               newChartInstance.destroy();
             }
             newChartInstance = new Chart(chartContainer.current, {
-              type: "doughnut",
+              type: "bar",
               data: {
                 labels: label,
                 datasets: [
                   {
-                    label: "Ingresos",
                     data: value,
                     backgroundColor: colorDonuht,
                     borderColor: colorDonuht,
+                    borderRadius: 6,
+                    pointRadius: 0,
                   },
                 ],
               },
               options: {
-                borderWidth: 1,
-                cutoutPercentage: 83,
-                title: "Ingresos",
-                width: 25,
+                indexAxis: "y",
+                // Elements options apply to all of the options unless overridden in a dataset
+                // In this case, we are setting the border of each horizontal bar to be 2px wide
+                elements: {
+                  bar: {
+                    borderWidth: 2,
+                  },
+                },
                 responsive: true,
-                plugins: { legend: { display: false } },
+                scales: {
+                    x: {
+                      display: false,
+                    },
+                },
+                plugins: {
+                  legend: {
+                    position: "right",
+                    display: false,
+                  },
+                  title: {
+                    display: false,
+                  },
+                },
               },
             });
           }
@@ -142,34 +162,54 @@ const ChartExpense = (props) => {
           Edate: Edate,
         }).then((res) => {
           if (chartContainerEgre && chartContainerEgre.current) {
-            let label = [];
-            let value = [];
-            res.data.forEach((data) => {
-              label.push(data.categoria);
-              value.push(data.cantidad);
+            const label = new Array(res.data.length).fill("");
+            const value = new Array(res.data.length).fill("");
+
+            res.data.forEach((data, i) => {
+              label.splice(i, 1, data.categoria);
+              value.splice(i, 1, data.cantidad);
             });
             if (newChartInstanceEgre) {
               newChartInstanceEgre.destroy();
             }
             newChartInstanceEgre = new Chart(chartContainerEgre.current, {
-              type: "doughnut",
+              type: "bar",
               data: {
                 labels: label,
                 datasets: [
                   {
-                    label: "Egresos",
                     data: value,
                     backgroundColor: colorDonuht,
                     borderColor: colorDonuht,
+                    borderRadius: 6,
+                    pointRadius: 0,
                   },
                 ],
               },
               options: {
-                borderWidth: 1,
-                cutoutPercentage: 65,
-                title: "Egresos",
+                indexAxis: "y",
+                // Elements options apply to all of the options unless overridden in a dataset
+                // In this case, we are setting the border of each horizontal bar to be 2px wide
+                elements: {
+                  bar: {
+                    borderWidth: 2,
+                  },
+                },
                 responsive: true,
-                plugins: { legend: { display: false } },
+                scales: {
+                    x: {
+                      display: false,
+                    },
+                },
+                plugins: {
+                  legend: {
+                    position: "right",
+                    display: false,
+                  },
+                  title: {
+                    display: false,
+                  },
+                },
               },
             });
           }
@@ -344,7 +384,7 @@ const ChartBalance = (props) => {
                             ? this.getLabelForValue(val)
                             : ""; // Show each 4 data
                         } else {
-                          return this.getLabelForValue(val)
+                          return this.getLabelForValue(val);
                         }
                       },
                       color: "white",
@@ -571,26 +611,26 @@ const ChartBalanceComparison = (props) => {
                       ticks: {
                         callback: function (val, index) {
                           if (valueCurrent.length > 20) {
-                          return (index % 10 === 0 &&
-                            index !== valueCurrent.length - 2) ||
-                            index === valueCurrent.length - 1
-                            ? this.getLabelForValue(val)
-                            : ""; // Show each 10 data
-                        } else if (valueCurrent.length > 10) {
-                          return (index % 4 === 0 &&
-                            index !== valueCurrent.length - 2) ||
-                            index === valueCurrent.length - 1
-                            ? this.getLabelForValue(val)
-                            : ""; // Show each 4 data
-                        } else if (valueCurrent.length > 5) {
-                          return (index % 2 === 0 &&
-                            index !== valueCurrent.length - 2) ||
-                            index === valueCurrent.length - 1
-                            ? this.getLabelForValue(val)
-                            : ""; // Show each 4 data
-                        } else {
-                          return this.getLabelForValue(val)
-                        }
+                            return (index % 10 === 0 &&
+                              index !== valueCurrent.length - 2) ||
+                              index === valueCurrent.length - 1
+                              ? this.getLabelForValue(val)
+                              : ""; // Show each 10 data
+                          } else if (valueCurrent.length > 10) {
+                            return (index % 4 === 0 &&
+                              index !== valueCurrent.length - 2) ||
+                              index === valueCurrent.length - 1
+                              ? this.getLabelForValue(val)
+                              : ""; // Show each 4 data
+                          } else if (valueCurrent.length > 5) {
+                            return (index % 2 === 0 &&
+                              index !== valueCurrent.length - 2) ||
+                              index === valueCurrent.length - 1
+                              ? this.getLabelForValue(val)
+                              : ""; // Show each 4 data
+                          } else {
+                            return this.getLabelForValue(val);
+                          }
                         },
                         color: "white",
                       },
@@ -609,7 +649,12 @@ const ChartBalanceComparison = (props) => {
     // eslint-disable-next-line
   }, [props.upload, props.resize]);
 
-  return <canvas ref={chartContainerBalanceComparison} style={{minHeight: '200px', width: '95%'}}/>;
+  return (
+    <canvas
+      ref={chartContainerBalanceComparison}
+      style={{ minHeight: "200px", width: "95%" }}
+    />
+  );
 };
 
 export {
