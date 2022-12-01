@@ -63,7 +63,7 @@ const FormAccount = (props) => {
                 required
                 step={0.01}
                 className="form-control"
-                onValueChange={(e) => VerifySignal(e, "")}
+                onChange={(e) => VerifySignal(e, "")}
               />
                 {/* <Form.Control
                   pattern="[0-9]{0,5}"
