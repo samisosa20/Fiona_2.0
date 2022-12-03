@@ -7,6 +7,21 @@
 working....
 
 
+## tips
+
+add thoose lines in the file `.htaccess` to can refresh page in production mode
+
+`<Directory>
+    RewriteEngine on
+    # Don't rewrite files or directories
+    RewriteCond %{REQUEST_FILENAME} -f {OR}
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    
+    RewriteRule ^ index.html [L]
+</Directory>`
+
+
 ## Versions
 
 [<img src="https://github.com/creativetimofficial/public-assets/blob/master/logos/react-logo.jpg?raw=true" width="60" height="60" />](https://www.creative-tim.com/product/argon-dashboard-react?ref=adr-github-readme)
