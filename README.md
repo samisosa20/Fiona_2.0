@@ -11,15 +11,15 @@ working....
 
 add thoose lines in the file `.htaccess` to can refresh page in production mode
 
-`<Directory>
-    RewriteEngine on
-    # Don't rewrite files or directories
-    RewriteCond %{REQUEST_FILENAME} -f {OR}
-    RewriteCond %{REQUEST_FILENAME} -d
-    RewriteRule ^ - [L]
-    
-    RewriteRule ^ index.html [L]
-</Directory>`
+`<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /subdirectory
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteRule . /index.html [L]
+</IfModule>`
 
 
 ## Versions
