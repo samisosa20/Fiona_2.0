@@ -28,19 +28,7 @@ RewriteRule . /index.html [L]
 
 ## Quick start
 
-- Clone the repo: `git clone https://github.com/creativetimofficial/argon-dashboard-react.git`.
-- ***Install node 10 and npm:*** 
-    1. `curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -`.
-    2. `sudo apt-get install -y nodejs`.
-- Install dependencies: `npm install -g start-react-app`.
-
-
-## Browser Support
-
-At present, we officially aim to support the last two versions of the following browsers:
-
-<img src="https://github.com/creativetimofficial/public-assets/blob/master/logos/chrome-logo.png?raw=true" width="64" height="64"> <img src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/firefox-logo.png" width="64" height="64"> <img src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/edge-logo.png" width="64" height="64"> <img src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/safari-logo.png" width="64" height="64"> <img src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/logos/opera-logo.png" width="64" height="64">
-
+****
 
 ## Licensing
 
