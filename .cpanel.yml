@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/itpmsoft/fiona.itpmsoftware.com
+    - /bin/cp -R images $DEPLOYPATH
