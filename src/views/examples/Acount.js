@@ -34,6 +34,7 @@ function Account() {
     edit_badge: "",
     edit_monto: false,
     edit_save_account: 0,
+    edit_show_account: 0,
     id_data: 0
   });
   /* Declaracion de estados de los modals */
@@ -68,7 +69,7 @@ function Account() {
       id: 2,
       idc: idc
     }).then(response => {
-      setState(response.data);
+      setState(response.data.filter(v => v.show == 1));
     });
   }, [refreshData]);
 
@@ -93,6 +94,7 @@ function Account() {
       edit_descrip: stateformEdit.descrip,
       edit_badge: stateformEdit.group,
       edit_include: stateformEdit.include,
+      edit_show: stateformEdit.show,
       id_data: id
     });
     ModDelCateSate();
@@ -104,18 +106,21 @@ function Account() {
       edit_descrip: stateformEdit.descrip,
       edit_badge: stateformEdit.group,
       edit_include: stateformEdit.include,
+      edit_show: stateformEdit.show,
       id_data: id
     });
     ModShareAccount();
   };
-  const OpenModalEdit = (e, id, catego, descrip, group, monto, include) => {
+  const OpenModalEdit = (e, id, catego, descrip, group, monto, include, show) => {
     e.preventDefault();
     include = include === "1" ? true : false;
+    show = show === "1" ? true : false;
     setformEdit({
       edit_account: catego,
       edit_descrip: descrip,
       edit_badge: group,
       edit_include: include,
+      edit_show: show,
       edit_monto: monto,
       id_data: id
     });
@@ -326,6 +331,8 @@ function Account() {
   const handleChangeEdit = event => {
     if (event.target.name === "edit_save_account") {
       setformEdit({ ...stateformEdit, edit_include: event.target.checked });
+    } else if (event.target.name === "edit_show_account") {
+      setformEdit({ ...stateformEdit, edit_show: event.target.checked });
     } else {
       setformEdit({
         ...stateformEdit,
@@ -478,7 +485,8 @@ function Account() {
         descrip: stateformEdit.edit_descrip,
         divisa: stateformEdit.edit_badge,
         monto_ini: stateformEdit.edit_monto,
-        save_account: include
+        save_account: include,
+        show_account: stateformEdit.edit_show ? 1 : 0
       }).then(response => {
         console.log(response);
         ModEdiCateSate();

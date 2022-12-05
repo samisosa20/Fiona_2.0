@@ -79,6 +79,17 @@ const FormEditor = (props) => {
           id="edit_save_account"
         />
       </FormGroup>
+      <FormGroup>
+        <Form.Check
+          type="checkbox"
+          label="Show"
+          value="1"
+          defaultChecked={stateformEdit.edit_show}
+          onChange={handleChangeEdit}
+          name="edit_show_account"
+          id="edit_show_account"
+        />
+      </FormGroup>
     </>
   );
 };

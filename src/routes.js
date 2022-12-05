@@ -120,7 +120,7 @@ var routes = [
     sidebar: false,
   },
   {
-    path: "/move",
+    path: "/move/:id",
     name: "Movement",
     icon: "ni ni-circle-08 text-pink",
     component: Move,

@@ -22,17 +22,22 @@ const AcountAdd = (props) => {
         ? {
             mouseX: event.clientX - 2,
             mouseY: event.clientY - 4,
-            onClickEdit: (event) => {OpenModalEdit(
-              event,
-              data.id,
-              data.nombre,
-              data.descripcion,
-              data.divisa,
-              data.monto_inicial,
-              data.cuenta_ahorro
-            )},
-            onClickDelete: (e) => {OpenModalDelete(e, data.id, data.nombre)},
-            onClickShare: (e) => OpenModalShare(e, data.id, data.nombre)
+            onClickEdit: (event) => {
+              OpenModalEdit(
+                event,
+                data.id,
+                data.nombre,
+                data.descripcion,
+                data.divisa,
+                data.monto_inicial,
+                data.cuenta_ahorro,
+                data.show
+              );
+            },
+            onClickDelete: (e) => {
+              OpenModalDelete(e, data.id, data.nombre);
+            },
+            onClickShare: (e) => OpenModalShare(e, data.id, data.nombre),
           }
         : null
     );
@@ -46,16 +51,16 @@ const AcountAdd = (props) => {
         {state
           ? state.map((data, index) => (
               <Card
-                className="col-12 px-2 col-md-6 mb-3 cursor-pointer hover:shadow"
+                className="col-12 px-2 col-md-6 mb-3 cursor-pointer hover:shadow flex-row align-items-center"
                 key={index}
               >
-                <Link
-                  to={"/admin/move?acount=" + data.id + "&naco=" + data.nombre}
-                  className=" text-decoration-none"
+                <CardHeader
+                  className="border-0 rounded col-10"
+                  onContextMenu={(e) => handleContextMenu(e, data)}
                 >
-                  <CardHeader
-                    className="border-0 rounded"
-                    onContextMenu={(e) => handleContextMenu(e, data)}
+                  <Link
+                    to={"/admin/move/" + data.id}
+                    className=" text-decoration-none"
                   >
                     <Row>
                       <div className="col p-0">
@@ -84,22 +89,21 @@ const AcountAdd = (props) => {
                             )}
                       </div>
                     </Row>
-                  </CardHeader>
-                </Link>
+                  </Link>
+                </CardHeader>
                 <div
                   onClick={(e) => handleContextMenu(e, data)}
-                  className="position-absolute right-4 top-4"
+                  className="col-2 text-center"
                 >
                   <i className="fa fa-ellipsis-v"></i>
                 </div>
-
               </Card>
             ))
-            : ""}
-            <ContextMenuCustom
-              contextMenu={contextMenu}
-              handleClose={handleClose}
-            />
+          : ""}
+        <ContextMenuCustom
+          contextMenu={contextMenu}
+          handleClose={handleClose}
+        />
         <Card
           className="col-12 px-2 col-md-6 mb-3 cursor-pointer hover:shadow"
           onClick={(e) => OpenModalNew(e)}

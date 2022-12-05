@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TrmApi from "trm-api";
-import CurrencyInput from 'react-currency-input-field';
+import {useHistory, useParams} from 'react-router-dom';
 
 import API from "../../variables/API";
 import axios from "axios";
@@ -77,6 +77,7 @@ function Account() {
   });
   const [stateCatego, setCatego] = useState([]);
   const [stateEvent, setEvent] = useState([]);
+  const [listAccount, setListAccount] = useState([]);
   const [refreshData, setrefreshData] = useState(false);
   const [stateAlert, setSateAlert] = useState({ visible: false, code: 200 });
   const [showOption, setShowOption] = useState(false);
@@ -90,11 +91,9 @@ function Account() {
   const [stateSignal, setSignal] = useState({ Signal: "+" });
 
   // extrae de la URL informacion
-  let url = window.location.href;
-  let div = url.split("=");
-  let sub_acount = div[1];
-  let div2 = sub_acount.split("&");
-  let acount = div2[0];
+  const params = useParams()
+  const histoy = useHistory()
+  let acount = params.id;
   let idc = localStorage.getItem("IdUser");
 
   // Llamado multiple para la lista y la descripcion
@@ -112,11 +111,16 @@ function Account() {
             idc: idc,
             acount: acount,
           }),
+          API.post(`acount`, {
+            id: 2,
+            idc: idc,
+            acount: acount,
+          }),
         ])
         .then(
-          axios.spread((firstResponse, secondResponse) => {
+          axios.spread((firstResponse, secondResponse, accountsResponse) => {
             setState({
-              NameAcount: div[2].replace("%20", " "),
+              NameAcount: firstResponse.data[0].nombre,
               Balance: firstResponse.data[0]
                 ? firstResponse.data[0].cantidad
                 : 0.0,
@@ -129,11 +133,12 @@ function Account() {
               json_movi: secondResponse.data,
             });
             setMoveJson(secondResponse.data);
+            setListAccount(accountsResponse.data)
           })
         );
     }
     loadDataMove();
-  }, [refreshData]);
+  }, [refreshData, params.id]);
 
   // Funcion para cambiar de estado de los modals
   const ModNewMoviSate = () => setshowNewMod(!showNewMod);
@@ -704,6 +709,9 @@ function Account() {
     });
     setState({ ...state, json_movi: newJson });
   };
+  const handleChangeAccount = (e) => {
+    histoy.push("/admin/move/" + e.target.value)
+  }
   const renderRecursion = (listCategories) => {
     return listCategories.map((category) => (
       <>
@@ -730,9 +738,14 @@ function Account() {
         {/* Table */}
         <Row className="mb-2">
           <div className="col">
-            <h3 className="mb-0 text-white text-uppercase">
-              {state.NameAcount}:
-            </h3>
+            <Form.Control
+              as="select"
+              name="account"
+              onChange={handleChangeAccount}
+              value={acount.toString()}
+            >
+              {listAccount.filter(v => v.show == 1).map((v,i)=><option key={i} value={v.id}>{v.nombre}</option>)}
+            </Form.Control>
           </div>
           <div className="col justify-content-end row">
             <Button className="btn-info mb-3" onClick={(e) => OpenModalMovi(e)}>
