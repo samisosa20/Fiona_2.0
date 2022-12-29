@@ -8,8 +8,8 @@ import "assets/scss/argon-dashboard-react.scss";
 import "assets/css/sammy-react.scss";
 import "./index.css"
 
-import AdminLayout from "layouts/Admin.js";
-import AuthLayout from "layouts/Auth.js";
+import AdminLayout from "views/layouts/PrivateContent";
+import AuthLayout from "views/layouts/PublicContent";
 import ValidShareAccount from "views/examples/ValidShare.js";
 
 

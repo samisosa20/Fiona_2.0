@@ -4,13 +4,12 @@
     "version": "1.1.0",
     "description": "React version of fiona by Sammy Guttman",
     "main": "index.js",
-    "proxy": "http://localhost:3000",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/itpmsoftware/Fiona_React.git"
     },
     "engines": {
-        "node": "14.15.0"
+        "node": "16.15.0"
     },
     "keywords": [
         "react",

@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import API from "../../variables/API";
+import React from "react";
 import { Link } from "react-router-dom";
-import store from "../../redux/store";
 import { Provider } from "react-redux";
 
-// reactstrap components
+// Components
 import {
   Button,
   Card,
@@ -19,43 +17,25 @@ import {
   Col,
 } from "reactstrap";
 
-function Login(props) {
-  const [email, setEmail] = useState(null)
+// Controllers
+import useControllers from "controllers";
 
-  /* ...state para que no se modifique */
-  const handleChange = (event) => {
-    setEmail(event.target.value)
-  };
+const Login = () => {
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!email) {
-      document.getElementById("mensaje").innerHTML =
-        "<div class='alert alert-danger' role='alert'>Please, enter you email.</div>";
-    } else {
-      API.post("forgot", {
-        email: email,
-      }).then((res) => {
-        if (res.data === 500) {
-          document.getElementById("mensaje").innerHTML =
-            "<div class='alert alert-danger' role='alert'>The user doesn't exist!</div>";
-        } else if (res.data === 400) {
-          document.getElementById("mensaje").innerHTML =
-            "<div class='alert alert-warning' role='alert'>We have a problem to reset your password, try again.</div>";
-        } else if (res.data === 200) {
-          window.location = "/auth/login?reset=true";
-        }
-      });
-    }
-  };
+  const { useScreenHooks } = useControllers();
+  const { useLogin } = useScreenHooks();
+  const { handleChange,
+        handleSubmit,
+        Login_success, store } = useLogin();
 
   return (
     <Provider store={store}>
+      {Login_success()}
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
           <CardBody className="px-lg-5 py-lg-5">
             <div className="text-center text-muted mb-4">
-              <small>Type your email to send a new password</small>!
+              <small>Sign in with credentials</small>
             </div>
             <Form role="form" onSubmit={handleSubmit}>
               <FormGroup className="mb-3">
@@ -74,9 +54,38 @@ function Login(props) {
                   />
                 </InputGroup>
               </FormGroup>
+              <FormGroup>
+                <InputGroup className="input-group-alternative">
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      <i className="ni ni-lock-circle-open" />
+                    </InputGroupText>
+                  </InputGroupAddon>
+                  <Input
+                    placeholder="Password"
+                    type="password"
+                    name="password"
+                    onChange={handleChange}
+                    autoComplete="new-password"
+                  />
+                </InputGroup>
+              </FormGroup>
+              <div className="custom-control custom-control-alternative custom-checkbox">
+                <input
+                  className="custom-control-input"
+                  id=" customCheckLogin"
+                  type="checkbox"
+                />
+                <label
+                  className="custom-control-label"
+                  htmlFor=" customCheckLogin"
+                >
+                  <span className="text-muted">Remember me</span>
+                </label>
+              </div>
               <div className="text-center">
                 <Button className="my-4" color="primary" type="submit">
-                  Restore Password
+                  Sign in
                 </Button>
               </div>
               <div id="mensaje"></div>
@@ -85,8 +94,8 @@ function Login(props) {
         </Card>
         <Row className="mt-3">
           <Col xs="6">
-            <Link className="text-light" to="/auth/login">
-              <small>Sign in</small>
+            <Link className="text-light" to="/auth/forgot">
+              <small>Forgot password?</small>
             </Link>
           </Col>
           <Col className="text-right" xs="6">
