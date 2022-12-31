@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 import { Form } from 'react-bootstrap';
 // core components
-import UserHeader from "components/Headers/UserHeader.js";
+import UserHeader from "views/components/Headers/Profile";
 
 // Assets
 import iconProfile from "../../assets/img/profile/newuser.jpg"

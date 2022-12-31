@@ -10,8 +10,8 @@ import {
 } from "reactstrap";
 import { Form, Modal } from "react-bootstrap";
 // core components
-import { Header } from "components/Headers/Header.js";
-import Alert from "../../components/Alert";
+import Header from "views/components/Headers/Default";
+import Alert from "../components/Alert";
 import API from "../../variables/API";
 
 function ViewBudget() {

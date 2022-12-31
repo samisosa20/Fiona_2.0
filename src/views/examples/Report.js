@@ -26,7 +26,7 @@ import API from "../../variables/API";
 import axios from "axios";
 
 // core components
-import { Header } from "components/Headers/Header.js";
+import Header from "views/components/Headers/Default";
 
 function Report() {
   const [stateDate, setDate] = useState({

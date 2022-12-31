@@ -1,8 +1,11 @@
 import React from "react";
-import HeaderInfo from "../Modals/HeaderInfo";
-// reactstrap components
+
+// Styles
+import 'assets/styles/components/Header.scss';
+
+// Components
+import HeaderInfo from "../../../../components/Modals/HeaderInfo";
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
-import '../../assets/styles/components/Header.scss';
 
 
 const ContainsHeader = (props) => {
@@ -44,11 +47,6 @@ const ContainsHeader = (props) => {
                           {state.ingresos}
                         </span>
                       </div>
-                      {/*<Col className="col-auto">
-                            <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                              <i className="fas fa-chart-bar" />
-                            </div>
-                          </Col>*/}
                     </Row>
                   </CardBody>
                 </Card>
@@ -71,11 +69,6 @@ const ContainsHeader = (props) => {
                           {state.egresos}
                         </span>
                       </div>
-                      {/*<Col className="col-auto">
-                            <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
-                              <i className="fas fa-chart-pie" />
-                            </div>
-                          </Col>*/}
                     </Row>
                   </CardBody>
                 </Card>
@@ -95,11 +88,6 @@ const ContainsHeader = (props) => {
                           {state.ahorros}
                         </span>
                       </div>
-                      {/*<Col className="col-auto">
-                            <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                              <i className="fas fa-users" />
-                            </div>
-                        </Col>*/}
                     </Row>
                   </CardBody>
                 </Card>
@@ -119,11 +107,6 @@ const ContainsHeader = (props) => {
                           {state.utilidad}
                         </span>
                       </div>
-                      {/*<Col className="col-auto">
-                            <div className="icon icon-shape bg-info text-white rounded-circle shadow">
-                              <i className="fas fa-percent" />
-                            </div>
-                        </Col>*/}
                     </Row>
                   </CardBody>
                 </Card>

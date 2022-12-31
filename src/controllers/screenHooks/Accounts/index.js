@@ -1,33 +1,19 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import TrmApi from "trm-api";
-// reactstrap components
-import { Button, Container } from "reactstrap";
-
-// core components
-import { Header } from "components/Headers/Header.js";
-import API from "../../variables/API";
 import axios from "axios";
 
-import Alert from "../../components/Alert";
-import ModalEditAcount from "components/Modals/EditorAcount";
-import Modaldelete from "../../components/Modals/Delete";
-import ModalAcountAdd from "../../components/Modals/AddAcount";
-import AcountAdd from "components/Acount/NewAccounts";
-import ModalAddMovement from "components/Modals/AddMovement";
-import ModalTranfer from "components/Modals/Transfer";
-import ModalshareAccount from "components/Modals/Share";
+// Variables
+import API from "variables/API";
 
-function Account() {
+const useAccounts = () => {
   const [state, setState] = useState([]);
-  // envio de informacion
   const [stateform, setform] = useState({
     catego: "",
     descrip: "",
     badge: "COP",
     monto: null,
-    save_account: false
+    save_account: false,
   });
-  // edicion de informacion
   const [stateformEdit, setformEdit] = useState({
     edit_account: "",
     edit_descrip: "",
@@ -35,7 +21,7 @@ function Account() {
     edit_monto: false,
     edit_save_account: 0,
     edit_show_account: 0,
-    id_data: 0
+    id_data: 0,
   });
   /* Declaracion de estados de los modals */
   const [showNewMod, setshowNewMod] = useState(false);
@@ -60,16 +46,16 @@ function Account() {
     descrip: "",
     trm: 1,
     customDeposit: 0,
-    inBadge: "COP"
+    inBadge: "COP",
   });
 
   useEffect(() => {
     var idc = localStorage.getItem("IdUser");
     API.post("acount", {
       id: 2,
-      idc: idc
-    }).then(response => {
-      setState(response.data.filter(v => v.show == 1));
+      idc: idc,
+    }).then((response) => {
+      setState(response.data.filter((v) => v.show == 1));
     });
   }, [refreshData]);
 
@@ -83,7 +69,7 @@ function Account() {
   const ModNewTransSate = () => setshowNewTransMod(!showNewTransMod);
 
   // Accion al abrir los modals
-  const OpenModalNew = e => {
+  const OpenModalNew = (e) => {
     e.preventDefault();
     ModNewCateSate();
   };
@@ -95,7 +81,7 @@ function Account() {
       edit_badge: stateformEdit.group,
       edit_include: stateformEdit.include,
       edit_show: stateformEdit.show,
-      id_data: id
+      id_data: id,
     });
     ModDelCateSate();
   };
@@ -107,11 +93,20 @@ function Account() {
       edit_badge: stateformEdit.group,
       edit_include: stateformEdit.include,
       edit_show: stateformEdit.show,
-      id_data: id
+      id_data: id,
     });
     ModShareAccount();
   };
-  const OpenModalEdit = (e, id, catego, descrip, group, monto, include, show) => {
+  const OpenModalEdit = (
+    e,
+    id,
+    catego,
+    descrip,
+    group,
+    monto,
+    include,
+    show
+  ) => {
     e.preventDefault();
     include = include === "1" ? true : false;
     show = show === "1" ? true : false;
@@ -122,14 +117,14 @@ function Account() {
       edit_include: include,
       edit_show: show,
       edit_monto: monto,
-      id_data: id
+      id_data: id,
     });
     ModEdiCateSate();
     //document.getElementById("edit_badge").value = group;
   };
   const VerifySignal = (event, idSigno) => {
-    let value = event.target.value
-    let signo = document.getElementById(idSigno)
+    let value = event.target.value;
+    let signo = document.getElementById(idSigno);
     if (value?.includes("-")) {
       if (idSigno !== "") {
         setSignal({ Signal: "-" });
@@ -141,7 +136,10 @@ function Account() {
     if (idSigno === "signo_move") {
       setform({ ...stateform, [event.target.name]: value });
     } else {
-      const customDeposit = stateformtrans.badge === "COP" && stateformtrans.inBadge === 'USD' ? parseFloat(value / stateformtrans.trm).toFixed(2) : parseFloat(value * stateformtrans.trm).toFixed(2)
+      const customDeposit =
+        stateformtrans.badge === "COP" && stateformtrans.inBadge === "USD"
+          ? parseFloat(value / stateformtrans.trm).toFixed(2)
+          : parseFloat(value * stateformtrans.trm).toFixed(2);
       setformtrans({
         ...stateformtrans,
         [event.target.name]: value,
@@ -149,7 +147,7 @@ function Account() {
       });
     }
   };
-  const ChangeSignal = event => {
+  const ChangeSignal = (event) => {
     setSignal({ Signal: event.target.value !== "+" ? "+" : "-" });
     if (event.target.value !== "+") {
       event.target.className = "btn btn-outline-success";
@@ -157,57 +155,71 @@ function Account() {
       event.target.className = "btn btn-outline-danger";
     }
   };
-  const handleChangeTrans = event => {
+  const handleChangeTrans = (event) => {
     if (event.target.name === "inBadge" || event.target.name === "badge") {
-      let value = event.target.value
-      let name = event.target.name
-      if (event.target.value !== stateformtrans.badge || event.target.value !== stateformtrans.inBadge ){
+      let value = event.target.value;
+      let name = event.target.name;
+      if (
+        event.target.value !== stateformtrans.badge ||
+        event.target.value !== stateformtrans.inBadge
+      ) {
         const trmApi = new TrmApi("HNgPywsjYTxDDwnGPdpyVbOth");
         trmApi
-        .latest()
-        .then((data) => {
-          const valueTRM = name === "inBadge" && stateformtrans.badge === value ? 1 : name === "badge" && stateformtrans.inBadge === value ? 1 : data.valor
-          const customDeposit = stateformtrans.badge === "COP" && value === 'USD' ? parseFloat(stateformtrans.monto / valueTRM).toFixed(2) : parseFloat(stateformtrans.monto * valueTRM).toFixed(2)
-          setformtrans({
-          ...stateformtrans,
-          trm: valueTRM,
-          [name]: value,
-          customDeposit: customDeposit
-        })}
-        )
-        .catch((error) => console.log(error));
+          .latest()
+          .then((data) => {
+            const valueTRM =
+              name === "inBadge" && stateformtrans.badge === value
+                ? 1
+                : name === "badge" && stateformtrans.inBadge === value
+                ? 1
+                : data.valor;
+            const customDeposit =
+              stateformtrans.badge === "COP" && value === "USD"
+                ? parseFloat(stateformtrans.monto / valueTRM).toFixed(2)
+                : parseFloat(stateformtrans.monto * valueTRM).toFixed(2);
+            setformtrans({
+              ...stateformtrans,
+              trm: valueTRM,
+              [name]: value,
+              customDeposit: customDeposit,
+            });
+          })
+          .catch((error) => console.log(error));
       }
-    } else if (event.target.name === "customDeposit"){
-      const valueTRM = stateformtrans.badge === "COP" && stateformtrans.inBadge === 'USD' ? parseFloat(stateformtrans.monto / event.target.value).toFixed(2) : parseFloat(stateformtrans.monto * event.target.value).toFixed(2)
+    } else if (event.target.name === "customDeposit") {
+      const valueTRM =
+        stateformtrans.badge === "COP" && stateformtrans.inBadge === "USD"
+          ? parseFloat(stateformtrans.monto / event.target.value).toFixed(2)
+          : parseFloat(stateformtrans.monto * event.target.value).toFixed(2);
       setformtrans({
         ...stateformtrans,
         trm: valueTRM,
-        [event.target.name]: event.target.value
+        [event.target.name]: event.target.value,
       });
     } else {
       setformtrans({
         ...stateformtrans,
-        [event.target.name]: event.target.value
+        [event.target.name]: event.target.value,
       });
     }
   };
-  const OpenModalMovi = e => {
+  const OpenModalMovi = (e) => {
     e.preventDefault();
     let idc = localStorage.getItem("IdUser");
     axios
       .all([
         API.post(`acount`, {
           id: 5,
-          idc: idc
+          idc: idc,
         }),
         API.post(`acount`, {
           id: 2,
-          idc: idc
+          idc: idc,
         }),
         API.post(`acount`, {
           id: 12,
-          idc: idc
-        })
+          idc: idc,
+        }),
       ])
       .then(
         axios.spread((firstResponse, secondResponse, thirdResponse) => {
@@ -215,11 +227,11 @@ function Account() {
           setAcount(secondResponse.data);
           let d = new Date();
           let d1 = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-          const eventFilter = thirdResponse.data.filter(event => {
+          const eventFilter = thirdResponse.data.filter((event) => {
             let d2 = new Date(event.fecha_fin.split("T")[0]);
             d2 = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
-            return d2.getTime() >= d1.getTime()
-          })
+            return d2.getTime() >= d1.getTime();
+          });
           setEvent(eventFilter);
         })
       );
@@ -233,7 +245,7 @@ function Account() {
 
     year = now.getFullYear();
     month =
-    (now.getMonth() + 1).toString().length === 1
+      (now.getMonth() + 1).toString().length === 1
         ? "0" + (now.getMonth() + 1).toString()
         : now.getMonth() + 1;
     date =
@@ -254,25 +266,17 @@ function Account() {
         : now.getSeconds(); */
 
     formattedDateTime =
-      year +
-      "-" +
-      month +
-      "-" +
-      date +
-      "T" +
-      hours +
-      ":" +
-      minutes;
+      year + "-" + month + "-" + date + "T" + hours + ":" + minutes;
     setform({ ...stateform, datetime: formattedDateTime });
     ModNewMoviSate();
   };
-  const OpenModalTrans = e => {
+  const OpenModalTrans = (e) => {
     e.preventDefault();
     let idc = localStorage.getItem("IdUser");
     API.post("acount", {
       id: 2,
-      idc: idc
-    }).then(response => setCatego(response.data));
+      idc: idc,
+    }).then((response) => setCatego(response.data));
     let now = new Date(),
       year,
       month,
@@ -283,7 +287,7 @@ function Account() {
 
     year = now.getFullYear();
     month =
-    (now.getMonth() + 1).toString().length === 1
+      (now.getMonth() + 1).toString().length === 1
         ? "0" + (now.getMonth() + 1).toString()
         : now.getMonth() + 1;
     date =
@@ -304,15 +308,7 @@ function Account() {
         : now.getSeconds(); */
 
     formattedDateTime =
-      year +
-      "-" +
-      month +
-      "-" +
-      date +
-      "T" +
-      hours +
-      ":" +
-      minutes;
+      year + "-" + month + "-" + date + "T" + hours + ":" + minutes;
 
     //document.getElementById("datetime_movi").value = formattedDateTime;
     setformtrans({ ...stateformtrans, datetime: formattedDateTime });
@@ -320,7 +316,7 @@ function Account() {
   };
 
   /* ...state para que no se modifique */
-  const handleChange = event => {
+  const handleChange = (event) => {
     //console.log(event.target.name === "edit_save_account");
     if (event.target.name === "edit_save_account") {
       setform({ ...stateform, save_account: event.target.checked });
@@ -328,7 +324,7 @@ function Account() {
       setform({ ...stateform, [event.target.name]: event.target.value });
     }
   };
-  const handleChangeEdit = event => {
+  const handleChangeEdit = (event) => {
     if (event.target.name === "edit_save_account") {
       setformEdit({ ...stateformEdit, edit_include: event.target.checked });
     } else if (event.target.name === "edit_show_account") {
@@ -336,12 +332,12 @@ function Account() {
     } else {
       setformEdit({
         ...stateformEdit,
-        [event.target.name]: event.target.value
+        [event.target.name]: event.target.value,
       });
     }
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     if (stateform.badge === 0) {
     } else {
@@ -353,8 +349,8 @@ function Account() {
         descrip: stateform.descrip,
         divisa: stateform.badge,
         monto: stateform.monto,
-        save: save_account
-      }).then(response => {
+        save: save_account,
+      }).then((response) => {
         console.log(response);
         ModNewCateSate();
         ChangeStateAccount();
@@ -367,7 +363,7 @@ function Account() {
     }
   };
 
-  const handleSubmitMovi = event => {
+  const handleSubmitMovi = (event) => {
     event.preventDefault();
     if (
       stateform.badge === "" ||
@@ -394,8 +390,8 @@ function Account() {
         catego: stateform.catego,
         descrip: stateform.descrip,
         date: stateform.datetime,
-        event: stateform.event ? stateform.event : ''
-      }).then(response => {
+        event: stateform.event ? stateform.event : "",
+      }).then((response) => {
         //alert (response.data);
         setrefreshData(!refreshData);
         ModNewMoviSate();
@@ -406,7 +402,7 @@ function Account() {
           descrip: "",
           badge: "COP",
           monto: null,
-          save_account: false
+          save_account: false,
         });
         setSignal({ Signal: "+" });
         setSateAlert({ visible: true, code: response.data });
@@ -416,7 +412,7 @@ function Account() {
       });
     }
   };
-  const handleSubmit_trans = event => {
+  const handleSubmit_trans = (event) => {
     event.preventDefault();
     if (
       stateformtrans.badge === "" ||
@@ -441,8 +437,8 @@ function Account() {
         date: stateformtrans.datetime,
         trm: stateformtrans.trm,
         customDeposit: stateformtrans.customDeposit,
-        inBadge: stateformtrans.inBadge
-      }).then(response => {
+        inBadge: stateformtrans.inBadge,
+      }).then((response) => {
         //alert (response.data);
         setrefreshData(!refreshData);
         ModNewTransSate();
@@ -455,8 +451,8 @@ function Account() {
           descrip: "",
           trm: 1,
           customDeposit: 0,
-          inBadge: "COP"
-        })
+          inBadge: "COP",
+        });
         document.getElementById("btn_new_trans_dash").innerHTML = "Add";
         document.getElementById("btn_new_trans_dash").disabled = false;
         setSateAlert({ visible: true, code: response.data });
@@ -466,7 +462,7 @@ function Account() {
       });
     }
   };
-  const handleSubmitEdit = event => {
+  const handleSubmitEdit = (event) => {
     event.preventDefault();
     if (stateformEdit.badge === 0) {
     } else {
@@ -486,8 +482,8 @@ function Account() {
         divisa: stateformEdit.edit_badge,
         monto_ini: stateformEdit.edit_monto,
         save_account: include,
-        show_account: stateformEdit.edit_show ? 1 : 0
-      }).then(response => {
+        show_account: stateformEdit.edit_show ? 1 : 0,
+      }).then((response) => {
         console.log(response);
         ModEdiCateSate();
         ChangeStateAccount();
@@ -499,94 +495,47 @@ function Account() {
       });
     }
   };
-  return (
-    <>
-      <Header />
-      <Container className="mt--7" fluid>
-        <div className="col justify-content-end row p-0 m-0">
-          <Button className="btn-info mb-3" onClick={e => OpenModalMovi(e)}>
-            <i className="fas fa-plus mr-2"></i>
-            Move
-          </Button>
-          <Button className="btn-success mb-3" onClick={e => OpenModalTrans(e)}>
-            <i className="fas fa-exchange-alt mr-2"></i>
-            Transfer
-          </Button>
-        </div>
-        <AcountAdd
-          state={state}
-          OpenModalNew={OpenModalNew}
-          OpenModalEdit={OpenModalEdit}
-          OpenModalDelete={OpenModalDelete}
-          OpenModalShare={OpenModalShare}
-        />
-        <ModalAcountAdd
-          showNewMod={showNewMod}
-          ModNewCateSate={ModNewCateSate}
-          handleSubmit={handleSubmit}
-          handleChange={handleChange}
-        />
-        <ModalAddMovement
-          stateSignal={stateSignal}
-          ChangeSignal={ChangeSignal}
-          VerifySignal={VerifySignal}
-          handleChange={handleChange}
-          stateAcount={stateAcount}
-          stateCatego={stateCatego}
-          stateEvent={stateEvent}
-          stateform={stateform}
-          showNewModMovi={showNewModMovi}
-          handleSubmitMovi={handleSubmitMovi}
-          ModNewMoviSate={ModNewMoviSate}
-        />
-        <Modaldelete
-          action="account"
-          title="Delete account"
-          message={
-            "Are you sure delete the account " +
-            stateformEdit.edit_account +
-            "?"
-          }
-          refreshData={refreshData}
-          setrefreshData={setrefreshData}
-          state={stateformEdit}
-          showDelMod={showDelMod}
-          setshowDelMod={setshowDelMod}
-          setSateAlert={setSateAlert}
-        />
-        <ModalshareAccount
-          title="Share account"
-          message={
-            "Are you sure share the account " + stateformEdit.edit_account + "?"
-          }
-          refreshData={refreshData}
-          setrefreshData={setrefreshData}
-          state={stateformEdit}
-          showShareMod={showShareMod}
-          setshowShareMod={setshowShareMod}
-          setSateAlert={setSateAlert}
-        />
-        <ModalEditAcount
-          showEdiMod={showEdiMod}
-          ModEdiCateSate={ModEdiCateSate}
-          handleSubmitEdit={handleSubmitEdit}
-          stateformEdit={stateformEdit}
-          handleChangeEdit={handleChangeEdit}
-        />
-        <ModalTranfer
-          showNewTransMod={showNewTransMod}
-          handleSubmit_trans={handleSubmit_trans}
-          stateSignal={stateSignal}
-          VerifySignal={VerifySignal}
-          stateCatego={stateCatego}
-          handleChangeTrans={handleChangeTrans}
-          ModNewTransSate={ModNewTransSate}
-          stateformtrans={stateformtrans}
-        />
-        <Alert visible={stateAlert.visible} code={stateAlert.code} />
-      </Container>
-    </>
-  );
-}
+  return {
+    state,
+    stateCatego,
+    stateAcount,
+    stateEvent,
+    stateAlert,
+    stateSignal,
+    OpenModalNew,
+    OpenModalDelete,
+    OpenModalShare,
+    OpenModalEdit,
+    VerifySignal,
+    ChangeSignal,
+    handleChangeTrans,
+    OpenModalMovi,
+    OpenModalTrans,
+    handleChange,
+    handleChangeEdit,
+    handleSubmit,
+    handleSubmitMovi,
+    handleSubmit_trans,
+    handleSubmitEdit,
+    showNewMod,
+    ModNewCateSate,
+    stateform,
+    showNewModMovi,
+    ModNewMoviSate,
+    stateformEdit,
+    refreshData,
+    setrefreshData,
+    showDelMod,
+    setshowDelMod,
+    setSateAlert,
+    showShareMod,
+    setshowShareMod,
+    showEdiMod,
+    ModEdiCateSate,
+    showNewTransMod,
+    ModNewTransSate,
+    stateformtrans,
+  };
+};
 
-export default Account;
+export default useAccounts;

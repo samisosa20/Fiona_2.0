@@ -1,5 +1,11 @@
+import useSidebar from "./sidebar"
+import useHeader from "./headers";
+
 const useComponentHooks = () => {
-    return {};
+    return {
+      useSidebar,
+      useHeader,
+    };
   };
   
   export default useComponentHooks;

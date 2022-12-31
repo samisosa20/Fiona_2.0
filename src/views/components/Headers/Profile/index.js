@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 // reactstrap components
 import { Container, Row, Col } from "reactstrap";
 
-import '../../assets/styles/components/HeaderUser.scss';
+import 'assets/styles/components/HeaderUser.scss';
 
 const UserHeader = () => {
   /* Declaracion de variables */

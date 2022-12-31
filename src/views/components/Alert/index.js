@@ -17,7 +17,7 @@ const Alert = (props) => {
                 setState("alert fixed-bottom mx-auto col-8 col-md-3 mb-2 text-dark bg-warn-lighten-10")
             }
         }
-    },[visible])
+    },[visible, code])
     return (
         <div
           className={state}

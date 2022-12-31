@@ -11,13 +11,13 @@ import {
 } from "reactstrap";
 import { Form, Modal } from "react-bootstrap";
 // core components
-import { Header } from "components/Headers/Header.js";
+import Header from "views/components/Headers/Default";
 import API from "../../variables/API";
 import { Link } from "react-router-dom";
 import "../../assets/styles/components/Catego.scss";
 
 import Modaldelete from "../../components/Modals/Delete";
-import Alert from "../../components/Alert";
+import Alert from "../components/Alert";
 import Modaledit from "../../components/Modals/Edit";
 import ContextMenuCustom from "../../components/ContextMenu";
 

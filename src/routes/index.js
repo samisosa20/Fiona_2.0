@@ -10,13 +10,12 @@ import Event from "../views/examples/Event.js";
 import Planned from "../views/examples/Planned.js";
 import Report from "../views/examples/Report.js";
 import Move from "../views/examples/Move.js";
-import Account from "../views/examples/Acount.js";
 import Profile from "../views/examples/Profile.js";
 
 
 
 const useRoute = () => {
-  const {Login, Register, Forgot} = useScreens()
+  const {Login, Register, Forgot, Account} = useScreens()
   const routes = [
     {
       path: "/Account",

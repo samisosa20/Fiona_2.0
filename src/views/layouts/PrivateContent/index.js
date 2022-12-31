@@ -18,8 +18,8 @@ const Admin = (props) => {
   const { getRoutes, getBrandText, routes } = useLayoutPrivate();
 
   // Components
-  const {Footers} = useComponents()
-  const {AdminFooter, Sidebar} = Footers()
+  const {Footers, Sidebar} = useComponents()
+  const {AdminFooter} = Footers()
 
   return (
     <>

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Card, CardBody, CardHeader, Button, Row, Container } from "reactstrap";
 import { Modal } from "react-bootstrap";
 // core components
-import { Header } from "components/Headers/Header.js";
+import Header from "views/components/Headers/Default";
 import API from "../../variables/API";
 import { Link } from "react-router-dom";
 import ContextMenuCustom from "../../components/ContextMenu";
-import Alert from "../../components/Alert";
+import Alert from "../components/Alert";
 
 function Budget() {
   const [contextMenu, setContextMenu] = useState(null);
