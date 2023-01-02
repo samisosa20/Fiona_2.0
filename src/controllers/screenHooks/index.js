@@ -2,6 +2,7 @@ import useLogin from "./Login";
 import useRegister from "./Register";
 import useForgot from "./Forgot";
 import useAccounts from "./Accounts";
+import useCategories from "./Categories"
 
 const useScreenHooks = () => {
     return {
@@ -9,6 +10,7 @@ const useScreenHooks = () => {
       useRegister,
       useForgot,
       useAccounts,
+      useCategories,
     };
   };
   

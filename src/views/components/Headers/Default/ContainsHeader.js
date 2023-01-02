@@ -4,7 +4,7 @@ import React from "react";
 import 'assets/styles/components/Header.scss';
 
 // Components
-import HeaderInfo from "../../../../components/Modals/HeaderInfo";
+import HeaderInfo from "../../Modals/HeaderInfo";
 import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
 

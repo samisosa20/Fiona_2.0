@@ -4,22 +4,21 @@ import React from "react";
 import { Button, Container } from "reactstrap";
 import useComponents from "views/components";
 
-
-import ModalEditAcount from "components/Modals/EditorAcount";
-import Modaldelete from "../../../components/Modals/Delete";
-import ModalAcountAdd from "../../../components/Modals/AddAcount";
-import AcountAdd from "components/Acount/NewAccounts";
-import ModalAddMovement from "components/Modals/AddMovement";
-import ModalTranfer from "components/Modals/Transfer";
-import ModalshareAccount from "components/Modals/Share";
-
 // Controllers
 import useControllers from "controllers";
 
 const Account = () => {
   // Components
-  const {Headers, Alert} = useComponents()
-  const {Header} = Headers()
+  const { Headers, Alert, Modals, AcountAdd } = useComponents();
+  const { Header } = Headers();
+  const {
+    ModalEditAcount,
+    Modaldelete,
+    ModalAcountAdd,
+    ModalAddMovement,
+    ModalTranfer,
+    ModalshareAccount,
+  } = Modals();
 
   const { useScreenHooks } = useControllers();
   const { useAccounts } = useScreenHooks();

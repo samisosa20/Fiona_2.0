@@ -7,7 +7,7 @@ import {
   } from "reactstrap";
 import { Form } from "react-bootstrap";
 
-import API from "../../../variables/API";
+import API from "variables/API";
 
 const FormEditor = (props) => {
 

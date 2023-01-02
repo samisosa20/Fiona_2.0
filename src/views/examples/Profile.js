@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import API from '../../variables/API';
+import API from 'variables/API';
 // reactstrap components
 import {
   Button,
@@ -16,7 +16,7 @@ import { Form } from 'react-bootstrap';
 import UserHeader from "views/components/Headers/Profile";
 
 // Assets
-import iconProfile from "../../assets/img/profile/newuser.jpg"
+import iconProfile from "assets/img/profile/newuser.jpg"
 
 function Profile() {
   /* Declaracion de variables */

@@ -2,7 +2,7 @@ import React from "react";
 
 import { Button } from "reactstrap";
 import { Form, Modal } from "react-bootstrap";
-import FormAdd from "components/Form/Acount/FormAdd";
+import FormAdd from "views/components/Form/Acount/FormAdd";
 
 const ModalAddMovement = (props) => {
 

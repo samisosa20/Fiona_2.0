@@ -19,7 +19,7 @@ import {
 } from "reactstrap";
 
 // Assets
-import iconProfile from "../../assets/img/profile/newuser.jpg"
+import iconProfile from "assets/img/profile/newuser.jpg"
 
 class AdminNavbar extends React.Component {
   logout() {

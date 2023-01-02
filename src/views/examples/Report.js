@@ -20,9 +20,9 @@ import {
   ChartBalance,
   ChartCashFlow,
   ChartBalanceComparison,
-} from "../../variables/charts";
-import ExcelExport from "components/Excel";
-import API from "../../variables/API";
+} from "variables/charts";
+import ExcelExport from "views/components/Excel";
+import API from "variables/API";
 import axios from "axios";
 
 // core components

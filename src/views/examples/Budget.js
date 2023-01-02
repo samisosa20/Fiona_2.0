@@ -3,9 +3,9 @@ import { Card, CardBody, CardHeader, Button, Row, Container } from "reactstrap";
 import { Modal } from "react-bootstrap";
 // core components
 import Header from "views/components/Headers/Default";
-import API from "../../variables/API";
+import API from "variables/API";
 import { Link } from "react-router-dom";
-import ContextMenuCustom from "../../components/ContextMenu";
+import ContextMenuCustom from "../components/ContextMenu";
 import Alert from "../components/Alert";
 
 function Budget() {

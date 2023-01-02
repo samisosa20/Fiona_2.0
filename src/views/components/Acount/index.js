@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { Card, CardBody, CardHeader, Button, Row } from "reactstrap";
 
-import ContextMenuCustom from "../ContextMenu";
+import ContextMenuCustom from "views/components/ContextMenu";
 
 const AcountAdd = (props) => {
   const [contextMenu, setContextMenu] = React.useState(null);

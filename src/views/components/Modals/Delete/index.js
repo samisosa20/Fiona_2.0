@@ -1,8 +1,10 @@
 import React from "react";
+
 // reactstrap components
 import { Button } from "reactstrap";
 import { Modal } from "react-bootstrap";
-import API from "../../../variables/API";
+
+import API from "variables/API";
 
 const Modaldelete = props => {
   const {

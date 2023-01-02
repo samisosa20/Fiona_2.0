@@ -4,7 +4,7 @@ import { Container } from "reactstrap";
 
 // components
 import useComponents from "views/components";
-import AdminNavbar from "components/Navbars/AdminNavbar.js";
+import AdminNavbar from "views/components/Navbars/AdminNavbar.js";
 
 import imgLogo from "assets/img/brand/argon-react.png";
 

@@ -6,7 +6,7 @@ import {
   ChartIncoming,
   ChartExpense,
   ChartSaving,
-} from "../variables/charts";
+} from "variables/charts";
 
 // reactstrap components
 import {
@@ -23,7 +23,7 @@ import {
   Label,
 } from "reactstrap";
 import { Form, InputGroup, Modal } from "react-bootstrap";
-import API from "../variables/API";
+import API from "variables/API";
 import axios from "axios";
 
 import Header from "views/components/Headers/Default";

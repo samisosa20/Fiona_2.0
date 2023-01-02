@@ -12,7 +12,7 @@ import { Form, Modal } from "react-bootstrap";
 // core components
 import Header from "views/components/Headers/Default";
 import Alert from "../components/Alert";
-import API from "../../variables/API";
+import API from "variables/API";
 
 function ViewBudget() {
   const [stateForm, setStateForm] = useState({

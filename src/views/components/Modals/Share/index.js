@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button, Input, FormGroup, Label } from "reactstrap";
 import { Modal } from "react-bootstrap";
 
-import API from "../../../variables/API";
+import API from "variables/API";
 
 
 const ModalshareAccount = (props) => {

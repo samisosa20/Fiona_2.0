@@ -7,7 +7,7 @@ import {
   Card,
   CardBody
 } from "reactstrap";
-import API from "../../variables/API";
+import API from "variables/API";
 
 
 function ValidShareAccount(props) {

@@ -3,7 +3,7 @@ import React from "react";
 import { FormGroup, Label, Button } from "reactstrap";
 import { Form } from "react-bootstrap";
 
-import API from "../../../variables/API";
+import API from "variables/API";
 
 const FormEditor = props => {
   const {

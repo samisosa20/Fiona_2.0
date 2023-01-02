@@ -13,17 +13,17 @@ import {
 } from "reactstrap";
 import { Form, Modal, InputGroup } from "react-bootstrap";
 
-import API from "../../variables/API";
+import API from "variables/API";
 import axios from "axios";
 
 // core components
 import Header from "views/components/Headers/Default";
-import "../../assets/styles/components/Catego.scss";
+import "assets/styles/components/Catego.scss";
 
-import Modaldelete from "../../components/Modals/Delete";
+import Modaldelete from "views/components/Modals/Delete";
 import Alert from "../components/Alert";
-import Modaledit from "../../components/Modals/EditPlanned";
-import ContextMenuCustom from "../../components/ContextMenu";
+import Modaledit from "views/components/Modals/EditPlanned";
+import ContextMenuCustom from "../components/ContextMenu";
 
 const Catego = () => {
   /* Declaracion de variables */

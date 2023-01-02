@@ -5,7 +5,6 @@ import Budget from "../views/examples/Budget.js";
 import ViewBudget from "../views/examples/View_budget";
 import ReportBudget from "../views/examples/Report_budget";
 import NewBudget from "../views/examples/New_budget";
-import Catego from "../views/examples/Catego.js";
 import Event from "../views/examples/Event.js";
 import Planned from "../views/examples/Planned.js";
 import Report from "../views/examples/Report.js";
@@ -15,7 +14,7 @@ import Profile from "../views/examples/Profile.js";
 
 
 const useRoute = () => {
-  const {Login, Register, Forgot, Account} = useScreens()
+  const {Login, Register, Forgot, Account, Catego} = useScreens()
   const routes = [
     {
       path: "/Account",

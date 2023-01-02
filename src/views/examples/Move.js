@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import TrmApi from "trm-api";
 import {useHistory, useParams} from 'react-router-dom';
 
-import API from "../../variables/API";
+import API from "variables/API";
 import axios from "axios";
 // reactstrap components
 import {
@@ -21,7 +21,7 @@ import { Form, InputGroup, Modal } from "react-bootstrap";
 // core components
 import Header from "views/components/Headers/Default";
 import Alert from "../components/Alert";
-import Modaldelete from "../../components/Modals/Delete";
+import Modaldelete from "views/components/Modals/Delete";
 
 function Account() {
   //declaracion de variables

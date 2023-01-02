@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal} from "react-bootstrap";
-import FormAccount from "components/Form/Acount/FormTransfer";
+import FormAccount from "views/components/Form/Acount/FormTransfer";
 
 const ModalTranfer = (props) => {
 

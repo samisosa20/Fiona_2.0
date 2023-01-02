@@ -12,7 +12,7 @@ import {
 import { Form, InputGroup } from "react-bootstrap";
 // core components
 import Header from "views/components/Headers/Default";
-import API from "../../variables/API";
+import API from "variables/API";
 import { BsChevronDown, BsChevronUp } from "react-icons/bs";
 
 function ViewBudget() {

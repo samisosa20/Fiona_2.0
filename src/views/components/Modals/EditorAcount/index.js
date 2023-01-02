@@ -1,5 +1,5 @@
 import React from "react";
-import FormEditor from "components/Form/Acount/FormEditor";
+import FormEditor from "views/components/Form/Acount/FormEditor";
 
 import {
   Button,

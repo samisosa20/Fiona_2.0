@@ -2,7 +2,7 @@ import React from "react";
 
 import { Button } from "reactstrap";
 import { Form, Modal } from "react-bootstrap";
-import FormCreator from "components/Form/Acount/FormCreator";
+import FormCreator from "views/components/Form/Acount/FormCreator";
 
 const ModalAcountAdd = (props) => {
   const { showNewMod, ModNewCateSate, handleSubmit, handleChange } = props;

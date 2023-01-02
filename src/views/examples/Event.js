@@ -13,13 +13,13 @@ import {
 import { Form, Modal } from "react-bootstrap";
 // core components
 import Header from "views/components/Headers/Default";
-import API from "../../variables/API";
-import "../../assets/styles/components/Catego.scss";
+import API from "variables/API";
+import "assets/styles/components/Catego.scss";
 
-import Modaldelete from "../../components/Modals/Delete";
+import Modaldelete from "views/components/Modals/Delete";
 import Alert from "../components/Alert";
-import Modaledit from "../../components/Modals/EditEvent";
-import ContextMenuCustom from "../../components/ContextMenu";
+import Modaledit from "views/components/Modals/EditEvent";
+import ContextMenuCustom from "../components/ContextMenu";
 
 const Catego = () => {
   /* Declaracion de variables */
