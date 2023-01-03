@@ -7,6 +7,11 @@ import Budget from "./Budget"
 import CreateBudget from "./Budget/Create"
 import ViewBudget from "./Budget/View"
 import ReportBudget from "./Budget/Report"
+import Movements from "./Movements"
+import Report from "./Report"
+import Events from "./Events"
+import Planned from "./Planned"
+import Profile from "./Profile"
 
 const useScreens = () => {
     return {
@@ -19,6 +24,11 @@ const useScreens = () => {
         CreateBudget,
         ViewBudget,
         ReportBudget,
+        Movements,
+        Report,
+        Events,
+        Planned,
+        Profile,
     }
 }
 

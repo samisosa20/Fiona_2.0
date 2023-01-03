@@ -1,12 +1,5 @@
 import useScreens from "../views/screens";
 
-import Dash from "../views/Dash.js";
-import Event from "../views/examples/Event.js";
-import Planned from "../views/examples/Planned.js";
-import Report from "../views/examples/Report.js";
-import Move from "../views/examples/Move.js";
-import Profile from "../views/examples/Profile.js";
-
 const useRoute = () => {
   const {
     Login,
@@ -18,7 +11,13 @@ const useRoute = () => {
     CreateBudget,
     ReportBudget,
     ViewBudget,
+    Movements,
+    Report,
+    Events,
+    Planned,
+    Profile,
   } = useScreens();
+  
   const routes = [
     {
       path: "/Account",
@@ -27,14 +26,6 @@ const useRoute = () => {
       component: Account,
       layout: "/admin",
       sidebar: true,
-    },
-    {
-      path: "/dash",
-      name: "Dashboard",
-      icon: "ni ni-tv-2 text-primary",
-      component: Dash,
-      layout: "/admin",
-      sidebar: false,
     },
     {
       path: "/catego",
@@ -88,7 +79,7 @@ const useRoute = () => {
       path: "/event",
       name: "Events",
       icon: "ni ni-time-alarm text-green",
-      component: Event,
+      component: Events,
       layout: "/admin",
       sidebar: true,
     },
@@ -128,7 +119,7 @@ const useRoute = () => {
       path: "/move/:id",
       name: "Movement",
       icon: "ni ni-circle-08 text-pink",
-      component: Move,
+      component: Movements,
       layout: "/admin",
       sidebar: false,
     },

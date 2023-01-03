@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import CurrencyInput from "react-currency-input-field";
 
 import { Button, Row, Input, FormGroup, Label } from "reactstrap";
 import { Form, InputGroup } from "react-bootstrap";
@@ -160,6 +159,7 @@ const FormAdd = (props) => {
                       </option>
                     );
                   }
+                  return null
                 })
               : ""}
           </Form.Control>

@@ -1,7 +1,7 @@
 {
     "homepage": "https://fiona.itpmsoftware.com/",
     "name": "fiona_app",
-    "version": "1.1.0",
+    "version": "2.0",
     "description": "React version of fiona by Sammy Guttman",
     "main": "index.js",
     "repository": {
@@ -32,8 +32,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject",
-        "heroku-postbuild": "npm run build",
-        "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
+        "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install",
         "compile-sass": "node-sass src/assets/scss/argon-dashboard-react.scss src/assets/css/argon-dashboard-react.css",
         "minify-sass": "node-sass src/assets/scss/argon-dashboard-react.scss src/assets/css/argon-dashboard-react.min.css --output-style compressed",
         "map-sass": "node-sass src/assets/scss/argon-dashboard-react.scss src/assets/css/argon-dashboard-react.css --source-map true"
@@ -52,7 +51,6 @@
         "@emotion/styled": "^11.6.0",
         "@fortawesome/fontawesome-free": "5.12.1",
         "@mui/material": "^5.2.2",
-        "@tailwindcss/postcss7-compat": "^2.0.2",
         "autoprefixer": "^9.8.6",
         "axios": "^0.21.4",
         "bootstrap": "^5.0.0-beta1",
@@ -69,7 +67,6 @@
         "react-bootstrap": "^1.0.1",
         "react-bootstrap-date-picker": "^5.1.0",
         "react-chartjs-2": "2.9.0",
-        "react-copy-to-clipboard": "5.0.2",
         "react-datetime": "2.16.3",
         "react-datetime-bootstrap": "^1.4.7",
         "react-dom": "^16.13.1",
@@ -93,10 +90,7 @@
         "@types/markerclustererplus": "2.1.33",
         "@types/react": "16.9.19",
         "eslint-plugin-flowtype": "3.13.0",
-        "gulp": "4.0.2",
-        "gulp-append-prepend": "1.0.8",
         "http-proxy-middleware": "^1.0.5",
-        "react-currency-input-field": "^3.6.4",
         "typescript": "3.7.5"
     }
 }

@@ -48,7 +48,7 @@ const useBudgetView = () => {
       idc: idc,
       year: year,
     }).then((response) => setState(response.data));
-  }, [refreshData]);
+  }, [refreshData, year]);
 
   const handleChange = (event) => {
     setstateEdit({ ...stateEdit, [event.target.name]: event.target.value });

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import NumberFormat from "react-number-format";
-// reactstrap components
+
+// Components
 import {
   Card,
   CardBody,
@@ -11,151 +12,49 @@ import {
   Button,
 } from "reactstrap";
 import { Form, Modal } from "react-bootstrap";
-// core components
-import Header from "views/components/Headers/Default";
-import API from "variables/API";
+import useComponents from "views/components";
+
+
 import "assets/styles/components/Catego.scss";
 
-import Modaldelete from "views/components/Modals/Delete";
-import Alert from "../components/Alert";
-import Modaledit from "views/components/Modals/EditEvent";
-import ContextMenuCustom from "../components/ContextMenu";
+// Controllers
+import useControllers from "controllers";
 
-const Catego = () => {
-  /* Declaracion de variables */
-  const [contextMenu, setContextMenu] = useState(null);
-  const [state, setState] = useState([]);
-  const [refreshData, setrefreshData] = useState(false);
-  // envio de informacion
-  const [stateform, setform] = useState({
-    namevent: "",
-    endingdate: "",
-  });
-  // edicion de informacion
-  const [stateformEdit, setformEdit] = useState({
-    edit_namevent: "",
-    prevName: "",
-    edit_endingdate: "",
-    id_data: 0,
-  });
-  // edicion de informacion
-  const [listMove, setlistMove] = useState({});
+const Events = () => {
+  // Components
+  const { Headers, Alert, Modals, ContextMenuCustom } = useComponents();
+  const { Header } = Headers();
+  const { Modaldelete, Modaledit } = Modals();
 
-  /* Declaracion de estados de los modals */
-  const [showNewMod, setshowNewMod] = useState(false);
-  const [showDelMod, setshowDelMod] = useState(false);
-  const [showEdiMod, setshowEdiMod] = useState(false);
-  const [showListMove, setShowListMove] = useState(false);
-  const [stateCatego, setStateCatego] = useState(false);
-  const [stateAlert, setSateAlert] = useState({ visible: false, code: 200 });
-
-  // Funcion para cambiar de estado de los modals
-  const ModNewEventSate = () => setshowNewMod(!showNewMod);
-  const ModListMove = () => setShowListMove(!showListMove);
-  const ModDelCateSate = () => setshowDelMod(!showDelMod);
-  const ModEdiEventSate = () => setshowEdiMod(!showEdiMod);
-  const ChangeStateCatego = () => setStateCatego(!stateCatego);
-
-  useEffect(() => {
-    let idc = localStorage.getItem("IdUser");
-    API.post("acount", {
-      id: 12,
-      idc: idc,
-    }).then((response) => {
-      //console.log(response.data);
-      setState(response.data);
-    });
-  }, [refreshData]);
-
-  /* ...state para que no se modifique */
-  const handleChange = (event) => {
-    setform({ ...stateform, [event.target.name]: event.target.value });
-  };
-  const handleChangeEdit = (event) => {
-    setformEdit({ ...stateformEdit, [event.target.name]: event.target.value });
-  };
-
-  // Accion al abrir los modals
-  const OpenModalNew = (e) => {
-    e.preventDefault();
-    ModNewEventSate();
-  };
-  const OpenModalDelete = (e, id, catego) => {
-    e.preventDefault();
-    setformEdit({
-      edit_categor: catego,
-      edit_descrip: stateformEdit.edit_descrip,
-      edit_group: stateformEdit.edit_group,
-      edit_include: stateformEdit.edit_include,
-      id_data: id,
-    });
-    ModDelCateSate();
-  };
-  const OpenModalEdit = (e, id, name, endDate) => {
-    e.preventDefault();
-    setformEdit({
-      edit_namevent: name,
-      prevName: name,
-      edit_endingdate: endDate,
-      id_data: id,
-    });
-    ModEdiEventSate();
-  };
-  const openListModal = (event) => {
-    let idc = localStorage.getItem("IdUser");
-    API.post("acount", {
-      id: 13,
-      idc: idc,
-      event: event,
-    }).then((response) => {
-      ModListMove();
-      setlistMove(response.data);
-      //console.log(response.data);
-    });
-  };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (stateform.namevent === "" || stateform.endingdate === "") {
-      setSateAlert({ visible: true, code: 1 });
-      setTimeout(() => {
-        setSateAlert({ visible: false, code: 0 });
-      }, 2000);
-    } else {
-      let idc = localStorage.getItem("IdUser");
-      API.post("add_data", {
-        id: 6,
-        idu: idc,
-        name: stateform.namevent,
-        date: stateform.endingdate,
-      }).then((response) => {
-        //alert(response.data);
-        ModNewEventSate();
-        ChangeStateCatego();
-        setrefreshData(!refreshData);
-        setSateAlert({ visible: true, code: response.data });
-        setTimeout(() => {
-          setSateAlert({ visible: false, code: 0 });
-        }, 2000);
-      });
-    }
-  };
-
-  const handleContextMenu = (event, data) => {
-    event.preventDefault();
-    setContextMenu(
-      contextMenu === null
-        ? {
-            mouseX: event.clientX - 2,
-            mouseY: event.clientY - 4,
-            onClickEdit: (e) =>
-              OpenModalEdit(e, data.id, data.nombre, data.fecha_fin),
-          }
-        : null
-    );
-  };
-  const handleClose = () => {
-    setContextMenu(null);
-  };
+  const { useScreenHooks } = useControllers();
+  const { useEvent } = useScreenHooks();
+  const { 
+    state,
+    handleContextMenu,
+    openListModal,
+    contextMenu,
+    handleClose,
+    OpenModalNew,
+    stateAlert,
+    showNewMod,
+    handleSubmit,
+    handleChange,
+    stateformEdit,
+    refreshData,
+    setrefreshData,
+    showDelMod,
+    setshowDelMod,
+    setSateAlert,
+    setformEdit,
+    showEdiMod,
+    setshowEdiMod,
+    handleChangeEdit,
+    OpenModalDelete,
+    showListMove,
+    ModListMove,
+    listMove,
+    ModNewEventSate,
+   } = useEvent();
 
   return (
     <>
@@ -323,4 +222,4 @@ const Catego = () => {
   );
 };
 
-export default Catego;
+export default Events;

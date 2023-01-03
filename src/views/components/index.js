@@ -5,6 +5,8 @@ import Alert from "./Alert"
 import Modals from './Modals'
 import AcountAdd from "./Acount"
 import ContextMenuCustom from "./ContextMenu"
+import ExcelExport from "./Excel"
+import ValidShareAccount from "./Acount/Share"
 
 const useComponents = () => {
     return {
@@ -15,6 +17,8 @@ const useComponents = () => {
       Modals,
       AcountAdd,
       ContextMenuCustom,
+      ExcelExport,
+      ValidShareAccount,
     };
   };
   

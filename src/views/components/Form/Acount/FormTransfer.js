@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import CurrencyInput from 'react-currency-input-field';
 
 // reactstrap components
 import { Button, Row, FormGroup, Label } from "reactstrap";

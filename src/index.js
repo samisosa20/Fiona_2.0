@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch, Redirect, useParams } from "react-router-dom"; // para navegar entre paginas
+import { BrowserRouter, Route, Switch, Redirect, useParams } from "react-router-dom";
 
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -10,14 +10,14 @@ import "./index.css"
 
 import AdminLayout from "views/layouts/PrivateContent";
 import AuthLayout from "views/layouts/PublicContent";
-import ValidShareAccount from "views/examples/ValidShare.js";
 
+import useComponents from "views/components";
 
 
 function ValidPath() {
-  // We can call useParams() here to get the params,
-  // or in any child element as well!
-  let { idUser, account, owner } = useParams()
+  const {ValidShareAccount} = useComponents();
+  const { idUser, account, owner } = useParams()
+  
   return <ValidShareAccount idUSer={idUser} owner={owner} idAccount={account} />
 }
 

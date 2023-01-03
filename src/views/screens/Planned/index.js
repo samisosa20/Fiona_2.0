@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import NumberFormat from "react-number-format";
-// reactstrap components
+
+// Components
 import {
   Card,
   CardBody,
@@ -12,266 +13,53 @@ import {
   Input,
 } from "reactstrap";
 import { Form, Modal, InputGroup } from "react-bootstrap";
+import useComponents from "views/components";
 
-import API from "variables/API";
-import axios from "axios";
-
-// core components
-import Header from "views/components/Headers/Default";
 import "assets/styles/components/Catego.scss";
 
-import Modaldelete from "views/components/Modals/Delete";
-import Alert from "../components/Alert";
-import Modaledit from "views/components/Modals/EditPlanned";
-import ContextMenuCustom from "../components/ContextMenu";
+// Controllers
+import useControllers from "controllers";
 
-const Catego = () => {
-  /* Declaracion de variables */
-  const [contextMenu, setContextMenu] = useState(null);
-  const [state, setState] = useState([]);
-  const [refreshData, setrefreshData] = useState(false);
-  const [stateSignal, setSignal] = useState({ Signal: "+" });
-  const [stateAcount, setAcount] = useState([]);
-  // envio de informacion
-  const [stateform, setform] = useState({
-    category: "",
-    descrip: "",
-    badge: "COP",
-    value: 0,
-    frequency: "0",
-    recurrency: "",
-    startDate: null,
-    endDate: null,
-  });
-  // edicion de informacion
-  const [stateformEdit, setformEdit] = useState({
-    catego: "",
-    description: "",
-    account: "",
-    badge: "COP",
-    monto: 0,
-    frequency: "0",
-    recurrency: "",
-    startDate: null,
-    endDate: null,
-    id_data: 0,
-  });
+const Planned = () => {
+  // Components
+  const { Headers, Alert, Modals, ContextMenuCustom } = useComponents();
+  const { Header } = Headers();
+  const { Modaldelete, Modaledit } = Modals();
 
-  const translateRecu = {
-    "-1.00": "Specific Day",
-    "0.70": "Weekly",
-    "0.15": "Biweekly",
-    "1.00": "Monthly",
-    "2.00": "Bimonthly",
-    "3.00": "Trimestraly",
-    "4.00": "Quarterly",
-    "6.00": "Biannual",
-    "12.00": "Yearly",
-  };
-
-  /* Declaracion de estados de los modals */
-  const [showNewMod, setshowNewMod] = useState(false);
-  const [showDelMod, setshowDelMod] = useState(false);
-  const [showEdiMod, setshowEdiMod] = useState(false);
-  const [stateCatego, setCatego] = useState([]);
-  const [stateAlert, setSateAlert] = useState({ visible: false, code: 200 });
-
-  // Funcion para cambiar de estado de los modals
-  const ModNewPlannedSate = () => setshowNewMod(!showNewMod);
-  const ModDelCateSate = () => setshowDelMod(!showDelMod);
-  const ModEdiEventSate = () => setshowEdiMod(!showEdiMod);
-
-  useEffect(() => {
-    let idc = localStorage.getItem("IdUser");
-    API.post("acount", {
-      id: 15,
-      idc: idc,
-    }).then((response) => {
-      //console.log(response.data);
-      setState(response.data);
-    });
-    setform({
-      ...stateform,
-      startDate: `${new Date().getFullYear()}-${`${
-        new Date().getMonth() + 1
-      }`.padStart(2, 0)}-${`${new Date().getDate()}`.padStart(2, 0)}`,
-    });
-  }, [refreshData]);
-
-  const handleChange = (event) => {
-    if(event.target.name === 'repeat' && event.target.value === '0') {
-      setform({ ...stateform, endDate: '', [event.target.name]: event.target.value });
-    } else {
-      setform({ ...stateform, [event.target.name]: event.target.value });
-    }
-  };
-  const handleChangeEdit = (event) => {
-    setformEdit({ ...stateformEdit, [event.target.name]: event.target.value });
-  };
-
-  const OpenModalNew = (e) => {
-    e.preventDefault();
-    let idc = localStorage.getItem("IdUser");
-    axios
-      .all([
-        API.post(`acount`, {
-          id: 5,
-          idc: idc,
-        }),
-        API.post(`acount`, {
-          id: 2,
-          idc: idc,
-        }),
-      ])
-      .then(
-        axios.spread((firstResponse, secondResponse) => {
-          setCatego(firstResponse.data);
-          setAcount(secondResponse.data);
-        })
-      );
-    ModNewPlannedSate();
-  };
-  const OpenModalDelete = (e) => {
-    e.preventDefault();
-    ModDelCateSate();
-  };
-  const OpenModalEdit = (e, data) => {
-    e.preventDefault();
-    let idc = localStorage.getItem("IdUser");
-    axios
-      .all([
-        API.post(`acount`, {
-          id: 5,
-          idc: idc,
-        }),
-        API.post(`acount`, {
-          id: 2,
-          idc: idc,
-        }),
-      ])
-      .then(
-        axios.spread((firstResponse, secondResponse) => {
-          setCatego(firstResponse.data);
-          setAcount(secondResponse.data);
-          setformEdit({
-            category: data.category,
-            account: data.account,
-            description: data.description,
-            badge: data.badge,
-            value: data.value < 0 ? data.value * -1 : data.value,
-            frequency: data.fequency,
-            recurrency: data.recurrency,
-            startDate: data.startDate,
-            endDate: data.endDate,
-            categoryName: data.categoryName,
-            accountName: data.accountName,
-            specificDay: data.specificDay,
-            signal: data.value < 0 ? "-" : "+",
-            repeat: stateformEdit.endDate === '0000-00-00' ? 0 : 1,
-            id_data: data.id,
-          });
-          ModEdiEventSate();
-        })
-      );
-  };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (
-      stateform.startDate === "" ||
-      stateform.account === "" ||
-      stateform.value === "" ||
-      stateform.category === ""
-    ) {
-      setSateAlert({ visible: true, code: 1 });
-      setTimeout(() => {
-        setSateAlert({ visible: false, code: 0 });
-      }, 2000);
-    } else {
-      API.post("add_data", {
-        id: 9,
-        idu: localStorage.getItem("IdUser"),
-        value: stateform.value,
-        badge: stateform.badge,
-        account: stateform.account,
-        category: stateform.category,
-        startDate: stateform.startDate,
-        frequency: stateform.frequency,
-        recurrency: stateform.recurrency,
-        specificDay: stateform.specificDay,
-        endDate: stateform.endDate,
-        description: stateform.description,
-      }).then((response) => {
-        //alert(response.data);
-        ModNewPlannedSate();
-        setrefreshData(!refreshData);
-        setSignal({ Signal: "+" });
-        setSateAlert({ visible: true, code: response.data });
-        setform({frequency: '0', repeat: '0'})
-        setTimeout(() => {
-          setSateAlert({ visible: false, code: 0 });
-        }, 2000);
-      });
-    }
-  };
-
-  const handleContextMenu = (event, data) => {
-    event.preventDefault();
-
-    setContextMenu(
-      contextMenu === null
-        ? {
-            mouseX: event.clientX - 2,
-            mouseY: event.clientY - 4,
-            onClickEdit: (event) => {
-              OpenModalEdit(event, data);
-            },
-          }
-        : null
-    );
-  };
-  const handleClose = () => {
-    setContextMenu(null);
-  };
-  const ChangeSignal = (event) => {
-    setSignal({ Signal: event.target.value !== "+" ? "+" : "-" });
-  };
-  const VerifySignal = (event, idSigno) => {
-    if (event.target.value < 0) {
-      if (idSigno !== "") {
-        setSignal({ Signal: "-" });
-      }
-      event.target.value = event.target.value * -1;
-      setform({ ...stateform, [event.target.name]: event.target.value * -1 });
-    } else {
-      setform({
-        ...stateform,
-        [event.target.name]:
-          stateSignal.Signal === "+"
-            ? event.target.value
-            : event.target.value * -1,
-      });
-    }
-  };
-
-  const renderRecursion = (listCategories) => {
-    return listCategories.map((category) => (
-      <>
-        <option
-          key={category.id + category.name}
-          className={
-            category.lvl === 1 || category.subCategories?.length > 0
-              ? "font-weight-bold"
-              : ""
-          }
-          value={category.id}
-          dangerouslySetInnerHTML={{__html: '&nbsp;'.repeat(category.lvl - 1) + category.name}}
-        />
-        {category.subCategories?.length > 0 &&
-          renderRecursion(category.subCategories)}
-      </>
-    ));
-  };
-
+  const { useScreenHooks } = useControllers();
+  const { usePlanned } = useScreenHooks();
+  const {
+    state,
+    handleContextMenu,
+    OpenModalEdit,
+    translateRecu,
+    contextMenu,
+    handleClose,
+    OpenModalNew,
+    stateAlert,
+    showNewMod,
+    ModNewPlannedSate,
+    handleSubmit,
+    stateSignal,
+    ChangeSignal,
+    VerifySignal,
+    stateAcount,
+    handleChange,
+    stateCatego,
+    renderRecursion,
+    stateform,
+    stateformEdit,
+    refreshData,
+    setrefreshData,
+    showDelMod,
+    setshowDelMod,
+    setSateAlert,
+    showEdiMod,
+    setshowEdiMod,
+    handleChangeEdit,
+    OpenModalDelete,
+    setformEdit,
+  } = usePlanned();
   return (
     <>
       <Header />
@@ -317,7 +105,7 @@ const Catego = () => {
                         <h4 className="card-title col-12 col-md-6 col-xl-6 text-muted m-0">
                           Frequency:{" "}
                           <span className="text-dark ml-1">
-                            {data.fequency == "0"
+                            {data.fequency === "0"
                               ? "One time"
                               : translateRecu[data.recurrency]}
                           </span>
@@ -436,7 +224,8 @@ const Catego = () => {
                   >
                     <option></option>
                     {stateCatego.id !== -1000
-                  ? renderRecursion(stateCatego): ""}
+                      ? renderRecursion(stateCatego)
+                      : ""}
                   </Form.Control>
                 </FormGroup>
                 <FormGroup>
@@ -505,9 +294,8 @@ const Catego = () => {
                       Select a day
                     </option>
                     {Array.from(Array(31), (e, i) => {
-                      return <option key={i+1}>{i+1}</option>
-                    })
-                    }
+                      return <option key={i + 1}>{i + 1}</option>;
+                    })}
                   </Form.Control>
                 </FormGroup>
                 <FormGroup hidden={stateform.frequency === "0"}>
@@ -521,7 +309,9 @@ const Catego = () => {
                     <option value="1">Until a date</option>
                   </Form.Control>
                 </FormGroup>
-                <FormGroup hidden={!stateform.repeat || stateform.repeat === "0"}>
+                <FormGroup
+                  hidden={!stateform.repeat || stateform.repeat === "0"}
+                >
                   <Label>End Date</Label>
                   <Input type="date" name="endDate" onChange={handleChange} />
                 </FormGroup>
@@ -573,4 +363,4 @@ const Catego = () => {
   );
 };
 
-export default Catego;
+export default Planned;

@@ -55,7 +55,7 @@ const useAccounts = () => {
       id: 2,
       idc: idc,
     }).then((response) => {
-      setState(response.data.filter((v) => v.show == 1));
+      setState(response.data.filter((v) => parseInt(v.show)));
     });
   }, [refreshData]);
 

@@ -6,7 +6,7 @@ const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
-function ExcelExport(props) {
+const ExcelExport = (props) => {
   const { data } = props;
   return (
     <>
