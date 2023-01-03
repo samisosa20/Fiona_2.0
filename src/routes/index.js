@@ -16,6 +16,8 @@ const useRoute = () => {
     Events,
     Planned,
     Profile,
+    Heritage,
+    DetailHeritage,
   } = useScreens();
   
   const routes = [
@@ -128,6 +130,22 @@ const useRoute = () => {
       name: "Profile",
       icon: "ni ni-circle-08 text-pink",
       component: Profile,
+      layout: "/admin",
+      sidebar: false,
+    },
+    {
+      path: "/heritages",
+      name: "Heritages",
+      icon: "ni ni-building text-pink",
+      component: Heritage,
+      layout: "/admin",
+      sidebar: true,
+    },
+    {
+      path: "/heritages/:year",
+      name: "Heritages",
+      icon: "ni ni-building text-pink",
+      component: DetailHeritage,
       layout: "/admin",
       sidebar: false,
     },

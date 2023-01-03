@@ -53,7 +53,7 @@ const Catego = () => {
   return (
     <>
       <Header />
-      <Container className="mt--7" fluid>
+      <Container className="mt--7 pb-150" fluid>
         <Row>
           {state.lvl !== undefined ? (
             <Card className="shadow col-md-5 mr-2 ml-2 mb-3 arrow c-categorie">

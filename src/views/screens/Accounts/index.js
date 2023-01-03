@@ -67,7 +67,7 @@ const Account = () => {
   return (
     <>
       <Header />
-      <Container className="mt--7" fluid>
+      <Container className="mt--7 pb-150" fluid>
         <div className="col justify-content-end row p-0 m-0">
           <Button className="btn-info mb-3" onClick={(e) => OpenModalMovi(e)}>
             <i className="fas fa-plus mr-2"></i>

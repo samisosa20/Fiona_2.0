@@ -13,13 +13,6 @@ import {
   Button,
 } from "reactstrap";
 import { Form, InputGroup, Modal, ProgressBar } from "react-bootstrap";
-import {
-  ChartIncoming,
-  ChartExpense,
-  ChartBalance,
-  ChartCashFlow,
-  ChartBalanceComparison,
-} from "variables/charts";
 import useComponents from "views/components";
 
 // Controllers
@@ -27,8 +20,13 @@ import useControllers from "controllers";
 
 const Report = () => {
   // Components
-  const { Headers, ExcelExport } = useComponents();
+  const { Headers, ExcelExport, Charts } = useComponents();
   const { Header } = Headers();
+  const { ChartIncoming,
+    ChartExpense,
+    ChartBalance,
+    ChartCashFlow,
+    ChartBalanceComparison, } = Charts();
 
   const { useScreenHooks } = useControllers();
   const { useReport } = useScreenHooks();
@@ -51,7 +49,7 @@ const Report = () => {
     <>
       <Header />
       {/* Page content */}
-      <Container className="mt--7" fluid>
+      <Container className="mt--7 pb-150" fluid>
         <Row className="col justify-content-end mb-3">
           <div className="col-md-4">
             <Label className="text-dark">View Mode</Label>

@@ -12,6 +12,8 @@ import useReport from "./Report";
 import useEvent from "./Events";
 import usePlanned from "./Planned";
 import useProfile from "./Profile";
+import useHeritages from "./Heritages";
+import useHeritagesDetail from "./Heritages/Detail";
 
 const useScreenHooks = () => {
   return {
@@ -28,7 +30,9 @@ const useScreenHooks = () => {
     useReport,
     useEvent,
     usePlanned,
-    useProfile
+    useProfile,
+    useHeritages,
+    useHeritagesDetail,
   };
 };
 

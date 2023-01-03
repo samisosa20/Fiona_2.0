@@ -63,7 +63,7 @@ const Planned = () => {
   return (
     <>
       <Header />
-      <Container className="mt--7" fluid>
+      <Container className="mt--7 pb-150" fluid>
         <Row>
           {state
             ? state.map((data, index) => (

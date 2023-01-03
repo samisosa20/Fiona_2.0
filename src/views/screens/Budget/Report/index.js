@@ -50,7 +50,7 @@ const ReportBudget = () => {
   return (
     <>
       <Header />
-      <Container className="mt--7" fluid>
+      <Container className="mt--7 pb-150" fluid>
         <Row className="col justify-content-end mb-3">
           <div className="col-md-4">
             <Label className="text-dark">View Mode</Label>

@@ -60,6 +60,12 @@ const Modaldelete = props => {
         idu: idc,
         id_data: state.id_data
       };
+    } else if (action === "heritage") {
+      data = {
+        id: 8,
+        idu: idc,
+        id_data: state.id
+      };
     } else {
       data = { id: 5, idu: idc, year: year, category: state.number };
     }

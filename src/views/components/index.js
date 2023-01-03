@@ -7,6 +7,7 @@ import AcountAdd from "./Acount"
 import ContextMenuCustom from "./ContextMenu"
 import ExcelExport from "./Excel"
 import ValidShareAccount from "./Acount/Share"
+import Charts from "./Charts"
 
 const useComponents = () => {
     return {
@@ -19,6 +20,7 @@ const useComponents = () => {
       ContextMenuCustom,
       ExcelExport,
       ValidShareAccount,
+      Charts,
     };
   };
   

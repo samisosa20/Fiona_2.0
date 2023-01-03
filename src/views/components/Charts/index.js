@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { Chart, registerables } from "chart.js";
-import API from "./API";
+
+
+import API from "variables/API";
 
 //color donuht
 let colorDonuht = [
@@ -351,11 +353,11 @@ const ChartBalance = (props) => {
                 width: 25,
                 responsive: true,
                 plugins: { legend: { display: false } },
-                elements: {
+                /* elements: {
                   point: {
                     radius: 0,
                   },
-                },
+                }, */
                 scales: {
                   y: {
                     ticks: {
@@ -671,11 +673,16 @@ const ChartBalanceComparison = (props) => {
   );
 };
 
-export {
-  ChartIncoming,
-  ChartExpense,
-  ChartSaving,
-  ChartBalance,
-  ChartCashFlow,
-  ChartBalanceComparison,
-};
+const Charts = () => {
+  return {
+    ChartIncoming,
+    ChartExpense,
+    ChartSaving,
+    ChartBalance,
+    ChartCashFlow,
+    ChartBalanceComparison,
+  };
+
+}
+
+export default Charts

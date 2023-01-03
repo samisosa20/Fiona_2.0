@@ -12,6 +12,8 @@ import Report from "./Report"
 import Events from "./Events"
 import Planned from "./Planned"
 import Profile from "./Profile"
+import Heritage from "./Heritage"
+import DetailHeritage from "./Heritage/Detail"
 
 const useScreens = () => {
     return {
@@ -29,6 +31,8 @@ const useScreens = () => {
         Events,
         Planned,
         Profile,
+        Heritage,
+        DetailHeritage,
     }
 }
 

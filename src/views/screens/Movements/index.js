@@ -78,7 +78,7 @@ const Movements = () => {
     <>
       <Header />
       {/* Page content */}
-      <Container className="mt--7" fluid>
+      <Container className="mt--7 pb-150" fluid>
         {/* Table */}
         <Row className="mb-2">
           <div className="col">
@@ -148,6 +148,7 @@ const Movements = () => {
           {state.json_movi ? (
             state.json_movi.map((data, index) => (
               <ListGroupItem
+              className="cursor-pointer"
                 key={index}
                 onClick={
                   data.categoria !== "Transferencia"

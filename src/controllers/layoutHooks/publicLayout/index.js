@@ -13,6 +13,7 @@ const useLayoutPublic = () => {
           if (prop.layout === "/auth" || prop.layout === "/admin") {
             return (
               <Route
+                exact
                 path={prop.layout + prop.path}
                 component={prop.component}
                 key={key}
