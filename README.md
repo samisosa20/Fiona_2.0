@@ -4,7 +4,9 @@
 
 **Description**
 
-working....
+web application for managing personal finances, you can control how much you have, compare the budget, create events and much more
+
+**Requirements**
 
 `node >= 16`
 
@@ -30,7 +32,17 @@ RewriteRule . /index.html [L]
 
 ## Quick start
 
-****
+1. clone the repo
+
+`git clone https://github.com/samisosa20/Fiona_2.0.git`
+
+2. Install dependences
+
+`npm i`
+
+3. run application in dev
+
+`npm run dev`
 
 ## Licensing
 
