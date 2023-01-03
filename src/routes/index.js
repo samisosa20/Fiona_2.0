@@ -1,20 +1,24 @@
-import useScreens from '../views/screens'
+import useScreens from "../views/screens";
 
 import Dash from "../views/Dash.js";
-import Budget from "../views/examples/Budget.js";
-import ViewBudget from "../views/examples/View_budget";
-import ReportBudget from "../views/examples/Report_budget";
-import NewBudget from "../views/examples/New_budget";
 import Event from "../views/examples/Event.js";
 import Planned from "../views/examples/Planned.js";
 import Report from "../views/examples/Report.js";
 import Move from "../views/examples/Move.js";
 import Profile from "../views/examples/Profile.js";
 
-
-
 const useRoute = () => {
-  const {Login, Register, Forgot, Account, Catego} = useScreens()
+  const {
+    Login,
+    Register,
+    Forgot,
+    Account,
+    Catego,
+    Budget,
+    CreateBudget,
+    ReportBudget,
+    ViewBudget,
+  } = useScreens();
   const routes = [
     {
       path: "/Account",
@@ -68,7 +72,7 @@ const useRoute = () => {
       path: "/NewBudget",
       name: "New Budget",
       icon: "ni ni-money-coins text-yellow",
-      component: NewBudget,
+      component: CreateBudget,
       layout: "/admin",
       sidebar: false,
     },
@@ -138,7 +142,7 @@ const useRoute = () => {
     },
   ];
   return {
-    routes
-  }
-}
+    routes,
+  };
+};
 export default useRoute;
