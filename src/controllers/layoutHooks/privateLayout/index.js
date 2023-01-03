@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Route, useLocation } from "react-router-dom";
+import { matchPath } from "react-router"
 
 import useRoute from "routes";
 
@@ -24,16 +25,10 @@ const useLayoutPrivate = () => {
     });
   };
   const getBrandText = () => {
-    for (let i = 0; i < routes.length; i++) {
-      if (
-        location.pathname.indexOf(
-          routes[i].layout + routes[i].path
-        ) !== -1
-      ) {
-        return routes[i].name;
-      }
-    }
-    return "Brand";
+    const currentRoute = routes.find(
+      route => matchPath({path: route.layout + route.path}, location.pathname)
+      )
+    return currentRoute.name;
   };
   useEffect(() => {
     document.documentElement.scrollTop = 0;

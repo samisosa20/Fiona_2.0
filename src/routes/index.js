@@ -46,7 +46,7 @@ const useRoute = () => {
       sidebar: true,
     },
     {
-      path: "/ViewBudget",
+      path: "/ViewBudget/:year",
       name: "View Budget",
       icon: "ni ni-money-coins text-yellow",
       component: ViewBudget,

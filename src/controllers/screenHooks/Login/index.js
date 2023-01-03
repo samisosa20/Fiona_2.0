@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 
-import store from "redux/store";
-import { return_user } from "redux/actions/Login";
+import store from "config/redux/store";
+import { return_user } from "config/redux/actions/Login";
 
 import API from "variables/API";
 

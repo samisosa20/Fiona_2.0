@@ -1,13 +1,12 @@
 import { useState } from "react";
 
-import store from "redux/store";
+import store from "config/redux/store";
 
 import API from "variables/API";
 
 const useForgot = () => {
   const [email, setEmail] = useState(null)
 
-  /* ...state para que no se modifique */
   const handleChange = (event) => {
     setEmail(event.target.value)
   };
