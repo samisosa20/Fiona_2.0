@@ -24,7 +24,7 @@ const FormAdd = (props) => {
     return listCategories.map((category) => (
       <>
         <option
-          key={category.id + category.name}
+          key={category.id}
           className={
             category.lvl === 1 || category.subCategories?.length > 0
               ? "font-weight-bold"
@@ -62,7 +62,7 @@ const FormAdd = (props) => {
                 id="monto"
                 name="monto"
                 placeholder=" Please enter a value"
-                value={stateform.monto}
+                value={stateform?.monto}
                 required
                 step={0.01}
                 className="form-control"
@@ -81,7 +81,7 @@ const FormAdd = (props) => {
       </FormGroup>
       <FormGroup>
         <Label>Acount</Label>
-        <Form.Control as="select" name="acount" onChange={handleChange}>
+        <Form.Control as="select" name="acount" onChange={handleChange} required>
           <option value="" hidden>
             Choose an account
           </option>
@@ -102,7 +102,7 @@ const FormAdd = (props) => {
       </FormGroup>
       <FormGroup>
         <Label>Category</Label>
-        <Form.Control as="select" name="catego" onChange={handleChange}>
+        <Form.Control as="select" name="catego" onChange={handleChange} required>
           <option value="" hidden>
             Choose a category
           </option>
@@ -123,6 +123,7 @@ const FormAdd = (props) => {
         <Input
           type="datetime-local"
           name="datetime"
+          required
           defaultValue={`${new Date().getFullYear()}-${`${
             new Date().getMonth() + 1
           }`.padStart(2, 0)}-${`${new Date().getDate()}`.padStart(

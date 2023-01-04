@@ -94,6 +94,7 @@ const FormAccount = (props) => {
             as="select"
             id="account_ini"
             name="account_ini"
+            required
             onChange={handleChangeTrans}
           >
             <option value="" hidden>Choose an account</option>
@@ -113,6 +114,7 @@ const FormAccount = (props) => {
           <Form.Control
             as="select"
             name="account_fin"
+            required
             onChange={handleChangeTrans}
           >
             <option value="" hidden>Choose an account</option>

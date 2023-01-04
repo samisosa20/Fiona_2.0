@@ -3,7 +3,7 @@ import axios from "axios";
 
 import API from "variables/API";
 
-const useHeader = () => {
+const useHeader = (refreshData) => {
 
     const [state, setState] = useState({
         ingresos: 0,
@@ -57,7 +57,7 @@ const useHeader = () => {
             );
         }
         loadInfoCardMoney();
-      }, [divi, idc]);
+      }, [divi, idc, refreshData]);
     
       const OpenViewMovi = (e, id) => {
         e.preventDefault();

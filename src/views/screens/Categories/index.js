@@ -54,7 +54,7 @@ const Catego = () => {
     <>
       <Header />
       <Container className="mt--7 pb-150" fluid>
-        <Row>
+        <Row className="justify-content-around">
           {state.lvl !== undefined ? (
             <Card className="shadow col-md-5 mr-2 ml-2 mb-3 arrow c-categorie">
               <Link

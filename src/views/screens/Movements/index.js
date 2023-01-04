@@ -76,7 +76,7 @@ const Movements = () => {
 
   return (
     <>
-      <Header />
+      <Header refreshData={refreshData}/>
       {/* Page content */}
       <Container className="mt--7 pb-150" fluid>
         {/* Table */}
@@ -255,11 +255,11 @@ const Movements = () => {
               </FormGroup>
               <FormGroup>
                 <Label>Category</Label>
-                <Form.Control as="select" name="catego" onChange={handleChange}>
+                <Form.Control as="select" name="catego" onChange={handleChange} required>
                   <option value="" hidden>
                     Choose a category
                   </option>
-                  {stateCatego.id !== -1000 ? renderRecursion(stateCatego) : ""}
+                  {renderRecursion(stateCatego)}
                 </Form.Control>
               </FormGroup>
               <FormGroup>
@@ -361,7 +361,7 @@ const Movements = () => {
                         id="monto"
                         name="monto"
                         placeholder=" Please enter a value"
-                        value={stateformtrans.monto}
+                        value={stateformtrans?.monto}
                         required
                         step={0.01}
                         className="form-control"
@@ -387,33 +387,21 @@ const Movements = () => {
                   as="select"
                   id="account_ini"
                   name="account_ini"
+                  required
                   onChange={handleChangeTrans}
+                  defaultValue={acount}
                 >
                   <option value="" hidden>
                     Choose an account
                   </option>
-                  {stateCatego.id !== -1000
-                    ? stateCatego.map((data, index) => {
-                        if (data.id === acount) {
-                          return (
-                            <option
-                              key={index}
-                              selected
-                              className="font-weight-bold"
-                              value={data.id}
-                            >
-                              {data.nombre}
-                            </option>
-                          );
-                        } else {
+                  {stateCatego.map((data, index) => {
                           return (
                             <option key={index} value={data.id}>
                               {data.nombre}
                             </option>
                           );
-                        }
                       })
-                    : ""}
+                  }
                 </Form.Control>
               </FormGroup>
               <FormGroup>
@@ -421,20 +409,19 @@ const Movements = () => {
                 <Form.Control
                   as="select"
                   name="account_fin"
+                  required
                   onChange={handleChangeTrans}
                 >
                   <option value="" hidden>
                     Choose an account
                   </option>
-                  {stateCatego.id !== -1000
-                    ? stateCatego.map((data, index) => {
+                  {stateCatego.map((data, index) => {
                         return (
                           <option key={index} value={data.id}>
                             {data.nombre}
                           </option>
                         );
-                      })
-                    : ""}
+                      })}
                 </Form.Control>
               </FormGroup>
               <FormGroup>
@@ -599,6 +586,7 @@ const Movements = () => {
                 <Form.Control
                   as="select"
                   name="catego"
+                  required
                   onChange={handleChangeEdit}
                   value={stateformEdit.catego}
                 >

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 // Components
 import { Modal } from "react-bootstrap";
@@ -7,7 +8,8 @@ import ContainerHeader from "./ContainsHeader";
 // Controllers
 import useControllers from "controllers";
 
-const Header = () => {
+const Header = (props) => {
+  const {refreshData} = props
   const { useComponentHooks } = useControllers();
   const { useHeader } = useComponentHooks();
   const {
@@ -20,7 +22,7 @@ const Header = () => {
     OpenViewMovilvlMonth,
     formatter,
     BackViewMovi,
-  } = useHeader();
+  } = useHeader(refreshData);
 
   return (
     <ContainerHeader
@@ -37,5 +39,13 @@ const Header = () => {
     />
   );
 };
+
+Header.defaultProps = {
+  refreshData: false,
+};
+
+Header.propTypes = {
+  refreshData: PropTypes.bool
+}
 
 export default Header;

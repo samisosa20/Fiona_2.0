@@ -66,7 +66,7 @@ const Account = () => {
 
   return (
     <>
-      <Header />
+      <Header refreshData={refreshData}/>
       <Container className="mt--7 pb-150" fluid>
         <div className="col justify-content-end row p-0 m-0">
           <Button className="btn-info mb-3" onClick={(e) => OpenModalMovi(e)}>

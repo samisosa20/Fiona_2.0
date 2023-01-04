@@ -47,7 +47,7 @@ const AcountAdd = (props) => {
   };
   return (
     <>
-      <Row className="col-12 justify-content-between p-0 m-0">
+      <Row className="justify-content-around">
         {state
           ? state.map((data, index) => (
               <Card

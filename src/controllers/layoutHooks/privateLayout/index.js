@@ -33,6 +33,7 @@ const useLayoutPrivate = () => {
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
+    document.body.classList.remove("bg-default");
     //this.refs.mainContent.scrollTop = 0;
   }, []);
   return {

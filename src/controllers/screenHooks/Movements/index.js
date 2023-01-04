@@ -454,6 +454,8 @@ const useMovements = () => {
         signo.className = "btn btn-outline-danger";
       }
       value = value * -1;
+    } else {
+      value = value * 1;
     }
 
     if (idSigno === "signo_move") {
