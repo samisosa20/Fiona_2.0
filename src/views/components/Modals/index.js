@@ -5,6 +5,7 @@ import ModalAcountAdd from "./AddAcount"
 import ModalAddMovement from "./AddMovement"
 import ModalTranfer from "./Transfer"
 import ModalshareAccount from "./Share"
+import ModaleditPlanned from "./EditPlanned"
 
 const Modals = () => {
     return {
@@ -15,6 +16,7 @@ const Modals = () => {
         ModalTranfer,
         ModalshareAccount,
         Modaledit,
+        ModaleditPlanned,
     }
 }
 

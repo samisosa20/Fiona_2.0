@@ -24,7 +24,7 @@ const Planned = () => {
   // Components
   const { Headers, Alert, Modals, ContextMenuCustom } = useComponents();
   const { Header } = Headers();
-  const { Modaldelete, Modaledit } = Modals();
+  const { Modaldelete, ModaleditPlanned } = Modals();
 
   const { useScreenHooks } = useControllers();
   const { usePlanned } = useScreenHooks();
@@ -343,7 +343,8 @@ const Planned = () => {
             setshowDelMod={setshowDelMod}
             setSateAlert={setSateAlert}
           />
-          <Modaledit
+          {console.log(stateCatego)}
+          <ModaleditPlanned
             title="Edit planned payment"
             refreshData={refreshData}
             setrefreshData={setrefreshData}

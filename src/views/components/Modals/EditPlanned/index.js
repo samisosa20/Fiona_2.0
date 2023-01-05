@@ -3,7 +3,7 @@ import { Modal } from "react-bootstrap";
 
 import FormEditor from "../../Form/Planned/Editor";
 
-const Modaledit = props => {
+const ModaleditPlanned = props => {
   const {
     title,
     refreshData,
@@ -43,4 +43,4 @@ const Modaledit = props => {
   );
 };
 
-export default Modaledit;
+export default ModaleditPlanned;
