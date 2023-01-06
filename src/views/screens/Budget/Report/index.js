@@ -136,11 +136,12 @@ const ReportBudget = () => {
                             <td>{formatter.format(data.realValue)}</td>
                             <td
                               className={
-                                parseFloat(data.variation) < 0
-                                  ? "text-danger"
-                                  : "text-success"
+                                data.groupFather === 4 && parseFloat(data.variation) < 0
+                                  ? "text-danger" :
+                                  parseFloat(data.variation) > 0 ? "text-success" : "text-warning"
                               }
                             >
+                            <i className={`fas ${parseFloat(data.variation) < 0 ? "fa-arrow-down" : parseFloat(data.variation) > 0 ? "fa-arrow-up" : "fa-minus"}`}></i>
                               {parseFloat(data.variation).toFixed(2)}
                             </td>
                           </tr>
@@ -170,6 +171,7 @@ const ReportBudget = () => {
                                   : "text-success"
                               }
                             >
+                            <i className={`fas ${parseFloat(aux_variation) < 0 ? "fa-arrow-down" : "fa-arrow-up"}`}></i>
                               {parseFloat(aux_variation).toFixed(2)}
                             </td>
                           </tr>,
@@ -179,11 +181,12 @@ const ReportBudget = () => {
                             <td>{formatter.format(data.realValue)}</td>
                             <td
                               className={
-                                parseFloat(data.variation) < 0
-                                  ? "text-danger"
-                                  : "text-success"
+                                data.groupFather === 4 && parseFloat(data.variation) < 0
+                                  ? "text-danger" :
+                                  parseFloat(data.variation) > 0 ? "text-success" : "text-warning"
                               }
                             >
+                            <i className={`fas ${parseFloat(data.variation) < 0 ? "fa-arrow-down" : parseFloat(data.variation) > 0 ? "fa-arrow-up" : "fa-minus"}`}></i>
                               {parseFloat(data.variation).toFixed(2)}
                             </td>
                           </tr>,
@@ -201,11 +204,12 @@ const ReportBudget = () => {
                             <td>{formatter.format(data.realValue)}</td>
                             <td
                               className={
-                                parseFloat(data.variation) < 0
+                                data.groupFather === 4 && parseFloat(data.variation) < 0
                                   ? "text-danger"
-                                  : "text-success"
+                                  : parseFloat(data.variation) > 0 ? "text-success" : "text-warning"
                               }
                             >
+                            <i className={`fas ${parseFloat(data.variation) < 0 ? "fa-arrow-down" : parseFloat(data.variation) > 0 ? "fa-arrow-up" : "fa-minus"}`}></i>
                               {parseFloat(data.variation).toFixed(2)}
                             </td>
                           </tr>
