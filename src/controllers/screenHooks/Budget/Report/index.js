@@ -19,6 +19,7 @@ const useBudgetReport = () => {
 
   let aux_catego = "",
     aux_cat_print = "",
+    aux_group = "",
     acuBudget_print = 0.0,
     acuReal_print = 0.0,
     acuBudget = 0.0,
@@ -153,6 +154,7 @@ const useBudgetReport = () => {
     showDetail,
     displayDetail,
     stateFilter,
+    aux_group,
   };
 };
 

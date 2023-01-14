@@ -242,7 +242,7 @@ const DetailHeritage = () => {
                   type="text"
                   name="element"
                   required
-                  defaultValue={stateformEdit.elements}
+                  defaultValue={stateformEdit.element}
                   onChange={handleChangeEdit}
                 ></Form.Control>
               </FormGroup>

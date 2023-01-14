@@ -81,8 +81,25 @@ const useHeritagesDetail = () => {
     history.push(e.target.value)
   }
 
-  const handleSubmitEdit = () => {
-
+  const handleSubmitEdit = (e) => {
+    e.preventDefault();
+    let idc = localStorage.getItem("IdUser");
+    API.post("edit_data", {
+      ...stateformEdit,
+      id: 10,
+      idu: idc,
+      year,
+      badge: listHeritage.find(v=> v.year === year)?.badge,
+      id_heritage: stateformEdit.id,
+    }).then((response) => {
+      //alert(response.data);
+      ModEdiHeritageSate();
+      setrefreshData(!refreshData);
+      setSateAlert({ visible: true, code: response.data });
+      setTimeout(() => {
+        setSateAlert({ visible: false, code: 0 });
+      }, 2000);
+    });
   }
   const handleEditHeritage = (data) => {
     setStateformEdit(data)
