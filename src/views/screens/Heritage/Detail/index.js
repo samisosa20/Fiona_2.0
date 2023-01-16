@@ -124,7 +124,7 @@ const DetailHeritage = () => {
               >
                 <Row>
                   <div className="col">
-                    <h3 className="mb-0">{data.elements}</h3>
+                    <h3 className="mb-0">{data.element}</h3>
                   </div>
                   <div className="col justify-content-end">{data.badge}</div>
                 </Row>
