@@ -123,16 +123,14 @@ const useAccounts = () => {
     //document.getElementById("edit_badge").value = group;
   };
   const VerifySignal = (event, idSigno) => {
-    let value = event.target.value;
+    let value = event.target.value ? event.target.value * 1 : null;
     let signo = document.getElementById(idSigno);
-    if (value?.includes("-")) {
+    if (value < 0) {
       if (idSigno !== "") {
         setSignal({ Signal: "-" });
         signo.className = "btn btn-outline-danger";
       }
       value = value * -1;
-    } else {
-      value = value * 1;
     }
 
     if (idSigno === "signo_move") {
