@@ -108,6 +108,17 @@ const DetailHeritage = () => {
                   </span>
                 </h3>
               </div>
+              <div className="col justify-content-end my-2 my-md-0 p-0">
+                <h3 className="mb-0">
+                  Cash:
+                  <span className="font-weight-normal ml-1">
+                    {dollarString.format(
+                      listHeritage?.find((v) => v.year === year)
+                        ?.value_move
+                    )}
+                  </span>
+                </h3>
+              </div>
             </div>
           </CardHeader>
         </Card>
@@ -138,26 +149,14 @@ const DetailHeritage = () => {
                 </Row>
                 <Row>
                   <div className="col">
-                    {data.legal_value < 0 ? (
-                      <h3 className="mb-0 text-danger">
+                    <h3 className={`mb-0 ${data.legal_value < 0 ? 'text-danger' : 'text-success'}`}>
                         {dollarString.format(data.legal_value)}
                       </h3>
-                    ) : (
-                      <h3 className="mb-0 text-success">
-                        {dollarString.format(data.legal_value)}
-                      </h3>
-                    )}
                   </div>
                   <div className="col">
-                    {data.comercial_value < 0 ? (
-                      <h3 className="mb-0 text-danger">
+                      <h3 className={`mb-0 ${data.comercial_value < 0 ? 'text-danger' : 'text-success'}`}>
                         {dollarString.format(data.comercial_value)}
                       </h3>
-                    ) : (
-                      <h3 className="mb-0 text-success">
-                        {dollarString.format(data.comercial_value)}
-                      </h3>
-                    )}
                   </div>
                 </Row>
               </ListGroupItem>

@@ -19,6 +19,7 @@ const useReport = () => {
         ClassOpen: "",
         ClassClose: "",
         identify: 0,
+        listExpensive: [],
       });
       const [dataToExport, setDataToExport] = useState();
       const [stateDataModal, setDataModal] = useState({
@@ -271,6 +272,13 @@ const useReport = () => {
                 fecha_ini: Fecha_ini,
                 fecha_fin: Fehca_fin,
               }),
+              API.post(`report`, {
+                id: 20,
+                idc: idc,
+                divi: divi,
+                fecha_ini: Fecha_ini,
+                fecha_fin: Fehca_fin,
+              }),
             ])
             .then(
               axios.spread(
@@ -280,9 +288,10 @@ const useReport = () => {
                   budget,
                   openClose,
                   dataExport,
-                  groupExpensive
+                  groupExpensive,
+                  listExpensive
                 ) => {
-                  //console.log(groupExpensive.data)
+                  //console.log(listExpensive.data)
                   setData({
                     ResumAco: resumAcount.data,
                     TopExp: topExpenses.data,
@@ -298,6 +307,7 @@ const useReport = () => {
                         ? "text-danger"
                         : "text-success",
                     identify: 1,
+                    listExpensive: listExpensive.data,
                   });
                   setDataToExport(dataExport.data);
                 }
