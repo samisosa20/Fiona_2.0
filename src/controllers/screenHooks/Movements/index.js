@@ -364,7 +364,7 @@ const useMovements = () => {
             const customDeposit =
               stateformtrans.badge === "COP" && value === "USD"
                 ? parseFloat(stateformtrans.monto / valueTRM).toFixed(2)
-                : parseFloat(stateformtrans.monto * valueTRM).toFixed(2);
+                : parseFloat(event.target.value / stateformtrans.monto).toFixed(2);
             setformtrans({
               ...stateformtrans,
               trm: valueTRM,
@@ -378,7 +378,7 @@ const useMovements = () => {
       const valueTRM =
         stateformtrans.badge === "COP" && stateformtrans.inBadge === "USD"
           ? parseFloat(stateformtrans.monto / event.target.value).toFixed(2)
-          : parseFloat(stateformtrans.monto * event.target.value).toFixed(2);
+          : parseFloat(event.target.value / stateformtrans.monto).toFixed(2);
       setformtrans({
         ...stateformtrans,
         trm: valueTRM,

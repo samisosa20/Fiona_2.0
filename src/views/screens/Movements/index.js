@@ -245,6 +245,7 @@ const Movements = () => {
                     <Form.Control
                       as="select"
                       name="badge"
+                      value={state?.Divisa}
                       onChange={handleChange}
                     >
                       <option>COP</option>
@@ -373,6 +374,7 @@ const Movements = () => {
                     <Form.Control
                       as="select"
                       name="badge"
+                      value={state?.Divisa}
                       onChange={handleChangeTrans}
                     >
                       <option>COP</option>
@@ -394,7 +396,7 @@ const Movements = () => {
                   <option value="" hidden>
                     Choose an account
                   </option>
-                  {stateCatego.map((data, index) => {
+                  {stateCatego.filter(v => parseInt(v.show) === 1).map((data, index) => {
                           return (
                             <option key={index} value={data.id}>
                               {data.nombre}
@@ -415,7 +417,7 @@ const Movements = () => {
                   <option value="" hidden>
                     Choose an account
                   </option>
-                  {stateCatego.map((data, index) => {
+                  {stateCatego.filter(v => parseInt(v.show) === 1).map((data, index) => {
                         return (
                           <option key={index} value={data.id}>
                             {data.nombre}
@@ -573,6 +575,7 @@ const Movements = () => {
                     <Form.Control
                       as="select"
                       name="badge"
+                      defaultValue={stateformEdit.badge}
                       onChange={handleChangeEdit}
                     >
                       <option>COP</option>
@@ -733,6 +736,7 @@ const Movements = () => {
                     <Form.Control
                       as="select"
                       name="badge"
+                      value={stateformEditTrans.badge}
                       onChange={handleChangeEditTrans}
                     >
                       <option>COP</option>

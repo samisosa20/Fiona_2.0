@@ -86,7 +86,7 @@ const FormAdd = (props) => {
             Choose an account
           </option>
           {stateAcount.id !== -1000 && stateAcount.length > 0
-            ? stateAcount.map((data, index) => {
+            ? stateAcount.filter(v => parseInt(v.show) === 1).map((data, index) => {
                 return (
                   <option
                     key={index}

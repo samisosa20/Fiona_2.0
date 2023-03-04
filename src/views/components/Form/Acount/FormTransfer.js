@@ -99,7 +99,7 @@ const FormAccount = (props) => {
           >
             <option value="" hidden>Choose an account</option>
             {stateCatego.id !== -1000
-              ? stateCatego.map((data, index) => {
+              ? stateCatego.filter(v => parseInt(v.show) === 1).map((data, index) => {
                   return (
                     <option key={index} value={data.id}>
                       {data.nombre}
@@ -119,7 +119,7 @@ const FormAccount = (props) => {
           >
             <option value="" hidden>Choose an account</option>
             {stateCatego.id !== -1000
-              ? stateCatego.map((data, index) => {
+              ? stateCatego.filter(v => parseInt(v.show) === 1).map((data, index) => {
                   return (
                     <option key={index} value={data.id}>
                       {data.nombre}
