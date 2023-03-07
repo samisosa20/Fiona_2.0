@@ -7,6 +7,7 @@ import API from "variables/API";
 
 const useAccounts = () => {
   const [state, setState] = useState([]);
+  const [listAcount, setListAcount] = useState([]);
   const [stateform, setform] = useState({
     catego: "",
     descrip: "",
@@ -55,7 +56,8 @@ const useAccounts = () => {
       id: 2,
       idc: idc,
     }).then((response) => {
-      setState(response.data.filter((v) => parseInt(v.show)));
+      setListAcount(response.data);
+      setState(response.data.filter(v => parseInt(v.show)));
     });
   }, [refreshData]);
 
@@ -495,6 +497,15 @@ const useAccounts = () => {
       });
     }
   };
+
+  const handleChangeViewAccount = (e) => {
+    if(e.target.checked) {
+      setState(listAcount)
+    } else {
+      setState(listAcount.filter(v => parseInt(v.show)))
+    }
+  }
+
   return {
     state,
     stateCatego,
@@ -535,6 +546,7 @@ const useAccounts = () => {
     showNewTransMod,
     ModNewTransSate,
     stateformtrans,
+    handleChangeViewAccount,
   };
 };
 

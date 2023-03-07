@@ -1,4 +1,6 @@
 import React from "react";
+import { FormGroup } from "reactstrap";
+import { Form } from "react-bootstrap";
 
 // Components
 import { Button, Container } from "reactstrap";
@@ -62,24 +64,40 @@ const Account = () => {
     showNewTransMod,
     ModNewTransSate,
     stateformtrans,
+    handleChangeViewAccount,
   } = useAccounts();
 
   return (
     <>
-      <Header refreshData={refreshData}/>
+      <Header refreshData={refreshData} />
       <Container className="mt--7 pb-150" fluid>
-        <div className="col justify-content-end row p-0 m-0">
-          <Button className="btn-info mb-3" onClick={(e) => OpenModalMovi(e)}>
-            <i className="fas fa-plus mr-2"></i>
-            Move
-          </Button>
-          <Button
-            className="btn-success mb-3"
-            onClick={(e) => OpenModalTrans(e)}
-          >
-            <i className="fas fa-exchange-alt mr-2"></i>
-            Transfer
-          </Button>
+        <div className="d-flex justify-between w-100">
+          <div className="col">
+            <FormGroup>
+              <Form.Check
+                type="checkbox"
+                label="Show hidden"
+                value="1"
+                defaultChecked={stateformEdit.edit_include}
+                onChange={handleChangeViewAccount}
+                name="edit_save_account"
+                id="edit_save_account"
+              />
+            </FormGroup>
+          </div>
+          <div className="col justify-content-end row p-0 m-0">
+            <Button className="btn-info mb-3" onClick={(e) => OpenModalMovi(e)}>
+              <i className="fas fa-plus mr-2"></i>
+              Move
+            </Button>
+            <Button
+              className="btn-success mb-3"
+              onClick={(e) => OpenModalTrans(e)}
+            >
+              <i className="fas fa-exchange-alt mr-2"></i>
+              Transfer
+            </Button>
+          </div>
         </div>
         <AcountAdd
           state={state}
