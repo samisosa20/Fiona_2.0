@@ -1,4 +1,5 @@
 import React from "react";
+import NumberFormat from "react-number-format";
 
 // Styles
 import 'assets/styles/components/Header.scss';
@@ -44,7 +45,13 @@ const ContainsHeader = (props) => {
                           Annual Income
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0 text-success">
-                          {state.ingresos}
+                          <NumberFormat
+                            value={state.ingresos ?? 0}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            decimalScale={2}
+                            prefix={"$"}
+                          />
                         </span>
                       </div>
                     </Row>
@@ -66,7 +73,13 @@ const ContainsHeader = (props) => {
                           Annual Expenses
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0 text-danger">
-                          {state.egresos}
+                          <NumberFormat
+                            value={state.egresos ?? 0}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            decimalScale={2}
+                            prefix={"$"}
+                          />
                         </span>
                       </div>
                     </Row>
@@ -85,7 +98,13 @@ const ContainsHeader = (props) => {
                           Annual Savings
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
-                          {state.ahorros}
+                          <NumberFormat
+                            value={state.ahorros ?? 0}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            decimalScale={2}
+                            prefix={"$"}
+                          />
                         </span>
                       </div>
                     </Row>
@@ -104,7 +123,13 @@ const ContainsHeader = (props) => {
                           Annual Utility
                         </CardTitle>
                         <span className="h2 font-weight-bold mb-0">
-                          {state.utilidad}
+                          <NumberFormat
+                            value={state.utilidad ?? 0}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            decimalScale={2}
+                            prefix={"$"}
+                          />
                         </span>
                       </div>
                     </Row>

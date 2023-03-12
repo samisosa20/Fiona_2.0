@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import TrmApi from "trm-api";
 
 import API from "variables/API";
 
@@ -26,6 +27,7 @@ const useHeader = (refreshData) => {
       });
       let idc = localStorage.getItem("IdUser");
       let divi = localStorage.getItem("Divisa");
+
       useEffect(() => {
         async function loadInfoCardMoney() {
           await axios
@@ -44,12 +46,36 @@ const useHeader = (refreshData) => {
             .then(
               axios.spread((firstResponse, secondResponse) => {
                 try {
-                  setState({
-                    ingresos: firstResponse.data[0].ingreso,
-                    egresos: firstResponse.data[0].Egresos,
-                    ahorros: secondResponse.data[0].cantidad,
-                    utilidad: firstResponse.data[0].utilidad,
-                  });
+                  const trmApi = new TrmApi("HNgPywsjYTxDDwnGPdpyVbOth");
+                  trmApi
+                    .latest()
+                    .then((data) => {
+                      const valueTRM = data.valor
+                      const newFlow = firstResponse.data.map(v => {
+                        if(divi !== v.divisa && divi === 'COP') {
+                          return {ingreso: v.ingreso * valueTRM, Egresos: v.Egresos * valueTRM, utilidad: v.utilidad * valueTRM}
+                        } else if (divi !== v.divisa && divi === 'USD') {
+                          return {ingreso: v.ingreso / valueTRM, Egresos: v.Egresos / valueTRM, utilidad: v.utilidad / valueTRM}
+                        }
+                        return v
+                      })
+                      const newSaving = secondResponse.data.map(v => {
+                        if(divi !== v.Divisa && divi === 'COP') {
+                          return v.cantidad * valueTRM
+                        } else if (divi !== v.Divisa && divi === 'USD') {
+                          return v.cantidad / valueTRM
+                        }
+                        return v.cantidad
+                      })
+                      console.log(newSaving)
+                      setState({
+                        ingresos: newFlow.reduce((prev, curr) => prev + (curr.ingreso * 1), 0),
+                        egresos: newFlow.reduce((prev, curr) => prev + (curr.Egresos * 1), 0),
+                        ahorros: newSaving.reduce((prev, curr) => prev + (curr * 1), 0),
+                        utilidad: newFlow.reduce((prev, curr) => prev + (curr.utilidad * 1), 0),
+                      });
+                    })
+                    .catch((error) => console.log(error));
                 } catch (error) {
                   setState({ ingresos: 0, egresos: 0, ahorros: 0, utilidad: 0 });
                 }

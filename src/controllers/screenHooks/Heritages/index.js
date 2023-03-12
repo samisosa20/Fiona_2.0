@@ -46,7 +46,7 @@ const useHeritages = () => {
       idc: idc,
       badge: divi,
     }).then((response) => {
-      setListHeritage(response.data === "" ? [] : response.data);
+      setListHeritage( !response.data || response.data === "" ? [] : response.data);
     });
   }, [refreshData]);
   return {
