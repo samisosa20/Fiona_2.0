@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Switch, Redirect, useParams } from "react-router-
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
-import "assets/css/sammy-react.scss";
+import "assets/scss/fiona-styles.scss";
 import "./index.css"
 
 import AdminLayout from "views/layouts/PrivateContent";

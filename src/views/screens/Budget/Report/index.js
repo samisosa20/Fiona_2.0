@@ -45,6 +45,7 @@ const ReportBudget = () => {
     showDetail,
     displayDetail,
     stateFilter,
+    aux_group,
   } = useBudgetReport();
 
   return (
@@ -123,28 +124,34 @@ const ReportBudget = () => {
                         utilidadReal =
                           parseFloat(utilidadReal) - parseFloat(data.realValue);
                       }
+                      // if is the first render
                       if (data.nameSub !== aux_catego && aux_catego === "") {
                         aux_catego = data.nameSub;
                         acuBudget =
                           parseFloat(acuBudget) + parseFloat(data.budget);
                         acuReal =
                           parseFloat(acuReal) + parseFloat(data.realValue);
+                        aux_group = data.groupFather
+                        let color = "text-warning"
+                        if((parseInt(data.groupFather) === 4 && parseFloat(data.variation) < 0) || (parseInt(data.groupFather) !== 4 && parseFloat(data.variation) > 0)){
+                          color = "text-danger"
+                        } else if((parseInt(data.groupFather) !== 4 && parseFloat(data.variation) < 0) || (parseInt(data.groupFather) === 4 && parseFloat(data.variation) > 0)){
+                          color = "text-success"
+                        }
                         return (
                           <tr key={index}>
                             <td>{data.categoria}</td>
                             <td>{formatter.format(data.budget)}</td>
                             <td>{formatter.format(data.realValue)}</td>
                             <td
-                              className={
-                                parseFloat(data.variation) < 0
-                                  ? "text-danger"
-                                  : "text-success"
-                              }
+                              className={color}
                             >
+                            <i className={`fas ${parseFloat(data.variation) < 0 ? "fa-arrow-down" : parseFloat(data.variation) > 0 ? "fa-arrow-up" : "fa-minus"}`}></i>
                               {parseFloat(data.variation).toFixed(2)}
                             </td>
                           </tr>
                         );
+                        // total by category father and new subcategory
                       } else if (data.nameSub !== aux_catego) {
                         aux_cat_print = aux_catego;
                         aux_catego = data.nameSub;
@@ -155,21 +162,32 @@ const ReportBudget = () => {
                           100;
                         acuBudget = parseFloat(data.budget);
                         acuReal = parseFloat(data.realValue);
+                        let color = "text-warning"
+                        let color_aux = "text-warning"
+                        if((parseInt(data.groupFather) === 4 && parseFloat(data.variation) < 0) || (parseInt(data.groupFather) !== 4 && parseFloat(data.variation) > 0)){
+                          color = "text-danger"
+                        } else if((parseInt(data.groupFather) !== 4 && parseFloat(data.variation) < 0) || (parseInt(data.groupFather) === 4 && parseFloat(data.variation) > 0)){
+                          color = "text-success"
+                        }
+                        if((parseInt(aux_group) === 4 && parseFloat(aux_variation) < 0) || (parseInt(aux_group) !== 4 && parseFloat(aux_variation) > 0)){
+                          color_aux = "text-danger"
+                        } else if((parseInt(aux_group) !== 4 && parseFloat(aux_variation) < 0) || (parseInt(aux_group) === 4 && parseFloat(aux_variation) > 0)){
+                          color_aux = "text-success"
+                        }
+                        aux_group = data.groupFather
+                        // need last group
                         return [
                           <tr
                             key={index * 100}
-                            className="table-dark text-dark"
+                            className="table-dark text-dark font-weight-600"
                           >
                             <td>{aux_cat_print}</td>
                             <td>{formatter.format(acuBudget_print)}</td>
                             <td>{formatter.format(acuReal_print)}</td>
                             <td
-                              className={
-                                parseFloat(aux_variation) < 0
-                                  ? "text-danger"
-                                  : "text-success"
-                              }
+                              className={color_aux}
                             >
+                            <i className={`fas ${parseFloat(aux_variation) < 0 ? "fa-arrow-down" : "fa-arrow-up"}`}></i>
                               {parseFloat(aux_variation).toFixed(2)}
                             </td>
                           </tr>,
@@ -178,34 +196,36 @@ const ReportBudget = () => {
                             <td>{formatter.format(data.budget)}</td>
                             <td>{formatter.format(data.realValue)}</td>
                             <td
-                              className={
-                                parseFloat(data.variation) < 0
-                                  ? "text-danger"
-                                  : "text-success"
-                              }
+                              className={color}
                             >
+                            <i className={`fas ${parseFloat(data.variation) < 0 ? "fa-arrow-down" : parseFloat(data.variation) > 0 ? "fa-arrow-up" : "fa-minus"}`}></i>
                               {parseFloat(data.variation).toFixed(2)}
                             </td>
                           </tr>,
                         ];
+                        // render sub categories
                       } else {
                         aux_catego = data.nameSub;
                         acuBudget =
                           parseFloat(acuBudget) + parseFloat(data.budget);
                         acuReal =
                           parseFloat(acuReal) + parseFloat(data.realValue);
+                        aux_group = data.groupFather
+                        let color = "text-warning"
+                        if((parseInt(data.groupFather) === 4 && parseFloat(data.variation) < 0) || (parseInt(data.groupFather) !== 4 && parseFloat(data.variation) > 0)){
+                          color = "text-danger"
+                        } else if((parseInt(data.groupFather) !== 4 && parseFloat(data.variation) < 0) || (parseInt(data.groupFather) === 4 && parseFloat(data.variation) > 0)){
+                          color = "text-success"
+                        }
                         return (
                           <tr key={index}>
                             <td>{data.categoria}</td>
                             <td>{formatter.format(data.budget)}</td>
                             <td>{formatter.format(data.realValue)}</td>
                             <td
-                              className={
-                                parseFloat(data.variation) < 0
-                                  ? "text-danger"
-                                  : "text-success"
-                              }
+                              className={color}
                             >
+                            <i className={`fas ${parseFloat(data.variation) < 0 ? "fa-arrow-down" : parseFloat(data.variation) > 0 ? "fa-arrow-up" : "fa-minus"}`}></i>
                               {parseFloat(data.variation).toFixed(2)}
                             </td>
                           </tr>
@@ -215,17 +235,20 @@ const ReportBudget = () => {
                   ) : (
                     <tr></tr>
                   )}
-                  <tr className="table-dark text-dark">
+                  <tr className="table-dark text-dark font-weight-600">
                     <td className="font-weight-bold">{aux_catego}</td>
                     <td>{formatter.format(acuBudget)}</td>
                     <td>{formatter.format(acuReal)}</td>
                     <td
                       className={
-                        parseFloat(((acuReal - acuBudget) / acuReal) * 100) < 0
+                        (parseInt(aux_group) === 4 && parseFloat(((acuReal - acuBudget) / acuReal) * 100) < 0) || (parseInt(aux_group) !== 4 && parseFloat(((acuReal - acuBudget) / acuReal) * 100) > 0)
                           ? "text-danger"
-                          : "text-success"
+                          : (parseInt(aux_group) !== 4 && parseFloat(((acuReal - acuBudget) / acuReal) * 100) < 0) || (parseInt(aux_group) === 4 && parseFloat(((acuReal - acuBudget) / acuReal) * 100) > 0) ? 
+                          "text-success"
+                          : "text-warning"
                       }
                     >
+                      <i className={`fas ${parseFloat(((acuReal - acuBudget) / acuReal) * 100) < 0 ? "fa-arrow-down" : parseFloat(((acuReal - acuBudget) / acuReal) * 100) > 0 ? "fa-arrow-up" : "fa-minus"}`}></i>
                       {parseFloat(
                         ((acuReal - acuBudget) / acuReal) * 100
                       ).toFixed(2)}
@@ -256,6 +279,7 @@ const ReportBudget = () => {
                           : "text-success"
                       }
                     >
+                      <i className={`fas ${parseFloat(((utilidadReal - utilidadBudget) / utilidadReal) * 100) < 0 ? "fa-arrow-down" : parseFloat(((utilidadReal - utilidadBudget) / utilidadReal) * 100) > 0 ? "fa-arrow-up" : "fa-minus"}`}></i>
                       {parseFloat(
                         ((utilidadReal - utilidadBudget) / utilidadReal) * 100
                       ).toFixed(2)}
@@ -285,6 +309,7 @@ const ReportBudget = () => {
                   aux_catego = data.nameSub;
                   acuBudget = parseFloat(acuBudget) + parseFloat(data.budget);
                   acuReal = parseFloat(acuReal) + parseFloat(data.realValue);
+                  aux_group = data.groupFather
                 } else if (data.nameSub !== aux_catego) {
                   aux_cat_print = aux_catego;
                   aux_catego = data.nameSub;
@@ -294,6 +319,14 @@ const ReportBudget = () => {
                     ((acuReal_print - acuBudget_print) / acuReal_print) * 100;
                   acuBudget = parseFloat(data.budget);
                   acuReal = parseFloat(data.realValue);
+                  let color = "text-warning"
+                  const group = aux_group
+                  if((parseInt(data.groupFather) === 4 && parseFloat(data.variation) < 0) || (parseInt(data.groupFather) !== 4 && parseFloat(data.variation) > 0)){
+                    color = "text-danger"
+                  } else if((parseInt(data.groupFather) !== 4 && parseFloat(data.variation) < 0) || (parseInt(data.groupFather) === 4 && parseFloat(data.variation) > 0)){
+                    color = "text-success"
+                  }
+                  aux_group = data.groupFather
                   return (
                     <Card
                       id={`card-primary-${index * 100}`}
@@ -324,12 +357,9 @@ const ReportBudget = () => {
                             {formatter.format(acuReal_print)}
                           </p>
                           <p
-                            className={
-                              parseFloat(aux_variation) < 0
-                                ? "text-danger m-0 font-weight-bold"
-                                : "text-success m-0 font-weight-bold"
-                            }
+                            className={`${color} m-0 font-weight-bold`}
                           >
+                            <i className={`fas ${parseFloat(aux_variation) < 0 ? "fa-arrow-down" : parseFloat(aux_variation) > 0 ? "fa-arrow-up" : "fa-minus"}`}></i>
                             {parseFloat(aux_variation).toFixed(2)}
                           </p>
                         </div>
@@ -346,11 +376,6 @@ const ReportBudget = () => {
                                   key={i}
                                 >
                                   <h4>{v.categoria}</h4>
-                                  {/* <div className="row col-12 p-0 justify-content-between m-0">
-                                    <h5 className="m-0">Budget</h5>
-                                    <h5 className="m-0">Real</h5>
-                                    <h5 className="m-0">Variation</h5>
-                                  </div> */}
                                   <div className="row col-12 p-0 justify-content-between m-0">
                                     <p className="m-0 font-weight-normal">
                                       {formatter.format(v.budget)}
@@ -359,12 +384,12 @@ const ReportBudget = () => {
                                       {formatter.format(v.realValue)}
                                     </p>
                                     <p
-                                      className={
-                                        parseFloat(v.variation) < 0
-                                          ? "text-danger m-0 font-weight-bold"
-                                          : "text-success m-0 font-weight-bold"
+                                      className={(parseInt(group) === 4 && parseFloat(v.variation) < 0) || (parseInt(group) !== 4 && parseFloat(v.variation) > 0) ?
+                                        "text-danger m-0 font-weight-bold" : (parseInt(group) !== 4 && parseFloat(v.variation) < 0) || (parseInt(group) === 4 && parseFloat(v.variation) > 0) ?
+                                        "text-success m-0 font-weight-bold" : "text-warning m-0 font-weight-bold"
                                       }
                                     >
+                                      <i className={`fas ${parseFloat(v.variation) < 0 ? "fa-arrow-down" : parseFloat(v.variation) > 0 ? "fa-arrow-up" : "fa-minus"}`}></i>
                                       {parseFloat(v.variation).toFixed(2)}
                                     </p>
                                   </div>
@@ -379,6 +404,7 @@ const ReportBudget = () => {
                   aux_catego = data.nameSub;
                   acuBudget = parseFloat(acuBudget) + parseFloat(data.budget);
                   acuReal = parseFloat(acuReal) + parseFloat(data.realValue);
+                  aux_group = data.groupFather
                 }
               })
             ) : (
@@ -419,9 +445,12 @@ const ReportBudget = () => {
                         ((utilidadReal - utilidadBudget) / utilidadReal) * 100
                       ) < 0
                         ? "text-danger m-0 font-weight-bold"
-                        : "text-success m-0 font-weight-bold"
+                        : parseFloat(
+                          ((utilidadReal - utilidadBudget) / utilidadReal) * 100
+                        ) > 0 ? "text-success m-0 font-weight-bold" : "text-warning m-0 font-weight-bold"
                     }
                   >
+                    <i className={`fas ${parseFloat(((utilidadReal - utilidadBudget) / utilidadReal) * 100) < 0 ? "fa-arrow-down" : parseFloat(((utilidadReal - utilidadBudget) / utilidadReal) * 100) > 0 ? "fa-arrow-up" : "fa-minus"}`}></i>
                     {parseFloat(
                       ((utilidadReal - utilidadBudget) / utilidadReal) * 100
                     ).toFixed(2)}

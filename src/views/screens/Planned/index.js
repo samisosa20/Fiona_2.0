@@ -24,7 +24,7 @@ const Planned = () => {
   // Components
   const { Headers, Alert, Modals, ContextMenuCustom } = useComponents();
   const { Header } = Headers();
-  const { Modaldelete, Modaledit } = Modals();
+  const { Modaldelete, ModaleditPlanned } = Modals();
 
   const { useScreenHooks } = useControllers();
   const { usePlanned } = useScreenHooks();
@@ -64,7 +64,7 @@ const Planned = () => {
     <>
       <Header />
       <Container className="mt--7 pb-150" fluid>
-        <Row>
+        <Row className="justify-content-around">
           {state
             ? state.map((data, index) => (
                 <Card
@@ -343,7 +343,8 @@ const Planned = () => {
             setshowDelMod={setshowDelMod}
             setSateAlert={setSateAlert}
           />
-          <Modaledit
+          {console.log(stateCatego)}
+          <ModaleditPlanned
             title="Edit planned payment"
             refreshData={refreshData}
             setrefreshData={setrefreshData}

@@ -563,7 +563,7 @@ const ChartBalanceComparison = (props) => {
                       label: "Current period",
                       data: valueCurrent,
                       borderColor: colorDonuht[2],
-                      fill: true,
+                      fill: false,
                       backgroundColor: colorDonuht[2] + "0C",
                       tension: 0.2,
                     },
@@ -571,7 +571,7 @@ const ChartBalanceComparison = (props) => {
                       label: "Last Period",
                       data: valueLast,
                       borderColor: colorDonuht[1],
-                      fill: true,
+                      fill: false,
                       backgroundColor: colorDonuht[1] + "0C",
                       tension: 0.2,
                     },
@@ -579,7 +579,7 @@ const ChartBalanceComparison = (props) => {
                       label: "Same period last year",
                       data: valueYear,
                       borderColor: colorDonuht[6],
-                      fill: true,
+                      fill: false,
                       backgroundColor: colorDonuht[6] + "0C",
                       tension: 0.2,
                     },
@@ -590,11 +590,11 @@ const ChartBalanceComparison = (props) => {
                   title: "Balance comparison",
                   width: 25,
                   responsive: window.innerWidth >= 500,
-                  elements: {
+                  /* elements: {
                     point: {
                       radius: 0,
                     },
-                  },
+                  }, */
                   plugins: {
                     legend: {
                       display: window.innerWidth >= 500,
@@ -672,6 +672,134 @@ const ChartBalanceComparison = (props) => {
     />
   );
 };
+const ChartHeritage = (props) => {
+  const chartContainerHeritage = useRef(null);
+
+  useEffect(() => {
+    async function getData(data) {
+      if (
+        chartContainerHeritage &&
+        chartContainerHeritage.current
+      ) {
+        let label = [],
+          valueComercial = [],
+          valueLegal = [];
+        data.forEach((data) => {
+          label.push(data.year);
+          valueComercial.push(data.comercial_heritage);
+          valueLegal.push(data.legal_heritage);
+        });
+        if (newChartInstanceBalanceComparison) {
+          newChartInstanceBalanceComparison.destroy();
+        }
+        newChartInstanceBalanceComparison = new Chart(
+          chartContainerHeritage.current,
+          {
+            type: "line",
+            data: {
+              labels: label,
+              datasets: [
+                {
+                  label: "Comercial Heritage",
+                  data: valueComercial,
+                  borderColor: colorDonuht[2],
+                  fill: false,
+                  backgroundColor: colorDonuht[2] + "0C",
+                  tension: 0.2,
+                },
+                {
+                  label: "Legal Heritage",
+                  data: valueLegal,
+                  borderColor: colorDonuht[6],
+                  fill: false,
+                  backgroundColor: colorDonuht[6] + "0C",
+                  tension: 0.2,
+                },
+              ],
+            },
+            options: {
+              borderWidth: 1.5,
+              title: "Balance comparison",
+              width: 25,
+              responsive: window.innerWidth >= 500,
+              /* elements: {
+                point: {
+                  radius: 0,
+                },
+              }, */
+              plugins: {
+                legend: {
+                  display: window.innerWidth >= 500,
+                  labels: {
+                    color: "#fff",
+                  },
+                },
+              },
+              scales: {
+                y: {
+                  ticks: {
+                    callback: function (value) {
+                      const label = formatter.format(
+                        value >= 1000000 || value <= -1000000
+                          ? value / 1000000
+                          : value >= 1000 || value <= -1000
+                          ? value / 1000
+                          : value
+                      );
+                      return value >= 1000000 || value <= -1000000
+                        ? label + "M"
+                        : value >= 1000 || value <= -1000
+                        ? label + "K"
+                        : label;
+                    },
+                    color: "white",
+                  },
+                },
+                x: {
+                  ticks: {
+                    callback: function (val, index) {
+                      if (valueComercial.length > 20) {
+                        return (index % 10 === 0 &&
+                          index !== valueComercial.length - 2) ||
+                          index === valueComercial.length - 1
+                          ? this.getLabelForValue(val)
+                          : ""; // Show each 10 data
+                      } else if (valueComercial.length > 10) {
+                        return (index % 4 === 0 &&
+                          index !== valueComercial.length - 2) ||
+                          index === valueComercial.length - 1
+                          ? this.getLabelForValue(val)
+                          : ""; // Show each 4 data
+                      } else if (valueComercial.length > 5) {
+                        return (index % 2 === 0 &&
+                          index !== valueComercial.length - 2) ||
+                          index === valueComercial.length - 1
+                          ? this.getLabelForValue(val)
+                          : ""; // Show each 4 data
+                      } else {
+                        return this.getLabelForValue(val);
+                      }
+                    },
+                    color: "white",
+                  },
+                },
+              },
+            },
+          }
+        );
+      }
+    }
+    getData(props.data);
+    // eslint-disable-next-line
+  }, [props.data]);
+
+  return (
+    <canvas
+      ref={chartContainerHeritage}
+      style={{ minHeight: "150px", width: "95%" }}
+    />
+  );
+};
 
 const Charts = () => {
   return {
@@ -681,6 +809,7 @@ const Charts = () => {
     ChartBalance,
     ChartCashFlow,
     ChartBalanceComparison,
+    ChartHeritage
   };
 
 }

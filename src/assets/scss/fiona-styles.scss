@@ -12,6 +12,15 @@
   min-height: 300px;
   max-height: 325px;
   overflow-x: hidden;
+  @media (min-width: 992px) {
+    max-height: 380px;
+  }
+  @media (min-width: 1600px) {
+    max-height: 450px;
+  }
+  @media (min-width: 1900px) {
+    max-height: 530px;
+  }
 }
 
 .height-15 {

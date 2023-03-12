@@ -364,7 +364,7 @@ const useMovements = () => {
             const customDeposit =
               stateformtrans.badge === "COP" && value === "USD"
                 ? parseFloat(stateformtrans.monto / valueTRM).toFixed(2)
-                : parseFloat(stateformtrans.monto * valueTRM).toFixed(2);
+                : parseFloat(event.target.value / stateformtrans.monto).toFixed(2);
             setformtrans({
               ...stateformtrans,
               trm: valueTRM,
@@ -378,7 +378,7 @@ const useMovements = () => {
       const valueTRM =
         stateformtrans.badge === "COP" && stateformtrans.inBadge === "USD"
           ? parseFloat(stateformtrans.monto / event.target.value).toFixed(2)
-          : parseFloat(stateformtrans.monto * event.target.value).toFixed(2);
+          : parseFloat(event.target.value / stateformtrans.monto).toFixed(2);
       setformtrans({
         ...stateformtrans,
         trm: valueTRM,
@@ -446,9 +446,9 @@ const useMovements = () => {
     }
   };
   const VerifySignal = (event, idSigno) => {
-    let value = event.target.value;
+    let value = event.target.value ? event.target.value * 1 : null;
     let signo = document.getElementById(idSigno);
-    if (value?.includes("-")) {
+    if (value < 0) {
       if (idSigno !== "") {
         setSignal({ Signal: "-" });
         signo.className = "btn btn-outline-danger";

@@ -7,6 +7,7 @@ import API from "variables/API";
 
 const useAccounts = () => {
   const [state, setState] = useState([]);
+  const [listAcount, setListAcount] = useState([]);
   const [stateform, setform] = useState({
     catego: "",
     descrip: "",
@@ -55,7 +56,8 @@ const useAccounts = () => {
       id: 2,
       idc: idc,
     }).then((response) => {
-      setState(response.data.filter((v) => parseInt(v.show)));
+      setListAcount(response.data);
+      setState(response.data.filter(v => parseInt(v.show)));
     });
   }, [refreshData]);
 
@@ -123,9 +125,9 @@ const useAccounts = () => {
     //document.getElementById("edit_badge").value = group;
   };
   const VerifySignal = (event, idSigno) => {
-    let value = event.target.value;
+    let value = event.target.value ? event.target.value * 1 : null;
     let signo = document.getElementById(idSigno);
-    if (value?.includes("-")) {
+    if (value < 0) {
       if (idSigno !== "") {
         setSignal({ Signal: "-" });
         signo.className = "btn btn-outline-danger";
@@ -176,7 +178,7 @@ const useAccounts = () => {
             const customDeposit =
               stateformtrans.badge === "COP" && value === "USD"
                 ? parseFloat(stateformtrans.monto / valueTRM).toFixed(2)
-                : parseFloat(stateformtrans.monto * valueTRM).toFixed(2);
+                : parseFloat(event.target.value / stateformtrans.monto).toFixed(2);
             setformtrans({
               ...stateformtrans,
               trm: valueTRM,
@@ -190,7 +192,7 @@ const useAccounts = () => {
       const valueTRM =
         stateformtrans.badge === "COP" && stateformtrans.inBadge === "USD"
           ? parseFloat(stateformtrans.monto / event.target.value).toFixed(2)
-          : parseFloat(stateformtrans.monto * event.target.value).toFixed(2);
+          : parseFloat(event.target.value / stateformtrans.monto).toFixed(2);
       setformtrans({
         ...stateformtrans,
         trm: valueTRM,
@@ -495,6 +497,15 @@ const useAccounts = () => {
       });
     }
   };
+
+  const handleChangeViewAccount = (e) => {
+    if(e.target.checked) {
+      setState(listAcount)
+    } else {
+      setState(listAcount.filter(v => parseInt(v.show)))
+    }
+  }
+
   return {
     state,
     stateCatego,
@@ -535,6 +546,7 @@ const useAccounts = () => {
     showNewTransMod,
     ModNewTransSate,
     stateformtrans,
+    handleChangeViewAccount,
   };
 };
 

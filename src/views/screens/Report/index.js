@@ -1,4 +1,5 @@
 import React from "react";
+import NumberFormat from "react-number-format";
 
 // Components
 import {
@@ -246,33 +247,6 @@ const Report = () => {
               </CardBody>
             </Card>
           </Col>
-          {/* <Col className="mb-5 mb-xl-0" sm="4" xl="4">
-            <Card className="bg-gradient-default shadow">
-              <CardHeader className="bg-transparent">
-                <Row className="align-items-center">
-                  <div className="col">
-                    <h6 className="text-uppercase text-light ls-1 mb-1">
-                      Cake chart
-                    </h6>
-                    <h2 className="text-white mb-0">Savings</h2>
-                  </div>
-                </Row>
-              </CardHeader>
-              <CardBody>
-                <div className="chart">
-                  {stateDate.Sdate !== "" ? (
-                    <ChartSaving
-                      dstart={stateDate.Sdate}
-                      dend={stateDate.Fdate}
-                      upload={stateSearch}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </CardBody>
-            </Card>
-          </Col> */}
         </Row>
         <Row className="mb-4">
           <Col className="mb-5 mb-xl-0" sm="12" lg="6">
@@ -693,6 +667,57 @@ const Report = () => {
                                     />
                                   )}
                                 </span>
+                              </div>
+                            </Row>
+                          </CardBody>
+                        </Card>
+                      ))
+                    : "Not found Data"}
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col className="mb-5 mb-xl-0" sm="6" xl="4">
+            <Card className="bg-gradient-default shadow h-100">
+              <CardHeader className="bg-transparent">
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h6 className="text-uppercase text-light ls-1 mb-1">
+                      List Expensive
+                    </h6>
+                  </div>
+                </Row>
+              </CardHeader>
+              <CardBody>
+                <div className="scroll-none card-scroll">
+                  {stateData.listExpensive
+                    ? stateData.listExpensive.map((data, index) => (
+                        <Card
+                          className="card-stats mb-1 shadow cursor-pointer"
+                          key={index}
+                        >
+                          <CardBody>
+                            <Row>
+                              <div className="col">
+                                <CardTitle
+                                  tag="h5"
+                                  className="text-uppercase text-muted mb-0"
+                                >
+                                  {data.categoria}
+                                </CardTitle>
+                                <NumberFormat
+                                    className={
+                                      data.total >= 0
+                                        ? `h4 font-weight-bold text-success`
+                                        : `h4 font-weight-bold text-danger`
+                                    }
+                                    value={data.total ? data.total : 0}
+                                    displayType={"text"}
+                                    thousandSeparator={true}
+                                    prefix={"$"}
+                                  />
                               </div>
                             </Row>
                           </CardBody>

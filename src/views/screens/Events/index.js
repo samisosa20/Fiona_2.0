@@ -60,7 +60,7 @@ const Events = () => {
     <>
       <Header />
       <Container className="mt--7 pb-150" fluid>
-        <Row>
+        <Row className="justify-content-around">
           {state
             ? state.map((data, index) => (
                 <Card

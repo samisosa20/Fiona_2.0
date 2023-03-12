@@ -4,12 +4,14 @@ import NumberFormat from "react-number-format";
 
 // Components
 import {
+  Col,
   Card,
+  CardHeader,
+  FormGroup,
   CardBody,
+  Label,
   Container,
   Row,
-  FormGroup,
-  Label,
   Button,
 } from "reactstrap";
 import { Form, Modal } from "react-bootstrap";
@@ -20,8 +22,9 @@ import useControllers from "controllers";
 
 const Heritage = () => {
   // Components
-  const { Headers, Alert } = useComponents();
+  const { Headers, Alert, Charts } = useComponents();
   const { Header } = Headers();
+  const { ChartHeritage } = Charts();
 
   const { useScreenHooks } = useControllers();
   const { useHeritages } = useScreenHooks();
@@ -39,7 +42,26 @@ const Heritage = () => {
     <>
       <Header />
       <Container className="mt--7 pb-150" fluid>
-        <Row>
+        <Col className="mb-5 mx-auto" sm="12" lg="8">
+          <Card className="bg-gradient-default shadow">
+            <CardHeader className="bg-transparent">
+              <Row className="align-items-center">
+                <div className="col">
+                  <h6 className="text-uppercase text-light ls-1 mb-1">
+                    Line chart
+                  </h6>
+                  <h2 className="text-white mb-0">Heritage</h2>
+                </div>
+              </Row>
+            </CardHeader>
+            <CardBody>
+              <div className="chart">
+                <ChartHeritage data={listHeritage} />
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+        <Row className="justify-content-around">
           {listHeritage.map((data, index) => (
             <Card
               className="shadow col-md-12 col-lg-5 mr-2 ml-2 mb-3 arrow c-categorie px-0"
