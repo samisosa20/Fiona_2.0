@@ -123,6 +123,7 @@ const FormAdd = (props) => {
         <Input
           type="datetime-local"
           name="datetime"
+          className="w-100"
           required
           defaultValue={`${new Date().getFullYear()}-${`${
             new Date().getMonth() + 1

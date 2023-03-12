@@ -276,6 +276,7 @@ const Movements = () => {
                 <Label>Date</Label>
                 <Form.Control
                   type="datetime-local"
+                  className="w-100"
                   defaultValue={`${new Date().getFullYear()}-${`${
                     new Date().getMonth() + 1
                   }`.padStart(2, 0)}-${`${new Date().getDate()}`.padStart(
@@ -439,6 +440,7 @@ const Movements = () => {
                 <Label>Date</Label>
                 <Form.Control
                   type="datetime-local"
+                  className="w-100"
                   name="datetime"
                   defaultValue={`${new Date().getFullYear()}-${`${
                     new Date().getMonth() + 1
@@ -611,6 +613,7 @@ const Movements = () => {
                 <Label>Date</Label>
                 <Form.Control
                   type="datetime-local"
+                  className="w-100"
                   defaultValue={stateformEdit.datetime}
                   name="datetime"
                   onChange={handleChangeEdit}
@@ -823,6 +826,7 @@ const Movements = () => {
                 <Label>Date</Label>
                 <Form.Control
                   type="datetime-local"
+                  className="w-100"
                   defaultValue={stateformEditTrans.datetime}
                   name="datetime"
                   onChange={handleChangeEditTrans}

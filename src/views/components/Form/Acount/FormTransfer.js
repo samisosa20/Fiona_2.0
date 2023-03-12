@@ -142,6 +142,7 @@ const FormAccount = (props) => {
           <Label>Date</Label>
           <Form.Control
             type="datetime-local"
+            className="w-100"
             defaultValue={dateTime}
             name="datetime"
             onChange={handleChangeTrans}
