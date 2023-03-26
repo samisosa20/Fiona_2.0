@@ -9,7 +9,7 @@
         "url": "git+https://github.com/itpmsoftware/Fiona_React.git"
     },
     "engines": {
-        "node": "16.15.0"
+        "node": "16.x"
     },
     "keywords": [
         "react",

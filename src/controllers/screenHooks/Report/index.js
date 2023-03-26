@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+import TrmApi from "trm-api";
+
 import API from "variables/API";
 
 const useReport = () => {
@@ -291,25 +293,97 @@ const useReport = () => {
                   groupExpensive,
                   listExpensive
                 ) => {
-                  //console.log(listExpensive.data)
-                  setData({
-                    ResumAco: resumAcount.data,
-                    TopExp: topExpenses.data,
-                    Budget: budget.data,
-                    groupExpensive: groupExpensive.data,
-                    OpenClose: openClose.data[0],
-                    ClassOpen:
-                      openClose.data[0] && openClose.data[0].open < 0
-                        ? "text-danger"
-                        : "text-success",
-                    ClassClose:
-                      openClose.data[0] && openClose.data[0].end < 0
-                        ? "text-danger"
-                        : "text-success",
-                    identify: 1,
-                    listExpensive: listExpensive.data,
-                  });
-                  setDataToExport(dataExport.data);
+                  console.log(openClose.data, {
+                    open: openClose.data.reduce((prev, curr) => prev + parseFloat(curr.open), 0),
+                    income: openClose.data.reduce((prev, curr) => prev + parseFloat(curr.income), 0),
+                    expenses: openClose.data.reduce((prev, curr) => prev + parseFloat(curr.expenses), 0),
+                    end: openClose.data.reduce((prev, curr) => prev + parseFloat(curr.end), 0),
+                  })
+                  const trmApi = new TrmApi("HNgPywsjYTxDDwnGPdpyVbOth");
+                  trmApi
+                    .latest()
+                    .then((data) => {
+                      const valueTRM = data.valor
+                      setData({
+                        ResumAco: resumAcount.data,
+                        TopExp: topExpenses.data,
+                        Budget: budget.data,
+                        groupExpensive: groupExpensive.data,
+                        OpenClose: {
+                          open: openClose.data.reduce((prev, curr) => {
+                            if (divi === 'COP') {
+                              if (divi === curr.divisa) {
+                                return prev + parseFloat(curr.open)
+                              } else {
+                                return prev + parseFloat(curr.open) * valueTRM
+                              }
+                            } else {
+                              if (divi === curr.divisa) {
+                                return prev + parseFloat(curr.open)
+                              } else {
+                                return prev + parseFloat(curr.open) / valueTRM
+                              }
+                            }
+                          }, 0),
+                          income: openClose.data.reduce((prev, curr) => {
+                            if (divi === 'COP') {
+                              if (divi === curr.divisa) {
+                                return prev + parseFloat(curr.income)
+                              } else {
+                                return prev + parseFloat(curr.income) * valueTRM
+                              }
+                            } else {
+                              if (divi === curr.divisa) {
+                                return prev + parseFloat(curr.income)
+                              } else {
+                                return prev + parseFloat(curr.income) / valueTRM
+                              }
+                            }
+                          }, 0),
+                          expenses: openClose.data.reduce((prev, curr) => {
+                            if (divi === 'COP') {
+                              if (divi === curr.divisa) {
+                                return prev + parseFloat(curr.expenses)
+                              } else {
+                                return prev + parseFloat(curr.expenses) * valueTRM
+                              }
+                            } else {
+                              if (divi === curr.divisa) {
+                                return prev + parseFloat(curr.expenses)
+                              } else {
+                                return prev + parseFloat(curr.expenses) / valueTRM
+                              }
+                            }
+                          }, 0),
+                          end: openClose.data.reduce((prev, curr) => {
+                            if (divi === 'COP') {
+                              if (divi === curr.divisa) {
+                                return prev + parseFloat(curr.end)
+                              } else {
+                                return prev + parseFloat(curr.end) * valueTRM
+                              }
+                            } else {
+                              if (divi === curr.divisa) {
+                                return prev + parseFloat(curr.end)
+                              } else {
+                                return prev + parseFloat(curr.end) / valueTRM
+                              }
+                            }
+                          }, 0),
+                        },
+                        ClassOpen:
+                          openClose.data[0] && openClose.data[0].open < 0
+                            ? "text-danger"
+                            : "text-success",
+                        ClassClose:
+                          openClose.data[0] && openClose.data[0].end < 0
+                            ? "text-danger"
+                            : "text-success",
+                        identify: 1,
+                        listExpensive: listExpensive.data,
+                      });
+                      setDataToExport(dataExport.data);
+                    })
                 }
               )
             );

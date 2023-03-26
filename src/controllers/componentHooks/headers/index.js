@@ -5,7 +5,6 @@ import TrmApi from "trm-api";
 import API from "variables/API";
 
 const useHeader = (refreshData) => {
-
     const [state, setState] = useState({
         ingresos: 0,
         egresos: 0,
