@@ -45,7 +45,7 @@ const useCategories = () => {
       idc: idc,
       lvl: lvl,
     }).then((response) => setState({ jsonCatego: response.data, lvl: lvl }));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [refreshData]);
 
   const handleChange = (event) => {

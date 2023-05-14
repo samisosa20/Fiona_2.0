@@ -29,7 +29,7 @@ const useSidebar = (props) => {
         target: "_blank",
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [logo]);
 
   const toggleCollapse = () => {

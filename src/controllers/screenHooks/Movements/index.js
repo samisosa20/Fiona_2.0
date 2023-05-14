@@ -115,7 +115,7 @@ const useMovements = () => {
         );
     }
     loadDataMove();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [refreshData, params.id]);
 
   const ModNewMoviSate = () => setshowNewMod(!showNewMod);

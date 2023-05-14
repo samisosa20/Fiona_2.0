@@ -71,7 +71,7 @@ const usePlanned = () => {
         new Date().getMonth() + 1
       }`.padStart(2, 0)}-${`${new Date().getDate()}`.padStart(2, 0)}`,
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [refreshData]);
 
   const handleChange = (event) => {
