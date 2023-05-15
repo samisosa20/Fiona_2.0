@@ -8,7 +8,7 @@ const useReportActions = () => {
     listReportProvider,
   } = useReportProviders();
 
-  const actGetReport = async (params: {init_date, end_date, currency},
+  const actGetReport = async (params,
     onSuccess,
     onError,
   ) => {

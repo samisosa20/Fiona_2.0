@@ -8,6 +8,7 @@ import ContextMenuCustom from "./ContextMenu"
 import ExcelExport from "./Excel"
 import ValidShareAccount from "./Acount/Share"
 import Charts from "./Charts"
+import InputControl from "./InputControl"
 
 const useComponents = () => {
     return {
@@ -21,6 +22,7 @@ const useComponents = () => {
       ExcelExport,
       ValidShareAccount,
       Charts,
+      InputControl,
     };
   };
   
