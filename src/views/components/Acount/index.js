@@ -1,9 +1,9 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-import { Card, CardBody, CardHeader, Row } from "reactstrap";
+import { Card, CardBody, CardHeader, Row, Table } from 'reactstrap';
 
-import ContextMenuCustom from "views/components/ContextMenu";
+import ContextMenuCustom from 'views/components/ContextMenu';
 
 const AcountAdd = (props) => {
   const [contextMenu, setContextMenu] = React.useState(null);
@@ -14,7 +14,7 @@ const AcountAdd = (props) => {
     OpenModalDelete,
     OpenModalShare,
   } = props;
-  const idc = localStorage.getItem("IdUser");
+
   const handleContextMenu = (event, data) => {
     event.preventDefault();
     setContextMenu(
@@ -45,9 +45,40 @@ const AcountAdd = (props) => {
   const handleClose = () => {
     setContextMenu(null);
   };
+
   return (
-    <>
-      <Row className="justify-content-around">
+    <div class="d-flex bg-white p-4 rounded position-relative">
+      <Table striped>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Balance</th>
+            <th>Tipo</th>
+            <th>Moneda</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {state.map((account, i) => (
+            <tr key={account.name + i}>
+              <td>{account.name}</td>
+              <td className={`font-weight-600 ${account.init_amount + account.balance < 0 ? "text-danger" : "text-success"}`}>{account.init_amount + account.balance}</td>
+              <td>{account.type}</td>
+              <td>{account.currency.code}</td>
+              <td>
+                <div onClick={(event) => OpenModalEdit(
+                event,
+                account
+              )}>
+                  <i className="fas fa-pencil-alt cursor-pointer text-blue"></i>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+
+      {/* <Row className="justify-content-around">
         {state
           ? state.map((data, index) => (
               <Card
@@ -64,29 +95,18 @@ const AcountAdd = (props) => {
                   >
                     <Row>
                       <div className="col p-0">
-                        <h3 className="mb-0">{data.nombre}</h3>
+                        <h3 className="mb-0">{data.name}</h3>
                       </div>
-                      {data.cantidad_int < 0 ? (
-                        <div className="col justify-content-end text-danger">
-                          $ {data.cantidad}
+                        <div className={`col justify-content-end  ${data.init_amount + data.balance < 0 ? "text-danger" : "text-success"}`}>
+                          {data.init_amount + data.balance}
                         </div>
-                      ) : (
-                        <div className="col justify-content-end text-success">
-                          $ {data.cantidad}
-                        </div>
-                      )}
                     </Row>
                     <Row>
                       <div className="col p-0 text-dark">
-                        Badge: {data.divisa}
+                        Badge: {data.currency.code}
                       </div>
                       <div className="col p-0 text-muted">
-                        {data.cuenta_ahorro === "1"
-                          ? "Saving Acount"
-                          : data.propietario &&
-                            data.propietario !== idc && (
-                              <div className="text-danger">Shared Account</div>
-                            )}
+                        {data.type}
                       </div>
                     </Row>
                   </Link>
@@ -114,8 +134,8 @@ const AcountAdd = (props) => {
             </h3>
           </CardBody>
         </Card>
-      </Row>
-    </>
+      </Row> */}
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import { useController } from "react-hook-form";
+import { Controller } from 'react-hook-form';
 
 import {
   FormGroup,
@@ -8,7 +8,7 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
-} from "reactstrap";
+} from 'reactstrap';
 
 const InputControl = (props) => {
   const {
@@ -17,41 +17,39 @@ const InputControl = (props) => {
     type,
     name,
     control,
+    errors,
     helperText,
-    FormFeedback,
     icon,
   } = props;
 
-  const {
-    field: { onChange, value, ref },
-    fieldState: { error }
-  } = useController({
-    name,
-    control,
-  });
-
   return (
-    <FormGroup>
-      {label && <Label>{label}</Label>}
-      <InputGroup className="input-group-alternative">
-        <InputGroupAddon addonType="prepend">
-          <InputGroupText>
-            <i className={`ni ${icon}`} />
-          </InputGroupText>
-        </InputGroupAddon>
-        <Input
-          placeholder={placeholder}
-          type={type}
-          onChange={onChange}
-          value={value}
-          ref={ref}
-        />
-      </InputGroup>
-      {helperText && <FormText>{helperText}</FormText>}
-      {error && error[name] && (
-        <FormFeedback invalid>{error[name]?.message}</FormFeedback>
+    <Controller
+      name={name}
+      control={control}
+      render={({ field: { onChange, onBlur, value } }) => (
+        <FormGroup>
+          {label && <Label>{label}</Label>}
+          <InputGroup className='input-group-alternative'>
+            <InputGroupAddon addonType='prepend'>
+              <InputGroupText>
+                <i className={`ni ${icon}`} />
+              </InputGroupText>
+            </InputGroupAddon>
+            <Input
+              placeholder={placeholder}
+              type={type}
+              onChange={onChange}
+              value={value}
+              
+            />
+          </InputGroup>
+          {helperText && <FormText>{helperText}</FormText>}
+          {errors && errors[name] && (
+            <p className="text-danger form-text small">{errors[name]?.message}</p>
+          )}
+        </FormGroup>
       )}
-    </FormGroup>
+    />
   );
 };
 

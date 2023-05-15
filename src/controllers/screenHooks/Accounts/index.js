@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import TrmApi from "trm-api";
 import axios from "axios";
 
-// Variables
-import API from "variables/API";
+// Services
+import useApi from "api";
+
+// Selectors
+import useSelectors from 'models/selectors';
 
 const useAccounts = () => {
   const [state, setState] = useState([]);
@@ -50,16 +53,13 @@ const useAccounts = () => {
     inBadge: "COP",
   });
 
-  useEffect(() => {
-    var idc = localStorage.getItem("IdUser");
-    API.post("acount", {
-      id: 2,
-      idc: idc,
-    }).then((response) => {
-      setListAcount(response.data);
-      setState(response.data.filter(v => parseInt(v.show)));
-    });
-  }, [refreshData]);
+  const { useActions } = useApi();
+  const { useAccountActions } = useActions();
+  const { actGetListAccount, actGetBalanceMonthYearAccount } = useAccountActions();
+
+  const { useAuthSelectors } = useSelectors();
+  const { loggedSelector } = useAuthSelectors();
+  const isAuth = loggedSelector();
 
   // Funcion para cambiar de estado de los modals
   const ModNewCateSate = () => setshowNewMod(!showNewMod);
@@ -502,9 +502,25 @@ const useAccounts = () => {
     if(e.target.checked) {
       setState(listAcount)
     } else {
-      setState(listAcount.filter(v => parseInt(v.show)))
+      setState(listAcount.filter(v => !v.deleted_at))
     }
   }
+
+  useEffect(() => {
+    const onSuccess = (data) => {
+      setListAcount(data)
+      setState(data.filter(v => !v.deleted_at));
+    };
+
+    const onSuccessBalance = (data) => {
+      setBalances(data)
+    }
+    
+    if (isAuth) {
+      actGetListAccount(onSuccess);
+      actGetBalanceMonthYearAccount({}, onSuccessBalance);
+    }
+  }, [refreshData]);
 
   return {
     state,
